@@ -1,0 +1,19 @@
+# Projet de test
+test-next/
+
+# Traces des agents
+traces/
+
+# Documentation projet
+doc-projet/
+
+# Dépendances
+node_modules/
+
+# Environnement
+.env
+.env.local
+
+# Build
+dist/
+.next/
