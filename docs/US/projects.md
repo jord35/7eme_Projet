@@ -14,8 +14,8 @@
 **Afin de** créer un nouveau projet
 
 **Critères d'acceptation :**
-- [ ] Un bouton "+ Nouveau projet" est visible en haut de la page
-- [ ] Le clic redirige vers `/projects/new`
+- [x] Un bouton "+ Nouveau projet" est visible en haut de la page
+- [x] Le clic ouvre une modale de création (pas une page dédiée)
 
 ---
 
@@ -26,11 +26,11 @@
 **Afin de** avoir une vue d'ensemble de mes projets
 
 **Critères d'acceptation :**
-- [ ] Les projets sont chargés depuis l'API (`GET /projects`)
-- [ ] Les cartes sont affichées en grille responsive (1 colonne mobile, 2 colonnes tablette, 3 colonnes desktop)
-- [ ] Chaque carte est cliquable et redirige vers `/projects/[id]`
-- [ ] Si aucun projet n'existe, un message "Aucun projet trouvé" est affiché
-- [ ] Un état de chargement est affiché pendant le chargement
+- [x] Les projets sont chargés depuis l'API (`GET /projects`)
+- [x] Les cartes sont affichées en grille responsive (1 colonne mobile, 2 colonnes tablette, 3 colonnes desktop)
+- [x] Chaque carte est cliquable et redirige vers `/projects/[id]`
+- [x] Si aucun projet n'existe, un message "Aucun projet trouvé" est affiché
+- [x] Un état de chargement (Spinner) est affiché pendant le chargement
 
 ---
 
@@ -41,19 +41,19 @@
 **Afin de** identifier rapidement un projet
 
 **Éléments affichés sur la carte :**
-- [ ] Nom du projet
-- [ ] Description du projet (extrait si trop long)
-- [ ] Barre de progression avec le pourcentage de tâches complétées
-- [ ] Nombre de tâches complétées (ex: "5/12 tâches")
-- [ ] Section "Équipe" avec le nombre de membres
-- [ ] Avatar / initiales du propriétaire (mis en évidence)
-- [ ] Avatars / initiales des autres membres (max 4 affichés, puis "+X" pour les suivants)
+- [x] Nom du projet
+- [x] Description du projet (extrait si trop long)
+- [x] Barre de progression avec le pourcentage de tâches complétées
+- [x] Nombre de tâches complétées (ex: "5/12 tâches")
+- [x] Section "Équipe" avec le nombre de membres
+- [x] Avatar / initiales du propriétaire (mis en évidence, fond orange)
+- [x] Avatars / initiales des autres membres (max 4 affichés, puis "+X" pour les suivants)
 - [ ] Rôle de l'utilisateur connecté visible (Propriétaire / Membre)
 
 **Critères d'acceptation :**
-- [ ] Le propriétaire du projet est visuellement distinct des autres membres
-- [ ] La carte entière est cliquable → redirige vers `/projects/[id]`
-- [ ] Le design est cohérent avec la maquette Figma
+- [x] Le propriétaire du projet est visuellement distinct des autres membres (fond orange)
+- [x] La carte entière est cliquable → redirige vers `/projects/[id]`
+- [x] Le design est cohérent avec la maquette Figma
 
 ---
 

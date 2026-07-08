@@ -14,10 +14,10 @@
 **Afin de** savoir de quel projet il s'agit
 
 **Critères d'acceptation :**
-- [ ] Une flèche de retour permet de revenir à la liste des projets (`/projects`)
-- [ ] Le nom du projet est affiché
-- [ ] La description du projet est affichée
-- [ ] Si l'utilisateur est admin, une icône "modifier" à côté du nom redirige vers le formulaire d'édition
+- [x] Une flèche de retour permet de revenir à la liste des projets (`/projects`)
+- [x] Le nom du projet est affiché
+- [x] La description du projet est affichée
+- [x] Si l'utilisateur est admin, une icône "modifier" à côté du nom ouvre une modale d'édition
 
 ---
 
@@ -28,8 +28,8 @@
 **Afin de** ajouter du travail à accomplir
 
 **Critères d'acceptation :**
-- [ ] Un bouton "Créer une tâche" est visible
-- [ ] Le clic ouvre un formulaire de création de tâche (modale ou page dédiée)
+- [x] Un bouton "Créer une tâche" est visible
+- [x] Le clic ouvre une modale de création de tâche
 
 ---
 
@@ -40,8 +40,8 @@
 **Afin de** (fonctionnalité non définie)
 
 **Critères d'acceptation :**
-- [ ] Le bouton "IA" est présent mais non cliquable (désactivé)
-- [ ] Un tooltip ou indication visuelle signale "Fonctionnalité à venir"
+- [x] Le bouton "IA" est présent mais désactivé (cursor-not-allowed)
+- [x] Un tooltip signale "Fonctionnalité à venir"
 
 ---
 
@@ -52,11 +52,11 @@
 **Afin de** savoir qui travaille sur le projet
 
 **Critères d'acceptation :**
-- [ ] Le titre "Contributeurs" est affiché avec le nombre total de membres
-- [ ] Le propriétaire du projet est affiché à gauche, mis en évidence
+- [x] Le titre "Contributeurs" est affiché avec le nombre total de membres
+- [x] Le propriétaire du projet est affiché en premier, mis en évidence (fond orange)
 - [ ] Le rôle de l'utilisateur connecté est visible
-- [ ] Les autres membres sont affichés à droite
-- [ ] Si le nombre de membres dépasse 4, seuls les 4 premiers sont affichés avec un indicateur "+X" pour les suivants
+- [x] Les autres membres sont affichés à la suite
+- [x] Si le nombre de membres dépasse 4, seuls les 4 premiers sont affichés avec un indicateur "+X" pour les suivants
 
 ---
 
@@ -67,10 +67,10 @@
 **Afin de** visualiser les tâches de la manière qui me convient
 
 **Critères d'acceptation :**
-- [ ] Un mécanisme de navigation permet de switcher entre les deux vues
-- [ ] La vue active est visuellement mise en évidence
-- [ ] La vue Calendrier utilise `react-calendar` pour l'affichage
-- [ ] Les jours où une tâche a une échéance sont mis en évidence (couleur ou marqueur visuel)
+- [x] Un mécanisme de navigation (onglets) permet de switcher entre les deux vues
+- [x] La vue active est visuellement mise en évidence (orange)
+- [x] La vue Calendrier utilise `react-calendar` pour l'affichage
+- [x] Les jours où une tâche a une échéance sont mis en évidence (orange)
 - [ ] Le clic sur un jour avec échéance affiche les tâches correspondantes
 
 ---
@@ -82,9 +82,9 @@
 **Afin de** trouver rapidement une tâche spécifique
 
 **Critères d'acceptation :**
-- [ ] Un filtre par statut est disponible : "À faire" (TODO), "En cours" (IN_PROGRESS), "Terminé" (DONE)
-- [ ] Une barre de recherche permet de chercher une tâche par mot-clé (titre, description)
-- [ ] Les filtres et la recherche peuvent être combinés
+- [x] Un filtre par statut est disponible : "Tous les statuts", "À faire" (TODO), "En cours" (IN_PROGRESS), "Terminé" (DONE)
+- [x] Une barre de recherche permet de chercher une tâche par mot-clé (titre, description)
+- [x] Les filtres et la recherche peuvent être combinés
 
 ---
 
@@ -95,15 +95,15 @@
 **Afin de** savoir ce qu'il reste à faire
 
 **Éléments affichés sur la carte :**
-- [ ] Titre de la tâche
-- [ ] Description de la tâche (extrait si trop long)
+- [x] Titre de la tâche
+- [x] Description de la tâche (extrait si trop long)
 - [ ] Date d'échéance
 - [ ] Personne à qui la tâche est assignée
-- [ ] Section commentaires (menu déroulant pour afficher/masquer)
+- [x] Section commentaires (accordéon pour afficher/masquer)
 
 **Critères d'acceptation :**
-- [ ] Les commentaires sont affichés dans un menu déroulant (accordéon) pour ne pas surcharger la vue
-- [ ] Le design est cohérent avec la maquette Figma
+- [x] Les commentaires sont affichés dans un accordéon pour ne pas surcharger la vue
+- [x] Le design est cohérent avec la maquette Figma
 
 ---
 

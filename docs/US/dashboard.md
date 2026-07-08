@@ -34,9 +34,9 @@
 **Afin de** visualiser mes tâches de la manière qui me convient
 
 **Critères d'acceptation :**
-- [ ] Un mécanisme de navigation (onglets, boutons) permet de switcher entre les deux vues
-- [ ] La vue active est visuellement mise en évidence
-- [ ] Le changement de vue n'effectue pas de requête API supplémentaire (les données sont déjà chargées)
+- [x] Un mécanisme de navigation (onglets) permet de switcher entre les deux vues
+- [x] La vue active est visuellement mise en évidence (orange)
+- [x] Le changement de vue n'effectue pas de requête API supplémentaire (les données sont déjà chargées)
 
 ---
 
@@ -47,11 +47,11 @@
 **Afin de** savoir ce que j'ai à faire et dans quel ordre
 
 **Critères d'acceptation :**
-- [ ] Les tâches sont chargées depuis l'API (`GET /dashboard/assigned-tasks`)
-- [ ] Les tâches sont triées par priorité (URGENT > HIGH > MEDIUM > LOW)
-- [ ] Chaque tâche est affichée sous forme de carte (voir US-DASHBOARD-5)
-- [ ] Si aucune tâche n'est assignée, un message "Aucune tâche assignée" est affiché
-- [ ] Un état de chargement est affiché pendant le chargement
+- [x] Les tâches sont chargées depuis l'API (`GET /dashboard/assigned-tasks`)
+- [x] Les tâches sont triées par priorité (URGENT > HIGH > MEDIUM > LOW)
+- [x] Chaque tâche est affichée sous forme de carte (TaskCard)
+- [x] Si aucune tâche n'est assignée, un message "Aucune tâche assignée pour le moment" est affiché
+- [x] Un état de chargement (Spinner) est affiché pendant le chargement
 
 ---
 
@@ -62,11 +62,11 @@
 **Afin de** visualiser l'avancement de mon travail
 
 **Critères d'acceptation :**
-- [ ] Trois colonnes sont affichées : "À faire" (TODO), "En cours" (IN_PROGRESS), "Terminé" (DONE)
-- [ ] Chaque colonne contient les cartes de tâches correspondant à son statut
-- [ ] Les tâches annulées (CANCELLED) ne sont pas affichées dans le Kanban
-- [ ] Chaque carte de tâche est identique à celle de la vue Liste (voir US-DASHBOARD-5)
-- [ ] Si une colonne est vide, un message indicatif est affiché
+- [x] Trois colonnes sont affichées : "À faire" (TODO), "En cours" (IN_PROGRESS), "Terminé" (DONE)
+- [x] Chaque colonne contient les cartes de tâches correspondant à son statut
+- [x] Les tâches annulées (CANCELLED) ne sont pas affichées dans le Kanban
+- [x] Chaque carte de tâche est identique à celle de la vue Liste (TaskCard)
+- [x] Si une colonne est vide, un message "Aucune tâche" est affiché
 
 ---
 
@@ -77,22 +77,22 @@
 **Afin de** avoir les informations essentielles sans ouvrir la tâche
 
 **Éléments affichés sur la carte :**
-- [ ] Nom de la tâche
-- [ ] Tag de statut : "À faire" (TODO), "En cours" (IN_PROGRESS), "Terminé" (DONE)
-- [ ] Description de la tâche (extrait si trop long)
-- [ ] Nom du projet associé
+- [x] Titre de la tâche
+- [x] Tag de statut : "À faire" (TODO), "En cours" (IN_PROGRESS), "Terminé" (DONE)
+- [x] Description de la tâche (extrait si trop long)
+- [x] Nom du projet associé (optionnel, via prop `showProject`)
 - [ ] Date de création de la tâche
-- [ ] Nombre de commentaires (valeur numérique, sans lien)
-- [ ] Bouton "Voir" qui redirige vers la page du projet contenant la tâche
+- [x] Nombre de commentaires (valeur numérique, sans lien)
+- [x] Bouton "Voir" qui redirige vers `/projects/[projectId]`
 
 **Critères d'acceptation :**
-- [ ] Le composant est réutilisable (utilisé dans les vues Liste et Kanban)
-- [ ] Le bouton "Voir" redirige vers `/projects/[projectId]` (page détail du projet)
-- [ ] Le design est cohérent avec la maquette Figma
+- [x] Le composant est réutilisable (utilisé dans les vues Liste et Kanban du dashboard + projet)
+- [x] Le bouton "Voir" redirige vers `/projects/[projectId]` (page détail du projet)
+- [x] Le design est cohérent avec la maquette Figma
 
 ---
 
 ## Questions en suspens
 
-- [ ] Le clic sur le nom du projet dans la carte doit-il rediriger vers `/projects/[id]` ?
+- [x] Le clic sur le nom du projet dans la carte doit-il rediriger vers `/projects/[id]` ? → Non, seul le bouton "Voir" redirige
 - [ ] Faut-il un drag & drop dans la vue Kanban (pour déplacer les tâches entre colonnes) ? → Sera traité dans un sprint ultérieur si nécessaire

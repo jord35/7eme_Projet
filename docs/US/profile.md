@@ -13,13 +13,13 @@
 **Afin de** mettre à jour mes informations personnelles
 
 **Critères d'acceptation :**
-- [ ] Les champs nom, prénom et email sont pré-remplis avec les valeurs actuelles
-- [ ] Le champ email valide le format email côté client (Zod)
-- [ ] La validation côté client (Zod) vérifie le format de l'email
-- [ ] Appel API `PUT /auth/profile`
-- [ ] En cas de succès, message de confirmation et mise à jour du contexte d'authentification
-- [ ] En cas d'erreur, message d'erreur affiché
-- [ ] Bouton "Enregistrer" ou "Modifier les informations" avec état de chargement
+- [x] Les champs prénom, nom et email sont pré-remplis avec les valeurs actuelles
+- [x] Le champ email valide le format email côté client (Zod)
+- [x] La validation côté client (Zod) vérifie le format de l'email
+- [x] Appel API `PUT /auth/profile`
+- [x] En cas de succès, message de confirmation et mise à jour du contexte d'authentification
+- [x] En cas d'erreur, message d'erreur affiché
+- [x] Bouton "Enregistrer" avec état de chargement
 
 ---
 
@@ -30,12 +30,12 @@
 **Afin de** sécuriser mon compte
 
 **Critères d'acceptation :**
-- [ ] Un formulaire dédié avec les champs : mot de passe actuel, nouveau mot de passe, confirmation
-- [ ] La validation côté client (Zod) vérifie les règles du mot de passe (≥ 8 car, maj, min, chiffre, spécial)
-- [ ] Appel API `PUT /auth/password`
-- [ ] En cas de succès, message de confirmation
-- [ ] En cas d'erreur, message d'erreur affiché
-- [ ] Les champs sont vidés après un changement réussi
+- [x] Un formulaire dédié avec les champs : mot de passe actuel, nouveau mot de passe, confirmation
+- [x] La validation côté client (Zod) vérifie les règles du mot de passe (≥ 8 car, maj, min, chiffre, spécial)
+- [x] Appel API `PUT /auth/password`
+- [x] En cas de succès, message de confirmation
+- [x] En cas d'erreur, message d'erreur affiché
+- [x] Les champs sont vidés après un changement réussi
 
 ---
 

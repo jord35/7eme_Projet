@@ -13,11 +13,11 @@
 **Afin de** comprendre que la page n'existe pas et être redirigé
 
 **Critères d'acceptation :**
-- [ ] Un message "Page non trouvée" ou "404" est affiché
-- [ ] Un bouton "Retour à l'accueil" est présent
-- [ ] Si l'utilisateur est connecté, le bouton redirige vers `/dashboard`
-- [ ] Si l'utilisateur n'est pas connecté, le bouton redirige vers `/login`
-- [ ] Le design est cohérent avec le reste de l'application
+- [x] Un message "Page non trouvée" et "404" sont affichés
+- [x] Un bouton "Retour à l'accueil" est présent
+- [x] Si l'utilisateur est connecté, le bouton redirige vers `/dashboard`
+- [x] Si l'utilisateur n'est pas connecté, le bouton redirige vers `/login`
+- [x] Le design est cohérent avec le reste de l'application
 
 ---
 

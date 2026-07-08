@@ -13,12 +13,12 @@
 **Afin de** ajouter un projet sans quitter la page courante
 
 **Critères d'acceptation :**
-- [ ] Une modale s'ouvre avec les champs : nom du projet, description
-- [ ] La validation côté client (Zod) vérifie que le nom est requis (min 2 caractères)
-- [ ] Appel API `POST /projects`
-- [ ] En cas de succès, la modale se ferme et le projet apparaît dans la liste
-- [ ] En cas d'erreur, message d'erreur dans la modale
-- [ ] La modale peut être fermée (bouton fermeture, clic overlay, touche Échap)
+- [x] Une modale s'ouvre avec les champs : nom du projet, description
+- [x] La validation côté client (Zod) vérifie que le nom est requis (min 2 caractères)
+- [x] Appel API `POST /projects`
+- [x] En cas de succès, la modale se ferme et le projet apparaît dans la liste
+- [x] En cas d'erreur, message d'erreur dans la modale (toast)
+- [x] La modale peut être fermée (bouton fermeture, clic overlay, touche Échap)
 
 ---
 
@@ -31,10 +31,10 @@
 **Afin de** mettre à jour les informations du projet
 
 **Critères d'acceptation :**
-- [ ] Une modale s'ouvre avec les champs pré-remplis (nom, description actuels)
-- [ ] Appel API `PUT /projects/[id]`
-- [ ] En cas de succès, la modale se ferme et les infos sont mises à jour
-- [ ] En cas d'erreur, message d'erreur dans la modale
+- [x] Une modale s'ouvre avec les champs pré-remplis (nom, description actuels)
+- [x] Appel API `PUT /projects/[id]`
+- [x] En cas de succès, la modale se ferme et les infos sont mises à jour
+- [x] En cas d'erreur, message d'erreur dans la modale (toast)
 
 ---
 
@@ -47,11 +47,12 @@
 **Afin de** ajouter une tâche sans quitter la page du projet
 
 **Critères d'acceptation :**
-- [ ] Une modale s'ouvre avec les champs : titre, description, priorité, échéance, assignation
-- [ ] La validation côté client (Zod) vérifie que le titre est requis
-- [ ] Appel API `POST /projects/[id]/tasks`
-- [ ] En cas de succès, la modale se ferme et la tâche apparaît dans la liste
-- [ ] En cas d'erreur, message d'erreur dans la modale
+- [x] Une modale s'ouvre avec les champs : titre, description, priorité, échéance
+- [ ] Assignation (pas encore implémentée)
+- [x] La validation côté client (Zod) vérifie que le titre est requis
+- [x] Appel API `POST /projects/[id]/tasks`
+- [x] En cas de succès, la modale se ferme et la tâche apparaît dans la liste
+- [x] En cas d'erreur, message d'erreur dans la modale (toast)
 
 ---
 

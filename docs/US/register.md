@@ -7,16 +7,16 @@
 **Afin de** accéder à l'application
 
 **Critères d'acceptation :**
-- [ ] Un formulaire avec les champs nom, email, mot de passe et confirmation est affiché
-- [ ] Le champ email valide le format email côté client (Zod)
-- [ ] Le mot de passe respecte les règles : ≥ 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial (@ $ ! % * ? &)
-- [ ] Le champ confirmation vérifie que les deux mots de passe sont identiques
-- [ ] Un bouton  "S'inscrire" est présent
-- [ ] Appel API `POST /auth/register`
-- [ ] En cas de succès, redirection vers `/login` avec un message de succès
-- [ ] En cas d'erreur de validation (Zod), message d'erreur affiché avant envoi à l'API
-- [ ] En cas d'erreur backend (email déjà utilisé), message d'erreur affiché après la réponse API
-- [ ] État de chargement pendant la requête
+- [x] Un formulaire avec les champs prénom, nom, email, mot de passe et confirmation est affiché
+- [x] Le champ email valide le format email côté client (Zod)
+- [x] Le mot de passe respecte les règles : ≥ 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial (@ $ ! % * ? &)
+- [x] Le champ confirmation vérifie que les deux mots de passe sont identiques
+- [x] Un bouton "Créer un compte" est présent
+- [x] Appel API `POST /auth/register`
+- [x] En cas de succès, redirection vers `/login` avec un message de succès
+- [x] En cas d'erreur de validation (Zod), message d'erreur affiché avant envoi à l'API
+- [x] En cas d'erreur backend (email déjà utilisé), message d'erreur affiché après la réponse API
+- [x] État de chargement pendant la requête
 
 ---
 
@@ -27,8 +27,8 @@
 **Afin de** me connecter si j'ai déjà un compte
 
 **Critères d'acceptation :**
-- [ ] Un lien "Déjà un compte ? Se connecter" est visible sur la page
-- [ ] Le lien redirige vers `/login`
+- [x] Un lien "Déjà un compte ? Se connecter" est visible sur la page
+- [x] Le lien redirige vers `/login`
 
 ---
 

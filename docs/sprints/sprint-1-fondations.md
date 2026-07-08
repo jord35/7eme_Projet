@@ -29,20 +29,20 @@
 **US associées :** [`US-NAV-1`](../US/navigation.md), [`US-NAV-2`](../US/navigation.md), [`US-NAV-3`](../US/navigation.md)
 
 **Fonctionnalités :**
-- [ ] Liens "Tableau de bord" → `/dashboard` et "Projets" → `/projects`
-- [ ] Lien actif mis en évidence
-- [ ] Pseudo utilisateur cliquable → `/profile`
-- [ ] Déconnexion (emplacement à définir, absent de la maquette)
-- [ ] Si non connecté : liens "Connexion" et "Inscription"
-- [ ] Accessible au clavier et lecteurs d'écran
+- [x] Liens "Tableau de bord" → `/dashboard` et "Projets" → `/projects`
+- [x] Lien actif mis en évidence
+- [x] Pseudo utilisateur cliquable → `/profile`
+- [x] Déconnexion
+- [x] Si non connecté : liens "Connexion" et "Inscription"
+- [x] Accessible au clavier et lecteurs d'écran
 
 ### 2.2 En-tête de page (`PageHeader.tsx`)
 
 **US associée :** [`US-DASHBOARD-1`](../US/dashboard.md)
 
 **Fonctionnalités :**
-- [ ] Props : `title` (requis), `description`, `backLink`, `action`, `showEditButton`, `showIAButton`
-- [ ] S'adapte à chaque page (Dashboard, Projets, Détail projet)
+- [x] Props : `title` (requis), `description`, `backLink`, `action`, `showEditButton`, `showIAButton`
+- [x] S'adapte à chaque page (Dashboard, Projets, Détail projet)
 
 ---
 
@@ -55,15 +55,15 @@
 **Composant :** `LoginForm.tsx`
 
 **Fonctionnalités :**
-- [ ] Formulaire avec `react-hook-form` + `zod`
-- [ ] Champs : email, mot de passe
-- [ ] Validation côté client (email valide, mot de passe requis)
-- [ ] Appel API `POST /auth/login`
-- [ ] Stockage du token JWT (sessionStorage)
-- [ ] Redirection vers `/dashboard` après connexion
-- [ ] Message d'erreur générique ("Email ou mot de passe incorrect")
-- [ ] Lien vers la page d'inscription
-- [ ] État de chargement pendant la requête
+- [x] Formulaire avec `react-hook-form` + `zod`
+- [x] Champs : email, mot de passe
+- [x] Validation côté client (email valide, mot de passe requis)
+- [x] Appel API `POST /auth/login`
+- [x] Stockage du token JWT (sessionStorage)
+- [x] Redirection vers `/dashboard` après connexion
+- [x] Message d'erreur générique ("Email ou mot de passe incorrect")
+- [x] Lien vers la page d'inscription
+- [x] État de chargement pendant la requête
 
 **Schéma zod :**
 ```typescript
@@ -80,13 +80,13 @@ export const loginSchema = z.object({
 **Composant :** `RegisterForm.tsx`
 
 **Fonctionnalités :**
-- [ ] Formulaire avec `react-hook-form` + `zod`
-- [ ] Champs : prénom, nom, email, mot de passe, confirmation
-- [ ] Validation : email valide, mot de passe ≥ 8 car + maj + min + chiffre + spécial, confirmation identique
-- [ ] Appel API `POST /auth/register`
-- [ ] Redirection vers `/login` avec message de succès
-- [ ] Message d'erreur si email déjà utilisé (vient du backend)
-- [ ] Lien vers la page de connexion
+- [x] Formulaire avec `react-hook-form` + `zod`
+- [x] Champs : prénom, nom, email, mot de passe, confirmation
+- [x] Validation : email valide, mot de passe ≥ 8 car + maj + min + chiffre + spécial, confirmation identique
+- [x] Appel API `POST /auth/register`
+- [x] Redirection vers `/login` avec message de succès
+- [x] Message d'erreur si email déjà utilisé (vient du backend)
+- [x] Lien vers la page de connexion
 
 **Schéma zod :**
 ```typescript
@@ -110,19 +110,19 @@ export const registerSchema = z.object({
 ### 3.3 Contexte d'authentification (`AuthContext.tsx`)
 
 **Fonctionnalités :**
-- [ ] État global : `user`, `isLoading`, `isAuthenticated`
-- [ ] Fonction `login(token, user)` → stocke le token + met à jour l'état
-- [ ] Fonction `logout()` → supprime le token + redirige vers `/login`
-- [ ] Au chargement, vérifie si un token existe → appelle `GET /auth/profile`
-- [ ] Fournit le contexte à toute l'application
+- [x] État global : `user`, `isLoading`, `isAuthenticated`
+- [x] Fonction `login(token, user)` → stocke le token + met à jour l'état
+- [x] Fonction `logout()` → supprime le token + redirige vers `/login`
+- [x] Au chargement, vérifie si un token existe → appelle `GET /auth/profile`
+- [x] Fournit le contexte à toute l'application
 
 ### 3.4 Protection des routes
 
 **Layout `(authenticated)/layout.tsx` :**
-- [ ] Vérifie si l'utilisateur est connecté
-- [ ] Si non connecté → redirection vers `/login`
-- [ ] Si chargement → affiche un spinner
-- [ ] Si connecté → affiche le contenu + [`Navigation`](../US/navigation.md)
+- [x] Vérifie si l'utilisateur est connecté
+- [x] Si non connecté → redirection vers `/login`
+- [x] Si chargement → affiche un spinner
+- [x] Si connecté → affiche le contenu + [`Navigation`](../US/navigation.md)
 
 ---
 
@@ -135,16 +135,16 @@ export const registerSchema = z.object({
 **Composant :** `ProfileForm.tsx`
 
 **Fonctionnalités :**
-- [ ] Affichage des informations actuelles (prénom, nom, email)
-- [ ] Formulaire d'édition (prénom, nom, email) avec `react-hook-form` + `zod`
-- [ ] Appel API `PUT /auth/profile`
-- [ ] Message de succès après modification
-- [ ] Mise à jour du contexte d'authentification
+- [x] Affichage des informations actuelles (prénom, nom, email)
+- [x] Formulaire d'édition (prénom, nom, email) avec `react-hook-form` + `zod`
+- [x] Appel API `PUT /auth/profile`
+- [x] Message de succès après modification
+- [x] Mise à jour du contexte d'authentification
 
 **Section changement de mot de passe :**
-- [ ] Formulaire dédié (mot de passe actuel, nouveau, confirmation)
-- [ ] Appel API `PUT /auth/password`
-- [ ] Message de succès/erreur
+- [x] Formulaire dédié (mot de passe actuel, nouveau, confirmation)
+- [x] Appel API `PUT /auth/password`
+- [x] Message de succès/erreur
 
 ---
 
@@ -155,11 +155,11 @@ export const registerSchema = z.object({
 **US associée :** [`US-404-1`](../US/not-found.md)
 
 **Fonctionnalités :**
-- [ ] Message clair "Page non trouvée"
-- [ ] Bouton "Retour à l'accueil"
-- [ ] Si connecté → redirige vers `/dashboard`
-- [ ] Si non connecté → redirige vers `/login`
-- [ ] Design cohérent avec le reste de l'application
+- [x] Message clair "Page non trouvée"
+- [x] Bouton "Retour à l'accueil"
+- [x] Si connecté → redirige vers `/dashboard`
+- [x] Si non connecté → redirige vers `/login`
+- [x] Design cohérent avec le reste de l'application
 
 ---
 
@@ -167,17 +167,17 @@ export const registerSchema = z.object({
 
 ### 6.1 Layout racine (`app/layout.tsx`)
 
-- [ ] Structure HTML de base (`<html>`, `<body>`)
-- [ ] Import des polices (Google Fonts ou locales)
-- [ ] Provider du contexte d'authentification
-- [ ] Provider des toasts (`sonner`)
-- [ ] Métadonnées (title, description)
+- [x] Structure HTML de base (`<html>`, `<body>`)
+- [x] Import des polices (Google Fonts ou locales)
+- [x] Provider du contexte d'authentification
+- [x] Provider des toasts (`sonner`)
+- [x] Métadonnées (title, description)
 
 ### 6.2 Layout authentifié (`(authenticated)/layout.tsx`)
 
-- [ ] Barre de navigation [`Navigation`](../US/navigation.md)
-- [ ] Vérification d'authentification
-- [ ] Redirection si non connecté
+- [x] Barre de navigation [`Navigation`](../US/navigation.md)
+- [x] Vérification d'authentification
+- [x] Redirection si non connecté
 
 ---
 
@@ -216,41 +216,42 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 ## 9. Checklist de fin de Sprint 1
 
 ### Composants transverses
-- [ ] `Navigation.tsx` créé et intégré au layout
-- [ ] `PageHeader.tsx` créé (utilisé sur Dashboard)
+- [x] `Navigation.tsx` créé et intégré au layout
+- [x] `PageHeader.tsx` créé (utilisé sur Dashboard)
 
 ### US-LOGIN — Authentification
-- [ ] Page `/login` fonctionnelle
-- [ ] Page `/register` fonctionnelle (avec prénom + nom)
-- [ ] AuthContext opérationnel
-- [ ] Protection des routes (layout authentifié)
-- [ ] Gestion des erreurs API
-- [ ] Stockage sécurisé du token
+- [x] Page `/login` fonctionnelle
+- [x] Page `/register` fonctionnelle (avec prénom + nom)
+- [x] AuthContext opérationnel
+- [x] Protection des routes (layout authentifié)
+- [x] Gestion des erreurs API
+- [x] Stockage sécurisé du token
 
 ### US-PROFILE — Profil
-- [ ] Page `/profile` affiche les infos (prénom, nom, email)
-- [ ] Modification prénom/nom/email fonctionnelle
-- [ ] Changement de mot de passe fonctionnel
-- [ ] Messages de succès/erreur
+- [x] Page `/profile` affiche les infos (prénom, nom, email)
+- [x] Modification prénom/nom/email fonctionnelle
+- [x] Changement de mot de passe fonctionnel
+- [x] Messages de succès/erreur
 
 ### US-404 — Page 404
-- [ ] Page 404 personnalisée
-- [ ] Redirection adaptée (connecté / non connecté)
+- [x] Page 404 personnalisée
+- [x] Redirection adaptée (connecté / non connecté)
 
 ### Layout
-- [ ] Navigation avec liens Dashboard et Projets
-- [ ] Footer
-- [ ] Layout racine configuré
-- [ ] Polices chargées
+- [x] Navigation avec liens Dashboard et Projets
+- [ ] Footer (non prioritaire)
+- [x] Layout racine configuré
+- [x] Polices chargées
 
 ### Composants UI
-- [ ] Input, Textarea, Select, Button créés
-- [ ] Spinner créé
-- [ ] Badge créé
+- [x] Input, Textarea, Select, Button créés
+- [x] Spinner créé
+- [x] Badge créé
+- [x] Modal créée
 
 ### Qualité
-- [ ] Tous les formulaires utilisent `react-hook-form` + `zod`
-- [ ] Tous les labels sont associés aux champs
-- [ ] Messages d'erreur avec `role="alert"`
-- [ ] Pas d'erreur console
-- [ ] Commit : "Sprint 1 — Fondations (Navigation + Auth + Profil + 404)"
+- [x] Tous les formulaires utilisent `react-hook-form` + `zod`
+- [x] Tous les labels sont associés aux champs
+- [x] Messages d'erreur avec `role="alert"`
+- [x] Pas d'erreur console
+- [x] Commit : "Sprint 1 — Fondations (Navigation + Auth + Profil + 404)"

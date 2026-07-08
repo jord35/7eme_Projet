@@ -7,13 +7,13 @@
 **Afin de** accéder à mon espace personnel
 
 **Critères d'acceptation :**
-- [ ] Un formulaire avec les champs email et mot de passe est affiché
-- [ ] Le champ email valide le format email côté client
-- [ ] Le champ mot de passe est masqué (type password)
-- [ ] Un bouton de soumission "Se connecter" est présent
-- [ ] En cas d'erreur (mauvais identifiants), un message "Email ou mot de passe incorrect" s'affiche
-- [ ] En cas de succès, l'utilisateur est redirigé vers `/dashboard`
-- [ ] Un état de chargement (spinner) est affiché pendant la requête
+- [x] Un formulaire avec les champs email et mot de passe est affiché
+- [x] Le champ email valide le format email côté client
+- [x] Le champ mot de passe est masqué (type password)
+- [x] Un bouton de soumission "Se connecter" est présent
+- [x] En cas d'erreur (mauvais identifiants), un message "Email ou mot de passe incorrect" s'affiche
+- [x] En cas de succès, l'utilisateur est redirigé vers `/dashboard`
+- [x] Un état de chargement (spinner) est affiché pendant la requête
 
 ---
 
@@ -24,8 +24,8 @@
 **Afin de** créer un compte si je n'en ai pas encore
 
 **Critères d'acceptation :**
-- [ ] Un lien "Créer un compte" ou "S'inscrire" est visible sur la page
-- [ ] Le lien redirige vers `/register`
+- [x] Un lien "S'inscrire" est visible sur la page
+- [x] Le lien redirige vers `/register`
 
 ---
 

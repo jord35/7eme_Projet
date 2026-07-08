@@ -157,9 +157,6 @@ frontend/src/
 │       ├── CommentSection.tsx
 │       ├── DashboardStats.tsx
 │       └── TaskCalendar.tsx    ← Vue calendrier (react-calendar)
-├── hooks/                      ← Hooks personnalisés
-│   ├── useAuth.ts
-│   └── useDebounce.ts
 ├── lib/                        ← Utilitaires
 │   ├── api.ts                  ← Appels API
 │   ├── validators.ts           ← Schémas zod

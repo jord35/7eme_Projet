@@ -12,9 +12,9 @@
 **Afin de** me déplacer dans l'application
 
 **Critères d'acceptation :**
-- [ ] Un lien "Tableau de bord" est présent dans la barre de navigation → redirige vers `/dashboard`
-- [ ] Un lien "Projets" est présent dans la barre de navigation → redirige vers `/projects`
-- [ ] Le lien correspondant à la page active est visuellement mis en évidence (couleur différente)
+- [x] Un lien "Tableau de bord" est présent dans la barre de navigation → redirige vers `/dashboard`
+- [x] Un lien "Projets" est présent dans la barre de navigation → redirige vers `/projects`
+- [x] Le lien correspondant à la page active est visuellement mis en évidence (couleur orange)
 - [ ] Les liens sont accessibles au clavier et aux lecteurs d'écran
 
 ---
@@ -26,9 +26,9 @@
 **Afin de** accéder à la page "Mon compte" (`/profile`)
 
 **Critères d'acceptation :**
-- [ ] Le nom ou pseudo de l'utilisateur connecté est affiché dans la barre de navigation
-- [ ] Le clic sur le nom redirige vers `/profile`
-- [ ] La déconnexion vide le token et redirige vers `/login`
+- [x] Le nom ou pseudo de l'utilisateur connecté est affiché dans la barre de navigation
+- [x] Le clic sur le nom redirige vers `/profile`
+- [x] La déconnexion vide le token et redirige vers `/login`
 
 **Note :** Le bouton de déconnexion n'est pas présent dans la maquette Figma. À définir ultérieurement (menu déroulant du profil, ou bouton séparé).
 
@@ -41,8 +41,8 @@
 **Afin de** pouvoir m'authentifier
 
 **Critères d'acceptation :**
-- [ ] Sur les pages `/login` et `/register`, la barre de navigation affiche des liens vers l'autre page
-- [ ] Pas de lien "Tableau de bord" ou "Projets" pour les utilisateurs non connectés
+- [x] Sur les pages `/login` et `/register`, la barre de navigation affiche des liens vers l'autre page
+- [x] Pas de lien "Tableau de bord" ou "Projets" pour les utilisateurs non connectés
 
 ---
 
