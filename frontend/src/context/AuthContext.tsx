@@ -23,18 +23,42 @@ function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const getToken = (): string | null => {
+        try {
+            return sessionStorage.getItem("token");
+        } catch {
+            return null;
+        }
+    };
+
+    const setToken = (token: string): void => {
+        try {
+            sessionStorage.setItem("token", token);
+        } catch {
+            // sessionStorage non disponible (navigation privée, etc.)
+        }
+    };
+
+    const removeToken = (): void => {
+        try {
+            sessionStorage.removeItem("token");
+        } catch {
+            // sessionStorage non disponible
+        }
+    };
+
     const loginSuccess = useCallback((token: string, user: User) => {
-        sessionStorage.setItem("token", token);
+        setToken(token);
         setUser(user);
     }, []);
 
     const logout = useCallback(() => {
-        sessionStorage.removeItem("token");
+        removeToken();
         setUser(null);
     }, []);
 
     useEffect(() => {
-        const token = sessionStorage.getItem("token");
+        const token = getToken();
         if (!token) {
             setIsLoading(false);
             return;
@@ -43,7 +67,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         getProfile()
             .then((profile) => setUser(profile))
             .catch(() => {
-                sessionStorage.removeItem("token");
+                removeToken();
                 setUser(null);
             })
             .finally(() => setIsLoading(false));
