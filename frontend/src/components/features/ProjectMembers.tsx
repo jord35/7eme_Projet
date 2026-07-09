@@ -14,6 +14,7 @@ interface ProjectMembersProps {
     showRoleBadge?: boolean;
 }
 
+/** Extrait les initiales d'un nom (ex: "Jean Dupont" → "JD") */
 function getInitials(name: string): string {
     return name
         .split(" ")
@@ -23,6 +24,7 @@ function getInitials(name: string): string {
         .slice(0, 2);
 }
 
+/** Détermine le libellé du rôle */
 function getRoleLabel(
     userId: string,
     ownerId: string,
@@ -33,6 +35,11 @@ function getRoleLabel(
     return "Contributeur";
 }
 
+/**
+ * Affiche l'équipe d'un projet : propriétaire à gauche, membres à droite.
+ * L'utilisateur connecté est mis en surbrillance (fond #FFE8D9).
+ * Utilisé dans ProjectCard (liste projets) et la page détail projet.
+ */
 function ProjectMembers({
     owner,
     members,
@@ -62,7 +69,6 @@ function ProjectMembers({
     const visibleMembers = allMembers.slice(0, 5);
     const hiddenCount = allMembers.length - 5;
 
-    // Rôle de l'utilisateur connecté
     const currentUser = allMembers.find((m) => m.isCurrentUser);
     const currentUserRole = currentUser
         ? getRoleLabel(currentUser.id, owner.id, currentUser.role)
@@ -78,9 +84,9 @@ function ProjectMembers({
                 {/* Propriétaire à gauche */}
                 <div className="flex items-center gap-2">
                     <span
-                        className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${currentUser?.id === owner.id
-                                ? "bg-brand-orange-main text-neutral-white ring-brand-orange-light"
-                                : "bg-brand-orange-main text-neutral-white"
+                        className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${owner.id === currentUserId
+                                ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
+                                : "bg-neutral-200 text-neutral-600"
                             }`}
                         title={owner.name}
                     >
@@ -106,7 +112,7 @@ function ProjectMembers({
                         <span
                             key={member.id}
                             className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${member.isCurrentUser
-                                    ? "bg-brand-orange-main text-neutral-white ring-brand-orange-light"
+                                    ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
                                     : "bg-neutral-200 text-neutral-600"
                                 }`}
                             title={member.name}

@@ -3,12 +3,26 @@
 import { useEffect, useCallback, type ReactNode } from "react";
 
 interface ModalProps {
+    /** Contrôle l'ouverture de la modale */
     isOpen: boolean;
+    /** Callback appelé quand l'utilisateur ferme (Escape ou clic overlay) */
     onClose: () => void;
+    /** Titre optionnel de la modale */
     title?: string;
+    /** Contenu de la modale */
     children: ReactNode;
 }
 
+/**
+ * Modale réutilisable.
+ * Gère : overlay cliquable, fermeture avec Escape, blocage du scroll,
+ * accessibilité (role="dialog", aria-modal, aria-labelledby).
+ *
+ * @example
+ * <Modal isOpen={show} onClose={() => setShow(false)} title="Créer un projet">
+ *   <CreateProjectForm onSuccess={handleSuccess} />
+ * </Modal>
+ */
 function Modal({ isOpen, onClose, title, children }: ModalProps) {
     const handleKeyDown = useCallback(
         (e: KeyboardEvent) => {

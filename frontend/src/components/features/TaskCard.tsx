@@ -4,6 +4,9 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import Image from "next/image";
 
+/**
+ * Props de la carte tâche (utilisée dans le dashboard).
+ */
 interface TaskCardProps {
     task: {
         id: string;
@@ -12,9 +15,14 @@ interface TaskCardProps {
         status: "TODO" | "IN_PROGRESS" | "DONE" | "CANCELLED";
         priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
         dueDate: string | null;
+        projectId: string;
+        creatorId: string;
+        createdAt: string;
         project?: { id: string; name: string };
         _count?: { comments: number };
+        comments?: Array<unknown>;
     };
+    /** Afficher le nom du projet ? (true dans le dashboard, false ailleurs) */
     showProject?: boolean;
 }
 
@@ -32,6 +40,11 @@ const statusVariants: Record<string, "info" | "warning" | "success" | "error"> =
     CANCELLED: "error",
 };
 
+/**
+ * Carte de tâche compacte pour le dashboard (Liste et Kanban).
+ * Affiche : titre, description, badge statut, projet, date, commentaires.
+ * Ne montre PAS les assignés (réservé à TaskDetailCard).
+ */
 function TaskCard({ task, showProject = false }: TaskCardProps) {
     const projectId = task.project?.id;
 
@@ -61,10 +74,16 @@ function TaskCard({ task, showProject = false }: TaskCardProps) {
                             {task.project.name}
                         </span>
                     )}
-                    {task._count && (
+                    {task.dueDate && (
+                        <span className="flex items-center gap-1">
+                            <Image src="/icons/calendar.svg" alt="" width={12} height={12} />
+                            {new Date(task.dueDate).toLocaleDateString("fr-FR")}
+                        </span>
+                    )}
+                    {(task as any).comments && (
                         <span className="flex items-center gap-1">
                             <Image src="/icons/comment.svg" alt="" width={12} height={12} />
-                            {task._count.comments}
+                            {(task as any).comments.length}
                         </span>
                     )}
                 </div>

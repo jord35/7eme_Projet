@@ -1,34 +1,60 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { TaskCard } from "@/components/features/TaskCard";
+import { Tabs } from "@/components/ui/Tabs";
+import { PageLoader } from "@/components/ui/PageLoader";
+import { TaskDetailCard } from "@/components/features/TaskDetailCard";
 import { TaskSearch } from "@/components/features/TaskSearch";
 import { ProjectMembers } from "@/components/features/ProjectMembers";
-import { Spinner } from "@/components/ui/Spinner";
+import { DeleteProjectModal } from "@/components/features/DeleteProjectModal";
 import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
-import { CreateTaskForm } from "@/components/forms/CreateTaskForm";
+import { TaskForm } from "@/components/forms/TaskForm";
 import { EditProjectForm } from "@/components/forms/EditProjectForm";
-import { getProject, getProjectTasks } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import {
+    getProject,
+    getProjectTasks,
+    deleteProject,
+    searchUsers,
+    addContributor,
+    removeContributor,
+} from "@/lib/api";
 import type { Project, Task } from "@/lib/api";
 
 type ViewMode = "list" | "calendar";
 
+const projectTabs = [
+    { key: "list", label: "Liste" },
+    { key: "calendar", label: "Calendrier" },
+];
+
 export default function ProjectDetailPage() {
     const { id } = useParams<{ id: string }>();
+    const router = useRouter();
+    const { user } = useAuth();
+
     const [project, setProject] = useState<Project | null>(null);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showCreateTask, setShowCreateTask] = useState(false);
     const [showEditProject, setShowEditProject] = useState(false);
+    const [showDeleteProject, setShowDeleteProject] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [viewMode, setViewMode] = useState<ViewMode>("list");
     const [statusFilter, setStatusFilter] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
+
+    const [showAddContributor, setShowAddContributor] = useState(false);
+    const [contributorSearch, setContributorSearch] = useState("");
+    const [searchResults, setSearchResults] = useState<Array<{ id: string; email: string; name: string | null }>>([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const [isAddingContributor, setIsAddingContributor] = useState(false);
 
     useEffect(() => {
         Promise.all([getProject(id), getProjectTasks(id)])
@@ -71,22 +97,76 @@ export default function ProjectDetailPage() {
         setShowEditProject(false);
     }
 
-    function toggleComments(taskId: string) {
-        setExpandedComments((prev) => {
-            const next = new Set(prev);
-            if (next.has(taskId)) next.delete(taskId);
-            else next.add(taskId);
-            return next;
-        });
+    async function handleDeleteProject() {
+        setIsDeleting(true);
+        try {
+            await deleteProject(id);
+            toast.success("Projet supprimé");
+            router.push("/projects");
+        } catch (err) {
+            toast.error(
+                err instanceof Error ? err.message : "Erreur de suppression"
+            );
+        } finally {
+            setIsDeleting(false);
+            setShowDeleteProject(false);
+        }
     }
 
-    if (isLoading) {
-        return (
-            <div className="flex min-h-[50vh] items-center justify-center">
-                <Spinner size="lg" />
-            </div>
-        );
+    async function handleSearchUsers(query: string) {
+        setContributorSearch(query);
+        if (query.length < 2) {
+            setSearchResults([]);
+            return;
+        }
+        setIsSearching(true);
+        try {
+            const results = await searchUsers(query);
+            const memberIds = new Set([
+                project?.owner.id,
+                ...(project?.members.map((m) => m.user.id) || []),
+            ]);
+            setSearchResults(results.filter((r) => !memberIds.has(r.id)));
+        } catch {
+            setSearchResults([]);
+        } finally {
+            setIsSearching(false);
+        }
     }
+
+    async function handleAddContributor(email: string) {
+        setIsAddingContributor(true);
+        try {
+            await addContributor(id, email);
+            toast.success("Contributeur ajouté !");
+            const updated = await getProject(id);
+            setProject(updated);
+            setShowAddContributor(false);
+            setContributorSearch("");
+            setSearchResults([]);
+        } catch (err) {
+            toast.error(
+                err instanceof Error ? err.message : "Erreur d'ajout"
+            );
+        } finally {
+            setIsAddingContributor(false);
+        }
+    }
+
+    async function handleRemoveContributor(userId: string) {
+        try {
+            await removeContributor(id, userId);
+            toast.success("Contributeur retiré");
+            const updated = await getProject(id);
+            setProject(updated);
+        } catch (err) {
+            toast.error(
+                err instanceof Error ? err.message : "Erreur de retrait"
+            );
+        }
+    }
+
+    if (isLoading) return <PageLoader />;
 
     if (!project) {
         return (
@@ -97,6 +177,7 @@ export default function ProjectDetailPage() {
     }
 
     const isAdmin = project.userRole === "ADMIN";
+    const isOwner = user?.id === project.owner.id;
 
     return (
         <div>
@@ -113,11 +194,21 @@ export default function ProjectDetailPage() {
                 onEditClick={() => setShowEditProject(true)}
             />
 
-            {/* Contributeurs (composant réutilisable, avec les noms) */}
+            {/* Contributeurs */}
             <div className="mb-6">
-                <h2 className="text-body-s font-medium text-neutral-600">
-                    Contributeurs ({project.members.length + 1})
-                </h2>
+                <div className="flex items-center justify-between">
+                    <h2 className="text-body-s font-medium text-neutral-600">
+                        Contributeurs ({project.members.length + 1})
+                    </h2>
+                    {isAdmin && (
+                        <button
+                            onClick={() => setShowAddContributor(true)}
+                            className="text-body-xs font-medium text-brand-orange-main hover:text-brand-orange-dark transition-colors"
+                        >
+                            + Ajouter un contributeur
+                        </button>
+                    )}
+                </div>
                 <div className="mt-2">
                     <ProjectMembers
                         owner={project.owner}
@@ -126,25 +217,46 @@ export default function ProjectDetailPage() {
                         showRoleBadge
                     />
                 </div>
+
+                {isAdmin && (
+                    <div className="mt-3 space-y-1">
+                        {project.members.map((m) => (
+                            <div
+                                key={m.user.id}
+                                className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5"
+                            >
+                                <span className="text-body-xs text-neutral-700">
+                                    {m.user.name}{" "}
+                                    <span className="text-neutral-400">
+                                        ({m.user.email})
+                                    </span>
+                                    {m.role === "ADMIN" && (
+                                        <Badge variant="info" className="ml-2">
+                                            Admin
+                                        </Badge>
+                                    )}
+                                </span>
+                                <button
+                                    onClick={() =>
+                                        handleRemoveContributor(m.user.id)
+                                    }
+                                    className="text-body-xs text-error-main hover:text-error-main/80 transition-colors"
+                                >
+                                    Retirer
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
-            {/* Navigation vues */}
-            <div className="mb-4 flex gap-2 border-b border-neutral-200">
-                {(["list", "calendar"] as ViewMode[]).map((mode) => (
-                    <button
-                        key={mode}
-                        onClick={() => setViewMode(mode)}
-                        className={`px-4 py-2 text-body-s font-medium transition-colors border-b-2 -mb-px ${viewMode === mode
-                            ? "border-brand-orange-main text-brand-orange-main"
-                            : "border-transparent text-neutral-400 hover:text-neutral-600"
-                            }`}
-                    >
-                        {mode === "list" ? "Liste" : "Calendrier"}
-                    </button>
-                ))}
-            </div>
+            <Tabs
+                tabs={projectTabs}
+                activeTab={viewMode}
+                onChange={(key) => setViewMode(key as ViewMode)}
+            />
 
-            {/* Filtres + recherche (composant réutilisable) */}
+            {/* Filtres + recherche */}
             <TaskSearch
                 onSearch={(query, status) => {
                     setSearchQuery(query);
@@ -167,26 +279,7 @@ export default function ProjectDetailPage() {
                     ) : (
                         <div className="mt-3 space-y-3">
                             {filteredTasks.map((task) => (
-                                <div key={task.id}>
-                                    <TaskCard task={task} />
-                                    {/* Commentaires en accordéon */}
-                                    <div className="mt-1">
-                                        <button
-                                            onClick={() => toggleComments(task.id)}
-                                            className="text-body-xs text-neutral-400 hover:text-neutral-600 transition-colors"
-                                        >
-                                            Commentaires ({task._count?.comments || 0})
-                                            {expandedComments.has(task.id) ? " ▲" : " ▼"}
-                                        </button>
-                                        {expandedComments.has(task.id) && (
-                                            <div className="mt-2 rounded-md bg-neutral-50 p-3 text-body-s text-neutral-600">
-                                                <p className="text-body-xs text-neutral-400 italic">
-                                                    Les commentaires seront chargés ici.
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                <TaskDetailCard key={task.id} task={task} />
                             ))}
                         </div>
                     )}
@@ -211,19 +304,30 @@ export default function ProjectDetailPage() {
                 </div>
             )}
 
-            {/* Modale création tâche */}
+            {isOwner && (
+                <div className="mt-8 border-t border-neutral-200 pt-6">
+                    <button
+                        onClick={() => setShowDeleteProject(true)}
+                        className="rounded-md bg-error-main px-4 py-2 text-body-s font-medium text-neutral-white shadow-sm hover:bg-error-main/80 transition-colors"
+                    >
+                        Supprimer le projet
+                    </button>
+                </div>
+            )}
+
             <Modal
                 isOpen={showCreateTask}
                 onClose={() => setShowCreateTask(false)}
                 title="Créer une tâche"
             >
-                <CreateTaskForm
+                <TaskForm
+                    mode="create"
                     projectId={id}
+                    members={project.members}
                     onSuccess={handleTaskCreated}
                 />
             </Modal>
 
-            {/* Modale modification projet */}
             <Modal
                 isOpen={showEditProject}
                 onClose={() => setShowEditProject(false)}
@@ -233,6 +337,69 @@ export default function ProjectDetailPage() {
                     project={project}
                     onSuccess={handleProjectUpdated}
                 />
+            </Modal>
+
+            <DeleteProjectModal
+                isOpen={showDeleteProject}
+                onConfirm={handleDeleteProject}
+                onCancel={() => setShowDeleteProject(false)}
+                isDeleting={isDeleting}
+            />
+
+            <Modal
+                isOpen={showAddContributor}
+                onClose={() => {
+                    setShowAddContributor(false);
+                    setContributorSearch("");
+                    setSearchResults([]);
+                }}
+                title="Ajouter un contributeur"
+            >
+                <div className="space-y-4">
+                    <input
+                        type="text"
+                        value={contributorSearch}
+                        onChange={(e) => handleSearchUsers(e.target.value)}
+                        placeholder="Rechercher par email ou nom..."
+                        className="block w-full rounded-md border border-neutral-200 px-3 py-2 text-body-s shadow-sm placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                    />
+                    {isSearching && (
+                        <p className="text-body-xs text-neutral-400">
+                            Recherche...
+                        </p>
+                    )}
+                    {searchResults.length > 0 && (
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                            {searchResults.map((u) => (
+                                <button
+                                    key={u.id}
+                                    onClick={() =>
+                                        handleAddContributor(u.email)
+                                    }
+                                    disabled={isAddingContributor}
+                                    className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-body-s hover:bg-neutral-50 transition-colors"
+                                >
+                                    <span>
+                                        {u.name || "Sans nom"}{" "}
+                                        <span className="text-neutral-400">
+                                            ({u.email})
+                                        </span>
+                                    </span>
+                                    <span className="text-brand-orange-main text-body-xs font-medium">
+                                        + Ajouter
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    {contributorSearch.length >= 2 &&
+                        !isSearching &&
+                        searchResults.length === 0 && (
+                            <p className="text-body-xs text-neutral-400">
+                                Aucun utilisateur trouvé.
+                            </p>
+                        )}
+                </div>
             </Modal>
         </div>
     );

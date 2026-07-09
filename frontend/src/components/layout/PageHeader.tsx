@@ -5,18 +5,32 @@ import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 
 interface PageHeaderProps {
+    /** Titre de la page */
     title: string;
+    /** Description optionnelle sous le titre */
     description?: string;
+    /** Lien de retour (flèche ←) */
     backLink?: string;
+    /** Bouton d'action principal (ex: "Créer un projet", "Créer une tâche") */
     action?: {
         label: string;
         onClick: () => void;
     };
+    /** Afficher le bouton d'édition (icône crayon) ? */
     showEditButton?: boolean;
+    /** Afficher le bouton IA (désactivé) ? */
     showIAButton?: boolean;
+    /** Callback du clic sur le bouton d'édition */
     onEditClick?: () => void;
 }
 
+/**
+ * En-tête de page réutilisable.
+ * Gère : titre, description, lien retour, bouton d'action,
+ * bouton d'édition (admin), et bouton IA (placeholder).
+ *
+ * Utilisé dans : Dashboard, Projets, Détail projet.
+ */
 function PageHeader({
     title,
     description,
@@ -28,7 +42,7 @@ function PageHeader({
 }: PageHeaderProps) {
     return (
         <div className="mb-6">
-            {/* Ligne retour */}
+            {/* Lien retour */}
             {backLink && (
                 <Link
                     href={backLink}

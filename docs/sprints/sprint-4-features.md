@@ -18,11 +18,11 @@
 
 ## 2. Modification de tâche (US-007)
 
-- [ ] Ajouter un bouton "Modifier" sur chaque carte tâche
-- [ ] Intégrer `EditTaskForm` (édition inline ou modale)
-- [ ] Permettre le changement de statut (TODO → IN_PROGRESS → DONE)
+- [ ] ~~Ajouter un bouton "Modifier" sur chaque carte tâche~~ *(retiré — pas dans les US)*
+- [ ] ~~Intégrer `EditTaskForm` (édition inline ou modale)~~ *(retiré — pas dans les US)*
+- [ ] Permettre le changement de statut (TODO → IN_PROGRESS → DONE) *(à faire dans une US dédiée)*
 
-**Fichiers :** [`frontend/src/components/features/TaskCard.tsx`](../../frontend/src/components/features/TaskCard.tsx), page détail projet
+**Fichiers :** page détail projet
 
 ---
 

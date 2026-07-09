@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { PageLoader } from "@/components/ui/PageLoader";
 import { ProjectCard } from "@/components/features/ProjectCard";
-import { Spinner } from "@/components/ui/Spinner";
 import { Modal } from "@/components/ui/Modal";
 import { CreateProjectForm } from "@/components/forms/CreateProjectForm";
 import { getProjects } from "@/lib/api";
@@ -26,13 +26,7 @@ export default function ProjectsPage() {
         setShowCreateModal(false);
     }
 
-    if (isLoading) {
-        return (
-            <div className="flex min-h-[50vh] items-center justify-center">
-                <Spinner size="lg" />
-            </div>
-        );
-    }
+    if (isLoading) return <PageLoader />;
 
     return (
         <div>
