@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TaskCard } from "@/components/features/TaskCard";
+import { TaskSearch } from "@/components/features/TaskSearch";
 import { Spinner } from "@/components/ui/Spinner";
 import { getAssignedTasks } from "@/lib/api";
 import type { AssignedTask } from "@/lib/api";
@@ -21,6 +22,7 @@ export default function DashboardPage() {
     const [viewMode, setViewMode] = useState<ViewMode>("list");
     const [tasks, setTasks] = useState<AssignedTask[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         getAssignedTasks()
@@ -29,12 +31,27 @@ export default function DashboardPage() {
             .finally(() => setIsLoading(false));
     }, []);
 
-    const sortedTasks = [...tasks].sort((a, b) => {
+    const sortedTasks = useMemo(() => {
+        let filtered = [...tasks];
+
+        // Filtre par recherche
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            filtered = filtered.filter(
+                (t) =>
+                    t.title.toLowerCase().includes(q) ||
+                    (t.description || "").toLowerCase().includes(q)
+            );
+        }
+
+        // Tri par priorité
         const priorityOrder = { URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
-        return (
-            (priorityOrder[a.priority] ?? 4) - (priorityOrder[b.priority] ?? 4)
+        return filtered.sort(
+            (a, b) =>
+                (priorityOrder[a.priority] ?? 4) -
+                (priorityOrder[b.priority] ?? 4)
         );
-    });
+    }, [tasks, searchQuery]);
 
     if (isLoading) {
         return (
@@ -55,6 +72,13 @@ export default function DashboardPage() {
                 }}
             />
 
+            {/* Barre de recherche (composant réutilisable, sans filtre statut) */}
+            <TaskSearch
+                onSearch={(query) => setSearchQuery(query)}
+                placeholder="Rechercher une tâche par titre..."
+                showStatusFilter={false}
+            />
+
             {/* Navigation vues */}
             <div className="mb-6 flex gap-2 border-b border-neutral-200">
                 {(["list", "kanban"] as ViewMode[]).map((mode) => (
@@ -62,8 +86,8 @@ export default function DashboardPage() {
                         key={mode}
                         onClick={() => setViewMode(mode)}
                         className={`px-4 py-2 text-body-s font-medium transition-colors border-b-2 -mb-px ${viewMode === mode
-                                ? "border-brand-orange-main text-brand-orange-main"
-                                : "border-transparent text-neutral-400 hover:text-neutral-600"
+                            ? "border-brand-orange-main text-brand-orange-main"
+                            : "border-transparent text-neutral-400 hover:text-neutral-600"
                             }`}
                     >
                         {mode === "list" ? "Liste" : "Kanban"}

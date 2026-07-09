@@ -6,6 +6,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TaskCard } from "@/components/features/TaskCard";
+import { TaskSearch } from "@/components/features/TaskSearch";
 import { Spinner } from "@/components/ui/Spinner";
 import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
@@ -15,13 +16,6 @@ import { getProject, getProjectTasks } from "@/lib/api";
 import type { Project, Task } from "@/lib/api";
 
 type ViewMode = "list" | "calendar";
-
-const statusOptions = [
-    { value: "", label: "Tous les statuts" },
-    { value: "TODO", label: "À faire" },
-    { value: "IN_PROGRESS", label: "En cours" },
-    { value: "DONE", label: "Terminé" },
-];
 
 export default function ProjectDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -160,8 +154,8 @@ export default function ProjectDetailPage() {
                         key={mode}
                         onClick={() => setViewMode(mode)}
                         className={`px-4 py-2 text-body-s font-medium transition-colors border-b-2 -mb-px ${viewMode === mode
-                                ? "border-brand-orange-main text-brand-orange-main"
-                                : "border-transparent text-neutral-400 hover:text-neutral-600"
+                            ? "border-brand-orange-main text-brand-orange-main"
+                            : "border-transparent text-neutral-400 hover:text-neutral-600"
                             }`}
                     >
                         {mode === "list" ? "Liste" : "Calendrier"}
@@ -169,27 +163,15 @@ export default function ProjectDetailPage() {
                 ))}
             </div>
 
-            {/* Filtres + recherche */}
-            <div className="mb-4 flex flex-wrap gap-3">
-                <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="rounded-md border border-neutral-200 px-3 py-1.5 text-body-s text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
-                >
-                    {statusOptions.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </option>
-                    ))}
-                </select>
-                <input
-                    type="text"
-                    placeholder="Rechercher une tâche..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 rounded-md border border-neutral-200 px-3 py-1.5 text-body-s text-neutral-950 placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
-                />
-            </div>
+            {/* Filtres + recherche (composant réutilisable) */}
+            <TaskSearch
+                onSearch={(query, status) => {
+                    setSearchQuery(query);
+                    setStatusFilter(status);
+                }}
+                placeholder="Rechercher une tâche..."
+                showStatusFilter
+            />
 
             {/* Vue Liste */}
             {viewMode === "list" && (
