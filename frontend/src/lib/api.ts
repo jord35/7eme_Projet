@@ -177,6 +177,52 @@ export async function deleteProject(id: string): Promise<void> {
     await handleResponse<{ message: string }>(res);
 }
 
+// ─── Contributeurs ─────────────────────────────────────────
+
+export interface UserSearchResult {
+    id: string;
+    email: string;
+    name: string | null;
+}
+
+export async function searchUsers(query: string): Promise<UserSearchResult[]> {
+    const res = await fetch(
+        `${API_URL}/users/search?query=${encodeURIComponent(query)}`,
+        { headers: getAuthHeaders() }
+    );
+    const data = await handleResponse<{ users: UserSearchResult[] }>(res);
+    return data.users;
+}
+
+export async function addContributor(
+    projectId: string,
+    email: string
+): Promise<void> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/contributors`,
+        {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ email, role: "CONTRIBUTOR" }),
+        }
+    );
+    await handleResponse(res);
+}
+
+export async function removeContributor(
+    projectId: string,
+    userId: string
+): Promise<void> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/contributors/${userId}`,
+        {
+            method: "DELETE",
+            headers: getAuthHeaders(),
+        }
+    );
+    await handleResponse(res);
+}
+
 // ─── Tâches ──────────────────────────────────────────────
 
 export interface Task {
@@ -221,4 +267,116 @@ export async function createTask(
     });
     const result = await handleResponse<{ task: Task }>(res);
     return result.task;
+}
+
+export async function updateTask(
+    projectId: string,
+    taskId: string,
+    data: {
+        title?: string;
+        description?: string;
+        status?: string;
+        dueDate?: string;
+        priority?: string;
+        assigneeIds?: string[];
+    }
+): Promise<Task> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/tasks/${taskId}`,
+        {
+            method: "PUT",
+            headers: getAuthHeaders(),
+            body: JSON.stringify(data),
+        }
+    );
+    const result = await handleResponse<{ task: Task }>(res);
+    return result.task;
+}
+
+export async function deleteTask(
+    projectId: string,
+    taskId: string
+): Promise<void> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/tasks/${taskId}`,
+        {
+            method: "DELETE",
+            headers: getAuthHeaders(),
+        }
+    );
+    await handleResponse<{ message: string }>(res);
+}
+
+// ─── Commentaires ─────────────────────────────────────────
+
+export interface Comment {
+    id: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    authorId: string;
+    taskId: string;
+    author: { id: string; name: string; email: string };
+}
+
+export async function getComments(
+    projectId: string,
+    taskId: string
+): Promise<Comment[]> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/tasks/${taskId}/comments`,
+        { headers: getAuthHeaders() }
+    );
+    const data = await handleResponse<{ comments: Comment[] }>(res);
+    return data.comments;
+}
+
+export async function createComment(
+    projectId: string,
+    taskId: string,
+    content: string
+): Promise<Comment> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/tasks/${taskId}/comments`,
+        {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ content }),
+        }
+    );
+    const data = await handleResponse<{ comment: Comment }>(res);
+    return data.comment;
+}
+
+export async function updateComment(
+    projectId: string,
+    taskId: string,
+    commentId: string,
+    content: string
+): Promise<Comment> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/tasks/${taskId}/comments/${commentId}`,
+        {
+            method: "PUT",
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ content }),
+        }
+    );
+    const data = await handleResponse<{ comment: Comment }>(res);
+    return data.comment;
+}
+
+export async function deleteComment(
+    projectId: string,
+    taskId: string,
+    commentId: string
+): Promise<void> {
+    const res = await fetch(
+        `${API_URL}/projects/${projectId}/tasks/${taskId}/comments/${commentId}`,
+        {
+            method: "DELETE",
+            headers: getAuthHeaders(),
+        }
+    );
+    await handleResponse<{ message: string }>(res);
 }
