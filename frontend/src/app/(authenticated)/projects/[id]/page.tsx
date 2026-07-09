@@ -7,6 +7,7 @@ import "react-calendar/dist/Calendar.css";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TaskCard } from "@/components/features/TaskCard";
 import { TaskSearch } from "@/components/features/TaskSearch";
+import { ProjectMembers } from "@/components/features/ProjectMembers";
 import { Spinner } from "@/components/ui/Spinner";
 import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
@@ -112,38 +113,18 @@ export default function ProjectDetailPage() {
                 onEditClick={() => setShowEditProject(true)}
             />
 
-            {/* Contributeurs */}
+            {/* Contributeurs (composant réutilisable, avec les noms) */}
             <div className="mb-6">
                 <h2 className="text-body-s font-medium text-neutral-600">
                     Contributeurs ({project.members.length + 1})
                 </h2>
-                <div className="mt-2 flex items-center gap-2">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-orange-main text-body-xs font-medium text-neutral-white">
-                        {project.owner.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .toUpperCase()
-                            .slice(0, 2)}
-                    </span>
-                    {project.members.slice(0, 4).map((m) => (
-                        <span
-                            key={m.user.id}
-                            className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 text-body-xs font-medium text-neutral-600"
-                        >
-                            {m.user.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
-                                .toUpperCase()
-                                .slice(0, 2)}
-                        </span>
-                    ))}
-                    {project.members.length > 4 && (
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-body-xs text-neutral-400">
-                            +{project.members.length - 4}
-                        </span>
-                    )}
+                <div className="mt-2">
+                    <ProjectMembers
+                        owner={project.owner}
+                        members={project.members}
+                        showNames
+                        showRoleBadge
+                    />
                 </div>
             </div>
 
