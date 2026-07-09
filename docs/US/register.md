@@ -1,9 +1,13 @@
 # Page Inscription (`/register`)
 
-## US-REGISTER-1 — Création de compte
+> Page de création de compte pour les nouveaux utilisateurs.
 
-**En tant que** visiteur non connecté  
-**Je veux** créer un compte avec mon nom, mon email et mon mot de passe  
+---
+
+## US-REGISTER-1 — Formulaire d'inscription
+
+**En tant que** visiteur non connecté
+**Je veux** créer un compte avec mon prénom, mon nom, mon email et mon mot de passe
 **Afin de** accéder à l'application
 
 **Critères d'acceptation :**
@@ -13,21 +17,20 @@
 - [x] Le champ confirmation vérifie que les deux mots de passe sont identiques
 - [x] Un bouton "Créer un compte" est présent
 - [x] Appel API `POST /auth/register`
-- [x] En cas de succès, redirection vers `/login` avec un message de succès
-- [x] En cas d'erreur de validation (Zod), message d'erreur affiché avant envoi à l'API
-- [x] En cas d'erreur backend (email déjà utilisé), message d'erreur affiché après la réponse API
+- [x] En cas de succès, redirection vers `/login` avec un toast de confirmation
+- [x] En cas d'erreur (email déjà utilisé), toast d'erreur affiché
 - [x] État de chargement pendant la requête
 
 ---
 
 ## US-REGISTER-2 — Lien vers la connexion
 
-**En tant que** visiteur non connecté  
-**Je veux** pouvoir accéder à la page de connexion depuis la page d'inscription  
+**En tant que** visiteur non connecté
+**Je veux** pouvoir accéder à la page de connexion depuis la page d'inscription
 **Afin de** me connecter si j'ai déjà un compte
 
 **Critères d'acceptation :**
-- [x] Un lien "Déjà un compte ? Se connecter" est visible sur la page
+- [x] Un lien "Déjà un compte ? Se connecter" est visible sous le formulaire
 - [x] Le lien redirige vers `/login`
 
 ---
@@ -35,4 +38,4 @@
 ## Notes
 
 - Voir aussi : [`login.md`](login.md) pour la page de connexion
-- Les règles de validation côté client (Zod) doivent correspondre à celles du backend : [`backend/src/utils/validation.ts`](../../backend/src/utils/validation.ts)
+- Les règles de validation côté client (Zod) sont dans [`validators.ts`](../../frontend/src/lib/validators.ts)
