@@ -32,28 +32,16 @@ export const profileSchema = z.object({
     firstName: z.string().min(1, "Prénom requis"),
     lastName: z.string().min(1, "Nom requis"),
     email: z.string().email("Email invalide"),
+    password: z
+        .string()
+        .min(8, "Minimum 8 caractères")
+        .regex(/[A-Z]/, "Au moins une majuscule")
+        .regex(/[a-z]/, "Au moins une minuscule")
+        .regex(/[0-9]/, "Au moins un chiffre")
+        .regex(/[@$!%*?&]/, "Au moins un caractère spécial")
+        .optional()
+        .or(z.literal("")),
 });
-
-export const passwordSchema = z
-    .object({
-        currentPassword: z.string().min(1, "Mot de passe actuel requis"),
-        newPassword: z
-            .string()
-            .min(8, "Minimum 8 caractères")
-            .regex(/[A-Z]/, "Au moins une majuscule")
-            .regex(/[a-z]/, "Au moins une minuscule")
-            .regex(/[0-9]/, "Au moins un chiffre")
-            .regex(/[@$!%*?&]/, "Au moins un caractère spécial"),
-        confirmNewPassword: z.string(),
-    })
-    .refine((data) => data.newPassword === data.confirmNewPassword, {
-        message: "Les mots de passe ne correspondent pas",
-        path: ["confirmNewPassword"],
-    })
-    .refine((data) => data.currentPassword !== data.newPassword, {
-        message: "Le nouveau mot de passe doit être différent de l'actuel",
-        path: ["newPassword"],
-    });
 
 // ─── Projet ─────────────────────────────────────────────
 
@@ -114,7 +102,6 @@ export const createCommentSchema = z.object({
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
-export type PasswordInput = z.infer<typeof passwordSchema>;
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
 export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
