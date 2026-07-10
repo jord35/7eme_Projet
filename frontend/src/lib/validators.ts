@@ -18,7 +18,10 @@ export const registerSchema = z
             .regex(/[A-Z]/, "Au moins une majuscule")
             .regex(/[a-z]/, "Au moins une minuscule")
             .regex(/[0-9]/, "Au moins un chiffre")
-            .regex(/[@$!%*?&]/, "Au moins un caractère spécial"),
+            .regex(
+                /[@$!%*?&]/,
+                "Au moins un caractère spécial (@$!%*?&)",
+            ),
         confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -28,20 +31,35 @@ export const registerSchema = z
 
 // ─── Profil ─────────────────────────────────────────────
 
-export const profileSchema = z.object({
-    firstName: z.string().min(1, "Prénom requis"),
-    lastName: z.string().min(1, "Nom requis"),
-    email: z.string().email("Email invalide"),
-    password: z
-        .string()
-        .min(8, "Minimum 8 caractères")
-        .regex(/[A-Z]/, "Au moins une majuscule")
-        .regex(/[a-z]/, "Au moins une minuscule")
-        .regex(/[0-9]/, "Au moins un chiffre")
-        .regex(/[@$!%*?&]/, "Au moins un caractère spécial")
-        .optional()
-        .or(z.literal("")),
-});
+export const profileSchema = z
+    .object({
+        firstName: z.string().min(1, "Prénom requis"),
+        lastName: z.string().min(1, "Nom requis"),
+        email: z.string().email("Email invalide"),
+        currentPassword: z.string().optional().or(z.literal("")),
+        newPassword: z
+            .string()
+            .min(8, "Minimum 8 caractères")
+            .regex(/[A-Z]/, "Au moins une majuscule")
+            .regex(/[a-z]/, "Au moins une minuscule")
+            .regex(/[0-9]/, "Au moins un chiffre")
+            .regex(/[@$!%*?&]/, "Au moins un caractère spécial (@$!%*?&)")
+            .optional()
+            .or(z.literal("")),
+    })
+    .refine(
+        (data) => {
+            // Si newPassword est fourni, currentPassword doit l'être aussi
+            if (data.newPassword && !data.currentPassword) {
+                return false;
+            }
+            return true;
+        },
+        {
+            message: "Le mot de passe actuel est requis pour changer de mot de passe",
+            path: ["currentPassword"],
+        },
+    );
 
 // ─── Projet ─────────────────────────────────────────────
 

@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { ProjectCard } from "@/components/features/ProjectCard";
 import { Modal } from "@/components/ui/Modal";
-import { CreateProjectForm } from "@/components/forms/CreateProjectForm";
+import { ProjectForm } from "@/components/forms/ProjectForm";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
 
@@ -58,7 +58,7 @@ export default function ProjectsPage() {
                 onClose={() => setShowCreateModal(false)}
                 title="Créer un projet"
             >
-                <CreateProjectForm onSuccess={handleProjectCreated} />
+                <ProjectForm mode="create" onSuccess={handleProjectCreated} />
             </Modal>
         </div>
     );

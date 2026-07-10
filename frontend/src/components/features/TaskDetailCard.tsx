@@ -26,6 +26,10 @@ interface TaskDetailCardProps {
         }>;
         comments?: Array<unknown>;
     };
+    /** Callback pour éditer la tâche */
+    onEdit?: (task: TaskDetailCardProps["task"]) => void;
+    /** Callback pour supprimer la tâche */
+    onDelete?: (task: TaskDetailCardProps["task"]) => void;
 }
 
 const statusLabels: Record<string, string> = {
@@ -57,19 +61,63 @@ function getInitials(name: string): string {
  * Affiche : titre, description, badge statut, date d'échéance,
  * liste des assignés (avatar + nom), et accordéon commentaires.
  */
-function TaskDetailCard({ task }: TaskDetailCardProps) {
+function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
     const [expandedComments, setExpandedComments] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
 
     return (
         <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
-            {/* Titre + Badge statut */}
+            {/* Titre + Badge statut + Menu "..." */}
             <div className="flex items-start justify-between gap-2">
                 <h3 className="text-body-m font-medium text-neutral-950">
                     {task.title}
                 </h3>
-                <Badge variant={statusVariants[task.status] || "neutral"}>
-                    {statusLabels[task.status] || task.status}
-                </Badge>
+                <div className="flex items-center gap-2">
+                    <Badge variant={statusVariants[task.status] || "neutral"}>
+                        {statusLabels[task.status] || task.status}
+                    </Badge>
+
+                    {/* Menu "..." */}
+                    {(onEdit || onDelete) && (
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowMenu((prev) => !prev)}
+                                className="flex h-7 w-7 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
+                                title="Actions"
+                            >
+                                ⋮
+                            </button>
+                            {showMenu && (
+                                <div className="absolute right-0 top-full z-10 mt-1 w-36 rounded-md bg-neutral-white shadow-lg ring-1 ring-neutral-200">
+                                    {onEdit && (
+                                        <button
+                                            onClick={() => {
+                                                setShowMenu(false);
+                                                onEdit(task);
+                                            }}
+                                            className="flex w-full items-center gap-2 px-3 py-2 text-body-xs text-neutral-700 hover:bg-neutral-50 transition-colors"
+                                        >
+                                            <Image src="/icons/edit.svg" alt="" width={12} height={12} />
+                                            Modifier
+                                        </button>
+                                    )}
+                                    {onDelete && (
+                                        <button
+                                            onClick={() => {
+                                                setShowMenu(false);
+                                                onDelete(task);
+                                            }}
+                                            className="flex w-full items-center gap-2 px-3 py-2 text-body-xs text-error-main hover:bg-neutral-50 transition-colors"
+                                        >
+                                            <Image src="/icons/trash.svg" alt="" width={12} height={12} />
+                                            Supprimer
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Description */}

@@ -11,19 +11,16 @@ import { PageLoader } from "@/components/ui/PageLoader";
 import { TaskDetailCard } from "@/components/features/TaskDetailCard";
 import { TaskSearch } from "@/components/features/TaskSearch";
 import { ProjectMembers } from "@/components/features/ProjectMembers";
-import { DeleteProjectModal } from "@/components/features/DeleteProjectModal";
+import { ConfirmDeleteModal } from "@/components/features/ConfirmDeleteModal";
 import { Modal } from "@/components/ui/Modal";
-import { Badge } from "@/components/ui/Badge";
 import { TaskForm } from "@/components/forms/TaskForm";
-import { EditProjectForm } from "@/components/forms/EditProjectForm";
+import { ProjectForm } from "@/components/forms/ProjectForm";
 import { useAuth } from "@/context/AuthContext";
 import {
     getProject,
     getProjectTasks,
     deleteProject,
-    searchUsers,
-    addContributor,
-    removeContributor,
+    deleteTask,
 } from "@/lib/api";
 import type { Project, Task } from "@/lib/api";
 
@@ -46,15 +43,12 @@ export default function ProjectDetailPage() {
     const [showEditProject, setShowEditProject] = useState(false);
     const [showDeleteProject, setShowDeleteProject] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [deletingTask, setDeletingTask] = useState<Task | null>(null);
+    const [isDeletingTask, setIsDeletingTask] = useState(false);
     const [viewMode, setViewMode] = useState<ViewMode>("list");
     const [statusFilter, setStatusFilter] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-
-    const [showAddContributor, setShowAddContributor] = useState(false);
-    const [contributorSearch, setContributorSearch] = useState("");
-    const [searchResults, setSearchResults] = useState<Array<{ id: string; email: string; name: string | null }>>([]);
-    const [isSearching, setIsSearching] = useState(false);
-    const [isAddingContributor, setIsAddingContributor] = useState(false);
 
     useEffect(() => {
         Promise.all([getProject(id), getProjectTasks(id)])
@@ -97,6 +91,28 @@ export default function ProjectDetailPage() {
         setShowEditProject(false);
     }
 
+    function handleTaskUpdated(task: Task) {
+        setTasks((prev) => prev.map((t) => (t.id === task.id ? task : t)));
+        setEditingTask(null);
+    }
+
+    async function handleDeleteTask() {
+        if (!deletingTask) return;
+        setIsDeletingTask(true);
+        try {
+            await deleteTask(id, deletingTask.id);
+            toast.success("Tâche supprimée");
+            setTasks((prev) => prev.filter((t) => t.id !== deletingTask.id));
+            setDeletingTask(null);
+        } catch (err) {
+            toast.error(
+                err instanceof Error ? err.message : "Erreur de suppression"
+            );
+        } finally {
+            setIsDeletingTask(false);
+        }
+    }
+
     async function handleDeleteProject() {
         setIsDeleting(true);
         try {
@@ -110,59 +126,6 @@ export default function ProjectDetailPage() {
         } finally {
             setIsDeleting(false);
             setShowDeleteProject(false);
-        }
-    }
-
-    async function handleSearchUsers(query: string) {
-        setContributorSearch(query);
-        if (query.length < 2) {
-            setSearchResults([]);
-            return;
-        }
-        setIsSearching(true);
-        try {
-            const results = await searchUsers(query);
-            const memberIds = new Set([
-                project?.owner.id,
-                ...(project?.members.map((m) => m.user.id) || []),
-            ]);
-            setSearchResults(results.filter((r) => !memberIds.has(r.id)));
-        } catch {
-            setSearchResults([]);
-        } finally {
-            setIsSearching(false);
-        }
-    }
-
-    async function handleAddContributor(email: string) {
-        setIsAddingContributor(true);
-        try {
-            await addContributor(id, email);
-            toast.success("Contributeur ajouté !");
-            const updated = await getProject(id);
-            setProject(updated);
-            setShowAddContributor(false);
-            setContributorSearch("");
-            setSearchResults([]);
-        } catch (err) {
-            toast.error(
-                err instanceof Error ? err.message : "Erreur d'ajout"
-            );
-        } finally {
-            setIsAddingContributor(false);
-        }
-    }
-
-    async function handleRemoveContributor(userId: string) {
-        try {
-            await removeContributor(id, userId);
-            toast.success("Contributeur retiré");
-            const updated = await getProject(id);
-            setProject(updated);
-        } catch (err) {
-            toast.error(
-                err instanceof Error ? err.message : "Erreur de retrait"
-            );
         }
     }
 
@@ -194,60 +157,15 @@ export default function ProjectDetailPage() {
                 onEditClick={() => setShowEditProject(true)}
             />
 
-            {/* Contributeurs */}
+            {/* Contributeurs (affichage lecture seule) */}
             <div className="mb-6">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-body-s font-medium text-neutral-600">
-                        Contributeurs ({project.members.length + 1})
-                    </h2>
-                    {isAdmin && (
-                        <button
-                            onClick={() => setShowAddContributor(true)}
-                            className="text-body-xs font-medium text-brand-orange-main hover:text-brand-orange-dark transition-colors"
-                        >
-                            + Ajouter un contributeur
-                        </button>
-                    )}
-                </div>
-                <div className="mt-2">
-                    <ProjectMembers
-                        owner={project.owner}
-                        members={project.members}
-                        showNames
-                        showRoleBadge
-                    />
-                </div>
-
-                {isAdmin && (
-                    <div className="mt-3 space-y-1">
-                        {project.members.map((m) => (
-                            <div
-                                key={m.user.id}
-                                className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5"
-                            >
-                                <span className="text-body-xs text-neutral-700">
-                                    {m.user.name}{" "}
-                                    <span className="text-neutral-400">
-                                        ({m.user.email})
-                                    </span>
-                                    {m.role === "ADMIN" && (
-                                        <Badge variant="info" className="ml-2">
-                                            Admin
-                                        </Badge>
-                                    )}
-                                </span>
-                                <button
-                                    onClick={() =>
-                                        handleRemoveContributor(m.user.id)
-                                    }
-                                    className="text-body-xs text-error-main hover:text-error-main/80 transition-colors"
-                                >
-                                    Retirer
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                <ProjectMembers
+                    owner={project.owner}
+                    members={project.members}
+                    label="Contributeurs"
+                    showNames
+                    showRoleBadge
+                />
             </div>
 
             <Tabs
@@ -279,7 +197,12 @@ export default function ProjectDetailPage() {
                     ) : (
                         <div className="mt-3 space-y-3">
                             {filteredTasks.map((task) => (
-                                <TaskDetailCard key={task.id} task={task} />
+                                <TaskDetailCard
+                                    key={task.id}
+                                    task={task}
+                                    onEdit={(t) => setEditingTask(t)}
+                                    onDelete={(t) => setDeletingTask(t)}
+                                />
                             ))}
                         </div>
                     )}
@@ -323,6 +246,8 @@ export default function ProjectDetailPage() {
                 <TaskForm
                     mode="create"
                     projectId={id}
+                    owner={project.owner}
+                    isOwner={isOwner}
                     members={project.members}
                     onSuccess={handleTaskCreated}
                 />
@@ -333,74 +258,59 @@ export default function ProjectDetailPage() {
                 onClose={() => setShowEditProject(false)}
                 title="Modifier le projet"
             >
-                <EditProjectForm
+                <ProjectForm
+                    mode="edit"
                     project={project}
                     onSuccess={handleProjectUpdated}
                 />
             </Modal>
 
-            <DeleteProjectModal
+            <ConfirmDeleteModal
                 isOpen={showDeleteProject}
                 onConfirm={handleDeleteProject}
                 onCancel={() => setShowDeleteProject(false)}
                 isDeleting={isDeleting}
+                title="Supprimer le projet"
+                message="Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible."
             />
 
-            <Modal
-                isOpen={showAddContributor}
-                onClose={() => {
-                    setShowAddContributor(false);
-                    setContributorSearch("");
-                    setSearchResults([]);
-                }}
-                title="Ajouter un contributeur"
-            >
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        value={contributorSearch}
-                        onChange={(e) => handleSearchUsers(e.target.value)}
-                        placeholder="Rechercher par email ou nom..."
-                        className="block w-full rounded-md border border-neutral-200 px-3 py-2 text-body-s shadow-sm placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+            {/* Modale édition de tâche */}
+            {editingTask && (
+                <Modal
+                    isOpen={!!editingTask}
+                    onClose={() => setEditingTask(null)}
+                    title="Modifier la tâche"
+                >
+                    <TaskForm
+                        mode="edit"
+                        projectId={id}
+                        owner={project.owner}
+                        isOwner={isOwner}
+                        members={project.members}
+                        initialData={{
+                            taskId: editingTask.id,
+                            title: editingTask.title,
+                            description: editingTask.description,
+                            dueDate: editingTask.dueDate,
+                            status: editingTask.status,
+                            assigneeIds:
+                                editingTask.assignees?.map((a) => a.userId) ||
+                                [],
+                        }}
+                        onSuccess={handleTaskUpdated}
                     />
-                    {isSearching && (
-                        <p className="text-body-xs text-neutral-400">
-                            Recherche...
-                        </p>
-                    )}
-                    {searchResults.length > 0 && (
-                        <div className="space-y-1 max-h-48 overflow-y-auto">
-                            {searchResults.map((u) => (
-                                <button
-                                    key={u.id}
-                                    onClick={() =>
-                                        handleAddContributor(u.email)
-                                    }
-                                    disabled={isAddingContributor}
-                                    className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-body-s hover:bg-neutral-50 transition-colors"
-                                >
-                                    <span>
-                                        {u.name || "Sans nom"}{" "}
-                                        <span className="text-neutral-400">
-                                            ({u.email})
-                                        </span>
-                                    </span>
-                                    <span className="text-brand-orange-main text-body-xs font-medium">
-                                        + Ajouter
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                    {contributorSearch.length >= 2 &&
-                        !isSearching &&
-                        searchResults.length === 0 && (
-                            <p className="text-body-xs text-neutral-400">
-                                Aucun utilisateur trouvé.
-                            </p>
-                        )}
-                </div>
-            </Modal>
+                </Modal>
+            )}
+
+            {/* Modale suppression de tâche */}
+            <ConfirmDeleteModal
+                isOpen={!!deletingTask}
+                onConfirm={handleDeleteTask}
+                onCancel={() => setDeletingTask(null)}
+                isDeleting={isDeletingTask}
+                title="Supprimer la tâche"
+                message={`Êtes-vous sûr de vouloir supprimer la tâche "${deletingTask?.title}" ? Cette action est irréversible.`}
+            />
         </div>
     );
 }

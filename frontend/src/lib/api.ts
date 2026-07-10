@@ -26,8 +26,12 @@ export interface LoginResponse {
 /** Gère la réponse API : parse le JSON, extrait `data`, ou throw une erreur */
 async function handleResponse<T>(res: Response): Promise<T> {
     if (!res.ok) {
-        const body = await res.json().catch(() => ({ error: "Erreur inconnue" }));
-        throw new Error(body.error || `Erreur ${res.status}`);
+        const body = await res.json().catch(() => ({ message: "Erreur inconnue" }));
+        const message =
+            body.message ||
+            body.error ||
+            `Erreur ${res.status}`;
+        throw new Error(message);
     }
     const json = await res.json();
     return json.data as T;

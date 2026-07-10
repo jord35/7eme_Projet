@@ -8,7 +8,7 @@ import { PageLoader } from "@/components/ui/PageLoader";
 import { Modal } from "@/components/ui/Modal";
 import { TaskListView } from "@/components/features/TaskListView";
 import { TaskKanbanView } from "@/components/features/TaskKanbanView";
-import { CreateProjectForm } from "@/components/forms/CreateProjectForm";
+import { ProjectForm } from "@/components/forms/ProjectForm";
 import { getAssignedTasks } from "@/lib/api";
 import type { AssignedTask, Project } from "@/lib/api";
 
@@ -46,12 +46,7 @@ export default function DashboardPage() {
             );
         }
 
-        const priorityOrder = { URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
-        return filtered.sort(
-            (a, b) =>
-                (priorityOrder[a.priority] ?? 4) -
-                (priorityOrder[b.priority] ?? 4)
-        );
+        return filtered;
     }, [tasks, searchQuery]);
 
     function handleProjectCreated(_project: Project) {
@@ -94,7 +89,7 @@ export default function DashboardPage() {
                 onClose={() => setShowCreateProject(false)}
                 title="Créer un projet"
             >
-                <CreateProjectForm onSuccess={handleProjectCreated} />
+                <ProjectForm mode="create" onSuccess={handleProjectCreated} />
             </Modal>
         </div>
     );

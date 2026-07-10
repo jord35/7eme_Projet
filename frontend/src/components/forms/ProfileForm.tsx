@@ -22,7 +22,8 @@ function ProfileForm() {
             firstName: defaultFirstName,
             lastName: defaultLastName,
             email: user?.email || "",
-            password: "",
+            currentPassword: "",
+            newPassword: "",
         },
     });
 
@@ -36,11 +37,9 @@ function ProfileForm() {
             });
             loginSuccess(sessionStorage.getItem("token")!, updated);
 
-            // Si un mot de passe est fourni, le changer
-            if (data.password) {
-                // Le backend attend currentPassword + newPassword
-                // On utilise le même mot de passe pour les deux
-                await updatePassword(data.password, data.password);
+            // Si un nouveau mot de passe est fourni, le changer
+            if (data.newPassword && data.currentPassword) {
+                await updatePassword(data.currentPassword, data.newPassword);
             }
 
             toast.success("Profil mis à jour !");
@@ -48,7 +47,8 @@ function ProfileForm() {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
-                password: "",
+                currentPassword: "",
+                newPassword: "",
             });
         } catch (err) {
             toast.error(
@@ -87,11 +87,19 @@ function ProfileForm() {
             />
 
             <Input
-                label="Mot de passe"
+                label="Mot de passe actuel"
+                type="password"
+                placeholder="Mot de passe actuel"
+                error={form.formState.errors.currentPassword?.message}
+                {...form.register("currentPassword")}
+            />
+
+            <Input
+                label="Nouveau mot de passe"
                 type="password"
                 placeholder="Nouveau mot de passe (optionnel)"
-                error={form.formState.errors.password?.message}
-                {...form.register("password")}
+                error={form.formState.errors.newPassword?.message}
+                {...form.register("newPassword")}
             />
 
             <Button

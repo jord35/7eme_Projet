@@ -2,7 +2,7 @@
 
 import { Modal } from "@/components/ui/Modal";
 
-interface DeleteProjectModalProps {
+interface ConfirmDeleteModalProps {
     /** Contrôle l'ouverture de la modale */
     isOpen: boolean;
     /** Callback appelé quand l'utilisateur confirme la suppression */
@@ -11,24 +11,27 @@ interface DeleteProjectModalProps {
     onCancel: () => void;
     /** État de chargement pendant la suppression */
     isDeleting: boolean;
+    /** Titre de la modale */
+    title?: string;
+    /** Message de confirmation */
+    message?: string;
 }
 
 /**
- * Modale de confirmation pour la suppression d'un projet.
- * Utilise le composant Modal réutilisable.
+ * Modale de confirmation générique pour la suppression.
+ * Utilisée pour les projets et les tâches.
  */
-function DeleteProjectModal({
+function ConfirmDeleteModal({
     isOpen,
     onConfirm,
     onCancel,
     isDeleting,
-}: DeleteProjectModalProps) {
+    title = "Supprimer",
+    message = "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.",
+}: ConfirmDeleteModalProps) {
     return (
-        <Modal isOpen={isOpen} onClose={onCancel} title="Supprimer le projet">
-            <p className="text-body-s text-neutral-600">
-                Êtes-vous sûr de vouloir supprimer ce projet ? Cette action
-                est irréversible.
-            </p>
+        <Modal isOpen={isOpen} onClose={onCancel} title={title}>
+            <p className="text-body-s text-neutral-600">{message}</p>
             <div className="mt-6 flex justify-end gap-3">
                 <button
                     onClick={onCancel}
@@ -49,5 +52,5 @@ function DeleteProjectModal({
     );
 }
 
-export { DeleteProjectModal };
-export type { DeleteProjectModalProps };
+export { ConfirmDeleteModal };
+export type { ConfirmDeleteModalProps };

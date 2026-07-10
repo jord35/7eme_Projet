@@ -15,6 +15,10 @@ interface TaskFormProps {
     /** Mode création ou édition */
     mode: "create" | "edit";
     projectId: string;
+    /** Propriétaire du projet (inclus dans la liste des assignables) */
+    owner: { id: string; name: string; email: string };
+    /** L'utilisateur connecté est-il propriétaire du projet ? */
+    isOwner: boolean;
     members: Array<{
         user: { id: string; name: string; email: string };
     }>;
@@ -42,7 +46,7 @@ const statusOptions = [
  * En mode "create" : appelle createTask().
  * En mode "edit" : pré-remplit les champs et appelle updateTask().
  */
-function TaskForm({ mode, projectId, members, initialData, onSuccess }: TaskFormProps) {
+function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuccess }: TaskFormProps) {
     const [selectedAssignees, setSelectedAssignees] = useState<string[]>(
         initialData?.assigneeIds || []
     );
@@ -101,10 +105,13 @@ function TaskForm({ mode, projectId, members, initialData, onSuccess }: TaskForm
         }
     }
 
-    const memberList = members.map((m) => ({
-        id: m.user.id,
-        name: m.user.name,
-    }));
+    const memberList = [
+        { id: owner.id, name: owner.name },
+        ...members.map((m) => ({
+            id: m.user.id,
+            name: m.user.name,
+        })),
+    ];
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -125,13 +132,15 @@ function TaskForm({ mode, projectId, members, initialData, onSuccess }: TaskForm
                 {...register("description")}
             />
 
-            {/* Date d'échéance */}
-            <Input
-                label="Date d'échéance"
-                type="date"
-                error={errors.dueDate?.message}
-                {...register("dueDate")}
-            />
+            {/* Date d'échéance (propriétaire uniquement) */}
+            {isOwner && (
+                <Input
+                    label="Date d'échéance"
+                    type="date"
+                    error={errors.dueDate?.message}
+                    {...register("dueDate")}
+                />
+            )}
 
             {/* Assigné à — accordéon */}
             {memberList.length > 0 && (
@@ -157,8 +166,8 @@ function TaskForm({ mode, projectId, members, initialData, onSuccess }: TaskForm
                                         type="button"
                                         onClick={() => toggleAssignee(member.id)}
                                         className={`rounded-full px-3 py-1 text-body-xs font-medium transition ${isSelected
-                                                ? "bg-brand-orange-main text-neutral-white"
-                                                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                                            ? "bg-brand-orange-main text-neutral-white"
+                                            : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                                             }`}
                                     >
                                         {member.name}
@@ -182,8 +191,8 @@ function TaskForm({ mode, projectId, members, initialData, onSuccess }: TaskForm
                             type="button"
                             onClick={() => setStatus(opt.value)}
                             className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${status === opt.value
-                                    ? "bg-brand-orange-main text-neutral-white"
-                                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                                ? "bg-brand-orange-main text-neutral-white"
+                                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                                 }`}
                         >
                             {opt.label}

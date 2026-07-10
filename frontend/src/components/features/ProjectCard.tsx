@@ -62,6 +62,7 @@ function ProjectCard({ project, completedTasks = 0 }: ProjectCardProps) {
                 <ProjectMembers
                     owner={project.owner}
                     members={project.members}
+                    label="Équipe"
                     showNames={false}
                     showRoleBadge
                 />

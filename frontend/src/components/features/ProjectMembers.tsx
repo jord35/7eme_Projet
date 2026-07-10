@@ -8,6 +8,8 @@ interface ProjectMembersProps {
         user: { id: string; name: string };
         role?: string;
     }>;
+    /** Libellé du groupe : "Équipe" → "Équipe (3)", "Contributeurs" → "Contributeurs 3 personnes" */
+    label?: string;
     /** Afficher les noms à côté des avatars ? (true dans détail projet, false dans carte) */
     showNames?: boolean;
     /** Afficher le badge du rôle de l'utilisateur connecté ? */
@@ -43,6 +45,7 @@ function getRoleLabel(
 function ProjectMembers({
     owner,
     members,
+    label,
     showNames = false,
     showRoleBadge = true,
 }: ProjectMembersProps) {
@@ -74,19 +77,32 @@ function ProjectMembers({
         ? getRoleLabel(currentUser.id, owner.id, currentUser.role)
         : null;
 
+    const count = allMembers.length;
+
+    /** Formate le label selon le type */
+    function formatLabel(): string {
+        if (!label) return "";
+        if (label === "Contributeurs") {
+            return `Contributeurs ${count} personne${count > 1 ? "s" : ""}`;
+        }
+        return `${label} (${count})`;
+    }
+
     return (
         <div>
-            <span className="text-body-xs text-neutral-400">
-                Équipe ({allMembers.length})
-            </span>
+            {label && (
+                <span className="text-body-xs text-neutral-400">
+                    {formatLabel()}
+                </span>
+            )}
 
             <div className="mt-2 flex items-center justify-between">
                 {/* Propriétaire à gauche */}
                 <div className="flex items-center gap-2">
                     <span
                         className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${owner.id === currentUserId
-                                ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
-                                : "bg-neutral-200 text-neutral-600"
+                            ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
+                            : "bg-neutral-200 text-neutral-600"
                             }`}
                         title={owner.name}
                     >
@@ -112,8 +128,8 @@ function ProjectMembers({
                         <span
                             key={member.id}
                             className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${member.isCurrentUser
-                                    ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
-                                    : "bg-neutral-200 text-neutral-600"
+                                ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
+                                : "bg-neutral-200 text-neutral-600"
                                 }`}
                             title={member.name}
                         >
