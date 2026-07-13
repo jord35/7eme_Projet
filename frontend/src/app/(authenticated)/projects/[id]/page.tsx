@@ -22,6 +22,7 @@ import {
     deleteProject,
     deleteTask,
 } from "@/lib/api";
+import { extractAssigneeIds } from "@/lib/mappers";
 import type { Project, Task } from "@/lib/api";
 
 type ViewMode = "list" | "calendar";
@@ -293,9 +294,7 @@ export default function ProjectDetailPage() {
                             description: editingTask.description,
                             dueDate: editingTask.dueDate,
                             status: editingTask.status,
-                            assigneeIds:
-                                editingTask.assignees?.map((a) => a.userId) ||
-                                [],
+                            assigneeIds: extractAssigneeIds(editingTask),
                         }}
                         onSuccess={handleTaskUpdated}
                     />
