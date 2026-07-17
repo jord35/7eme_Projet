@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { createTask, updateTask } from "@/lib/api";
 import { createTaskSchema, type CreateTaskInput } from "@/lib/validators";
+import { getProjectMemberIds } from "@/lib/mappers";
 import type { Task } from "@/lib/api";
 
 interface TaskFormProps {
@@ -29,6 +30,7 @@ interface TaskFormProps {
         description: string | null;
         dueDate: string | null;
         status: string;
+        priority?: string;
         assigneeIds: string[];
     };
     /** Callback appelé après création ou modification réussie */
@@ -41,16 +43,31 @@ const statusOptions = [
     { value: "DONE", label: "Terminé" },
 ];
 
+const priorityOptions = [
+    { value: "LOW", label: "Basse" },
+    { value: "MEDIUM", label: "Moyenne" },
+    { value: "HIGH", label: "Haute" },
+    { value: "URGENT", label: "Urgente" },
+];
+
 /**
  * Formulaire unifié de création / modification de tâche.
  * En mode "create" : appelle createTask().
  * En mode "edit" : pré-remplit les champs et appelle updateTask().
  */
 function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuccess }: TaskFormProps) {
+    // Filtre les assigneeIds pour ne garder que les membres encore dans le projet
+    // (évite les erreurs 400 INVALID_ASSIGNEES si un membre a été retiré entre-temps)
+    const validMemberIds = getProjectMemberIds({ owner, members });
+    const initialAssigneeIds = (initialData?.assigneeIds || []).filter((id) =>
+        validMemberIds.has(id)
+    );
+
     const [selectedAssignees, setSelectedAssignees] = useState<string[]>(
-        initialData?.assigneeIds || []
+        initialAssigneeIds
     );
     const [status, setStatus] = useState(initialData?.status || "TODO");
+    const [priority, setPriority] = useState(initialData?.priority || "MEDIUM");
     const [showAssignees, setShowAssignees] = useState(false);
 
     const {
@@ -66,8 +83,8 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
         },
     });
 
-    /** Bascule la sélection d'un assigné */
-    function toggleAssignee(userId: string) {
+    /** Bascule la sélection d'un assigné dans le state local (pas d'appel API) */
+    function toggleAssigneeSelection(userId: string) {
         setSelectedAssignees((prev) =>
             prev.includes(userId)
                 ? prev.filter((id) => id !== userId)
@@ -85,6 +102,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                     title: data.title,
                     description: data.description || "",
                     dueDate: data.dueDate,
+                    priority,
                     assigneeIds: selectedAssignees.length > 0 ? selectedAssignees : undefined,
                 });
                 toast.success("Tâche créée !");
@@ -94,6 +112,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                     description: data.description || "",
                     dueDate: data.dueDate,
                     status,
+                    priority,
                     assigneeIds: selectedAssignees,
                 });
                 toast.success("Tâche modifiée !");
@@ -164,7 +183,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                                     <button
                                         key={member.id}
                                         type="button"
-                                        onClick={() => toggleAssignee(member.id)}
+                                        onClick={() => toggleAssigneeSelection(member.id)}
                                         className={`rounded-full px-3 py-1 text-body-xs font-medium transition ${isSelected
                                             ? "bg-brand-orange-main text-neutral-white"
                                             : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
@@ -176,6 +195,30 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                             })}
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* Priorité (propriétaire uniquement) */}
+            {isOwner && (
+                <div>
+                    <label className="block text-body-xs font-medium text-neutral-600 mb-1">
+                        Priorité
+                    </label>
+                    <div className="flex gap-2">
+                        {priorityOptions.map((opt) => (
+                            <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() => setPriority(opt.value)}
+                                className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${priority === opt.value
+                                    ? "bg-brand-orange-main text-neutral-white"
+                                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                                    }`}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
 
