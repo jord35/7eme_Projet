@@ -17,3 +17,6 @@ node_modules/
 # Build
 dist/
 .next/
+
+# Scripts de dev locaux
+start-dev.bat
