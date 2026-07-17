@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { CommentSection } from "@/components/features/CommentSection";
 import Image from "next/image";
+import { getStatusLabel, getStatusVariant, formatShortDate, getInitials, getCommentCount } from "@/lib/mappers";
 
 /**
  * Props de la carte tâche détaillée (utilisée dans la page détail projet).
@@ -32,30 +33,6 @@ interface TaskDetailCardProps {
     onDelete?: (task: TaskDetailCardProps["task"]) => void;
 }
 
-const statusLabels: Record<string, string> = {
-    TODO: "À faire",
-    IN_PROGRESS: "En cours",
-    DONE: "Terminé",
-    CANCELLED: "Annulé",
-};
-
-const statusVariants: Record<string, "info" | "warning" | "success" | "error"> = {
-    TODO: "info",
-    IN_PROGRESS: "warning",
-    DONE: "success",
-    CANCELLED: "error",
-};
-
-/** Extrait les initiales d'un nom (ex: "Jean Dupont" → "JD") */
-function getInitials(name: string): string {
-    return name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
-}
-
 /**
  * Carte de tâche détaillée pour la page Single Project.
  * Affiche : titre, description, badge statut, date d'échéance,
@@ -64,6 +41,7 @@ function getInitials(name: string): string {
 function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
     const [expandedComments, setExpandedComments] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
+    const commentCount = getCommentCount(task);
 
     return (
         <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
@@ -73,8 +51,8 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
                     {task.title}
                 </h3>
                 <div className="flex items-center gap-2">
-                    <Badge variant={statusVariants[task.status] || "neutral"}>
-                        {statusLabels[task.status] || task.status}
+                    <Badge variant={getStatusVariant(task.status)}>
+                        {getStatusLabel(task.status)}
                     </Badge>
 
                     {/* Menu "..." */}
@@ -131,7 +109,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
             {task.dueDate && (
                 <div className="mt-3 flex items-center gap-1 text-body-xs text-neutral-400">
                     <Image src="/icons/calendar.svg" alt="" width={12} height={12} />
-                    <span>Échéance : {new Date(task.dueDate).toLocaleDateString("fr-FR")}</span>
+                    <span>Échéance : {formatShortDate(task.dueDate)}</span>
                 </div>
             )}
 
@@ -166,7 +144,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
                     className="flex items-center gap-1 text-body-xs text-neutral-400 hover:text-neutral-600 transition-colors"
                 >
                     <Image src="/icons/comment.svg" alt="" width={12} height={12} />
-                    Commentaires ({(task as any).comments?.length ?? task._count?.comments ?? 0})
+                    Commentaires ({commentCount})
                     <span className="ml-1">{expandedComments ? "▲" : "▼"}</span>
                 </button>
                 {expandedComments && (

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import Image from "next/image";
+import { getStatusLabel, getStatusVariant, formatShortDate, getCommentCount } from "@/lib/mappers";
 
 /**
  * Props de la carte tâche (utilisée dans le dashboard).
@@ -26,20 +27,6 @@ interface TaskCardProps {
     showProject?: boolean;
 }
 
-const statusLabels: Record<string, string> = {
-    TODO: "À faire",
-    IN_PROGRESS: "En cours",
-    DONE: "Terminé",
-    CANCELLED: "Annulé",
-};
-
-const statusVariants: Record<string, "info" | "warning" | "success" | "error"> = {
-    TODO: "info",
-    IN_PROGRESS: "warning",
-    DONE: "success",
-    CANCELLED: "error",
-};
-
 /**
  * Carte de tâche compacte pour le dashboard (Liste et Kanban).
  * Affiche : titre, description, badge statut, projet, date, commentaires.
@@ -47,6 +34,7 @@ const statusVariants: Record<string, "info" | "warning" | "success" | "error"> =
  */
 function TaskCard({ task, showProject = false }: TaskCardProps) {
     const projectId = task.project?.id;
+    const commentCount = getCommentCount(task);
 
     return (
         <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
@@ -61,8 +49,8 @@ function TaskCard({ task, showProject = false }: TaskCardProps) {
                         </p>
                     )}
                 </div>
-                <Badge variant={statusVariants[task.status] || "neutral"}>
-                    {statusLabels[task.status] || task.status}
+                <Badge variant={getStatusVariant(task.status)}>
+                    {getStatusLabel(task.status)}
                 </Badge>
             </div>
 
@@ -77,13 +65,13 @@ function TaskCard({ task, showProject = false }: TaskCardProps) {
                     {task.dueDate && (
                         <span className="flex items-center gap-1">
                             <Image src="/icons/calendar.svg" alt="" width={12} height={12} />
-                            {new Date(task.dueDate).toLocaleDateString("fr-FR")}
+                            {formatShortDate(task.dueDate)}
                         </span>
                     )}
-                    {(task as any).comments && (
+                    {commentCount > 0 && (
                         <span className="flex items-center gap-1">
                             <Image src="/icons/comment.svg" alt="" width={12} height={12} />
-                            {(task as any).comments.length}
+                            {commentCount}
                         </span>
                     )}
                 </div>

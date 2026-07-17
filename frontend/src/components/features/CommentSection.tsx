@@ -1,24 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Comment } from "@/lib/api";
 import { getComments, createComment } from "@/lib/api";
+import { formatDate } from "@/lib/mappers";
+import { useApi } from "@/lib/hooks/useApi";
 
 interface CommentSectionProps {
     projectId: string;
     taskId: string;
-}
-
-/** Formate une date ISO en français (ex: "9 juil. 2026, 14:30") */
-function formatDate(dateStr: string): string {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("fr-FR", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
 }
 
 /**
@@ -28,18 +18,16 @@ function formatDate(dateStr: string): string {
  * Les commentaires sont définitifs (pas de modification ni suppression).
  */
 function CommentSection({ projectId, taskId }: CommentSectionProps) {
-    const [comments, setComments] = useState<Comment[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { data: apiComments, isLoading } = useApi(
+        () => getComments(projectId, taskId),
+        [projectId, taskId],
+    );
+    const [localComments, setLocalComments] = useState<Comment[]>([]);
     const [newContent, setNewContent] = useState("");
     const [isAdding, setIsAdding] = useState(false);
 
-    // Chargement initial des commentaires
-    useEffect(() => {
-        getComments(projectId, taskId)
-            .then(setComments)
-            .catch(console.error)
-            .finally(() => setIsLoading(false));
-    }, [projectId, taskId]);
+    // Fusionne les commentaires de l'API avec les ajouts locaux (optimiste)
+    const comments = [...(apiComments ?? []), ...localComments];
 
     /** Ajoute un nouveau commentaire */
     async function handleAdd() {
@@ -51,7 +39,7 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
                 taskId,
                 newContent.trim()
             );
-            setComments((prev) => [...prev, comment]);
+            setLocalComments((prev) => [...prev, comment]);
             setNewContent("");
         } catch (err) {
             console.error("Erreur ajout commentaire:", err);
@@ -84,7 +72,7 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
                                     {comment.author.name}
                                 </span>
                                 <span className="text-body-xs text-neutral-400">
-                                    {formatDate(comment.createdAt)}
+                                    {formatDate(comment.createdAt, { withTime: true })}
                                 </span>
                             </div>
                             <p className="mt-1 text-body-xs text-neutral-600">

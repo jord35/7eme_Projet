@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { getInitials, getRoleLabel, formatMemberLabel } from "@/lib/mappers";
 
 interface ProjectMembersProps {
     owner: { id: string; name: string };
@@ -14,27 +15,6 @@ interface ProjectMembersProps {
     showNames?: boolean;
     /** Afficher le badge du rôle de l'utilisateur connecté ? */
     showRoleBadge?: boolean;
-}
-
-/** Extrait les initiales d'un nom (ex: "Jean Dupont" → "JD") */
-function getInitials(name: string): string {
-    return name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
-}
-
-/** Détermine le libellé du rôle */
-function getRoleLabel(
-    userId: string,
-    ownerId: string,
-    role: string | undefined
-): string {
-    if (userId === ownerId) return "Propriétaire";
-    if (role === "ADMIN") return "Admin";
-    return "Contributeur";
 }
 
 /**
@@ -79,20 +59,11 @@ function ProjectMembers({
 
     const count = allMembers.length;
 
-    /** Formate le label selon le type */
-    function formatLabel(): string {
-        if (!label) return "";
-        if (label === "Contributeurs") {
-            return `Contributeurs ${count} personne${count > 1 ? "s" : ""}`;
-        }
-        return `${label} (${count})`;
-    }
-
     return (
         <div>
             {label && (
                 <span className="text-body-xs text-neutral-400">
-                    {formatLabel()}
+                    {formatMemberLabel(label, count)}
                 </span>
             )}
 
