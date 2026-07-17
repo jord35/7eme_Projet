@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Tabs } from "@/components/ui/Tabs";
@@ -10,7 +10,9 @@ import { TaskListView } from "@/components/features/TaskListView";
 import { TaskKanbanView } from "@/components/features/TaskKanbanView";
 import { ProjectForm } from "@/components/forms/ProjectForm";
 import { getAssignedTasks } from "@/lib/api";
-import type { AssignedTask, Project } from "@/lib/api";
+import { filterBySearchQuery } from "@/lib/mappers";
+import { useApi } from "@/lib/hooks/useApi";
+import type { Project } from "@/lib/api";
 
 type ViewMode = "list" | "kanban";
 
@@ -22,31 +24,12 @@ const dashboardTabs = [
 export default function DashboardPage() {
     const { user } = useAuth();
     const [viewMode, setViewMode] = useState<ViewMode>("list");
-    const [tasks, setTasks] = useState<AssignedTask[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { data: tasks, isLoading } = useApi(getAssignedTasks);
     const [searchQuery, setSearchQuery] = useState("");
     const [showCreateProject, setShowCreateProject] = useState(false);
 
-    useEffect(() => {
-        getAssignedTasks()
-            .then(setTasks)
-            .catch(console.error)
-            .finally(() => setIsLoading(false));
-    }, []);
-
-    const sortedTasks = useMemo(() => {
-        let filtered = [...tasks];
-
-        if (searchQuery) {
-            const q = searchQuery.toLowerCase();
-            filtered = filtered.filter(
-                (t) =>
-                    t.title.toLowerCase().includes(q) ||
-                    (t.description || "").toLowerCase().includes(q)
-            );
-        }
-
-        return filtered;
+    const filteredTasks = useMemo(() => {
+        return filterBySearchQuery(tasks ?? [], searchQuery);
     }, [tasks, searchQuery]);
 
     function handleProjectCreated(_project: Project) {
@@ -74,14 +57,14 @@ export default function DashboardPage() {
 
             {viewMode === "list" && (
                 <TaskListView
-                    tasks={sortedTasks}
+                    tasks={filteredTasks}
                     searchQuery={searchQuery}
                     onSearch={setSearchQuery}
                 />
             )}
 
             {viewMode === "kanban" && (
-                <TaskKanbanView tasks={sortedTasks} />
+                <TaskKanbanView tasks={filteredTasks} />
             )}
 
             <Modal

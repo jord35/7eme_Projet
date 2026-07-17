@@ -22,7 +22,7 @@ import {
     deleteProject,
     deleteTask,
 } from "@/lib/api";
-import { extractAssigneeIds } from "@/lib/mappers";
+import { extractAssigneeIds, getProjectMemberIds, filterBySearchQuery } from "@/lib/mappers";
 import type { Project, Task } from "@/lib/api";
 
 type ViewMode = "list" | "calendar";
@@ -51,29 +51,32 @@ export default function ProjectDetailPage() {
     const [statusFilter, setStatusFilter] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
 
+    /** Filtre les assignés d'une tâche pour ne garder que les membres encore dans le projet */
+    function filterValidAssignees(task: Task, memberIds: Set<string>): Task {
+        if (!task.assignees) return task;
+        return {
+            ...task,
+            assignees: task.assignees.filter((a) => memberIds.has(a.user.id)),
+        };
+    }
+
     useEffect(() => {
         Promise.all([getProject(id), getProjectTasks(id)])
             .then(([projectData, tasksData]) => {
                 setProject(projectData);
-                setTasks(tasksData);
+                const memberIds = getProjectMemberIds(projectData);
+                setTasks(tasksData.map((task) => filterValidAssignees(task, memberIds)));
             })
             .catch(console.error)
             .finally(() => setIsLoading(false));
     }, [id]);
 
     const filteredTasks = useMemo(() => {
-        return tasks.filter((task) => {
-            if (statusFilter && task.status !== statusFilter) return false;
-            if (searchQuery) {
-                const q = searchQuery.toLowerCase();
-                if (
-                    !task.title.toLowerCase().includes(q) &&
-                    !(task.description || "").toLowerCase().includes(q)
-                )
-                    return false;
-            }
-            return true;
-        });
+        let result = tasks;
+        if (statusFilter) {
+            result = result.filter((task) => task.status === statusFilter);
+        }
+        return filterBySearchQuery(result, searchQuery);
     }, [tasks, statusFilter, searchQuery]);
 
     const dueDates = useMemo(() => {
@@ -88,8 +91,28 @@ export default function ProjectDetailPage() {
     }
 
     function handleProjectUpdated(updated: Project) {
-        setProject(updated);
+        // Préserve le userRole existant car le PUT /projects/:id ne le renvoie pas
+        // TODO back-end: ajouter userRole dans la réponse du PUT (comme le GET)
+        setProject((prev) => ({
+            ...updated,
+            userRole: updated.userRole ?? prev?.userRole,
+        }));
         setShowEditProject(false);
+    }
+
+    /** Recharge les tâches et le projet après un changement de membres */
+    async function handleMembersChanged() {
+        try {
+            const [projectData, tasksData] = await Promise.all([
+                getProject(id),
+                getProjectTasks(id),
+            ]);
+            setProject(projectData);
+            const memberIds = getProjectMemberIds(projectData);
+            setTasks(tasksData.map((task) => filterValidAssignees(task, memberIds)));
+        } catch (err) {
+            console.error("Erreur rechargement après changement membres:", err);
+        }
     }
 
     function handleTaskUpdated(task: Task) {
@@ -263,6 +286,7 @@ export default function ProjectDetailPage() {
                     mode="edit"
                     project={project}
                     onSuccess={handleProjectUpdated}
+                    onMembersChanged={handleMembersChanged}
                 />
             </Modal>
 
@@ -294,6 +318,7 @@ export default function ProjectDetailPage() {
                             description: editingTask.description,
                             dueDate: editingTask.dueDate,
                             status: editingTask.status,
+                            priority: editingTask.priority,
                             assigneeIds: extractAssigneeIds(editingTask),
                         }}
                         onSuccess={handleTaskUpdated}
