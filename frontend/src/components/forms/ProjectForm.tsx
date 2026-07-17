@@ -14,8 +14,6 @@ import {
     searchUsers,
     addContributor,
     removeContributor,
-    getProjectTasks,
-    updateTask,
 } from "@/lib/api";
 import {
     createProjectSchema,
@@ -23,7 +21,6 @@ import {
     type CreateProjectInput,
     type UpdateProjectInput,
 } from "@/lib/validators";
-import { extractAssigneeIds } from "@/lib/mappers";
 import type { Project } from "@/lib/api";
 
 interface ProjectFormProps {
@@ -133,23 +130,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
     async function handleRemoveContributor(userId: string) {
         if (!isEdit || !project) return;
         try {
-            // 1. Désassigner ce membre de toutes les tâches du projet AVANT de le retirer
-            //    (sinon le back-end rejette car le membre n'est plus dans le projet)
-            const tasks = await getProjectTasks(project.id);
-            const tasksToUpdate = tasks.filter((task) =>
-                task.assignees?.some((a) => a.user.id === userId)
-            );
-            await Promise.all(
-                tasksToUpdate.map((task) =>
-                    updateTask(project.id, task.id, {
-                        assigneeIds: extractAssigneeIds(task).filter(
-                            (id) => id !== userId
-                        ),
-                    })
-                )
-            );
-
-            // 2. Retirer le contributeur du projet
+            // Le back-end nettoie automatiquement les assignations aux tâches
             await removeContributor(project.id, userId);
 
             toast.success("Contributeur retiré");

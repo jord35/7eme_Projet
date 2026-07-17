@@ -652,7 +652,16 @@ export const removeContributor = async (
       return;
     }
 
-    // Supprimer le membre
+    // 1. Supprimer les assignations de ce membre dans toutes les tâches du projet
+    //    (évite les assignations orphelines)
+    await prisma.taskAssignee.deleteMany({
+      where: {
+        userId,
+        task: { projectId: id },
+      },
+    });
+
+    // 2. Supprimer le membre
     await prisma.projectMember.deleteMany({
       where: {
         userId,
