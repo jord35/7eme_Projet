@@ -14,6 +14,8 @@ import {
     searchUsers,
     addContributor,
     removeContributor,
+    getProjectTasks,
+    updateTask,
 } from "@/lib/api";
 import {
     createProjectSchema,
@@ -21,6 +23,7 @@ import {
     type CreateProjectInput,
     type UpdateProjectInput,
 } from "@/lib/validators";
+import { extractAssigneeIds } from "@/lib/mappers";
 import type { Project } from "@/lib/api";
 
 interface ProjectFormProps {
@@ -30,9 +33,11 @@ interface ProjectFormProps {
     project?: Project;
     /** Callback appelé après création ou modification réussie */
     onSuccess: (project: Project) => void;
+    /** Callback appelé après ajout ou retrait d'un contributeur */
+    onMembersChanged?: () => void;
 }
 
-function ProjectForm({ mode, project, onSuccess }: ProjectFormProps) {
+function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectFormProps) {
     const isEdit = mode === "edit";
 
     // ─── Formulaire nom/description ───
@@ -116,6 +121,7 @@ function ProjectForm({ mode, project, onSuccess }: ProjectFormProps) {
             setCurrentMembers(updated.members);
             setContributorSearch("");
             setSearchResults([]);
+            onMembersChanged?.();
         } catch (err) {
             toast.error(
                 err instanceof Error ? err.message : "Erreur d'ajout"
@@ -127,11 +133,30 @@ function ProjectForm({ mode, project, onSuccess }: ProjectFormProps) {
     async function handleRemoveContributor(userId: string) {
         if (!isEdit || !project) return;
         try {
+            // 1. Désassigner ce membre de toutes les tâches du projet AVANT de le retirer
+            //    (sinon le back-end rejette car le membre n'est plus dans le projet)
+            const tasks = await getProjectTasks(project.id);
+            const tasksToUpdate = tasks.filter((task) =>
+                task.assignees?.some((a) => a.user.id === userId)
+            );
+            await Promise.all(
+                tasksToUpdate.map((task) =>
+                    updateTask(project.id, task.id, {
+                        assigneeIds: extractAssigneeIds(task).filter(
+                            (id) => id !== userId
+                        ),
+                    })
+                )
+            );
+
+            // 2. Retirer le contributeur du projet
             await removeContributor(project.id, userId);
+
             toast.success("Contributeur retiré");
             const { getProject } = await import("@/lib/api");
             const updated = await getProject(project.id);
             setCurrentMembers(updated.members);
+            onMembersChanged?.();
         } catch (err) {
             toast.error(
                 err instanceof Error ? err.message : "Erreur de retrait"
