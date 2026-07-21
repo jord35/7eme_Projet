@@ -17,7 +17,7 @@ function Navigation() {
                 {/* Logo + Liens */}
                 <div className="flex items-center gap-6">
                     <Link href="/dashboard" className="flex items-center gap-2">
-                        <Image src="/icons/logo-orange.svg" alt="Abricot" width={32} height={32} />
+                        <Image src="/logos/logo-orange.svg" alt="Abricot" width={32} height={32} />
                     </Link>
 
                     {isAuthenticated && (
@@ -25,8 +25,8 @@ function Navigation() {
                             <Link
                                 href="/dashboard"
                                 className={`text-body-s font-medium transition-colors ${isActive("/dashboard")
-                                        ? "text-brand-orange-main"
-                                        : "text-neutral-600 hover:text-neutral-950"
+                                    ? "text-brand-orange-main"
+                                    : "text-neutral-600 hover:text-neutral-950"
                                     }`}
                             >
                                 Tableau de bord
@@ -34,8 +34,8 @@ function Navigation() {
                             <Link
                                 href="/projects"
                                 className={`text-body-s font-medium transition-colors ${isActive("/projects")
-                                        ? "text-brand-orange-main"
-                                        : "text-neutral-600 hover:text-neutral-950"
+                                    ? "text-brand-orange-main"
+                                    : "text-neutral-600 hover:text-neutral-950"
                                     }`}
                             >
                                 Projets
