@@ -47,7 +47,7 @@ function Tabs({ tabs, activeTab, onChange }: TabsProps) {
                         key={tab.key}
                         onClick={() => onChange(tab.key)}
                         className={`flex items-center gap-2 rounded-md px-4 py-2 text-body-s font-medium transition-colors ${isActive
-                            ? "bg-[#FFE8D9]"
+                            ? "bg-brand-orange-light"
                             : "bg-neutral-white"
                             }`}
                     >

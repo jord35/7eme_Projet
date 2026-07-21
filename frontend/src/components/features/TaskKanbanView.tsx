@@ -1,6 +1,7 @@
 "use client";
 
 import { TaskCard } from "@/components/features/TaskCard";
+import { BadgeCount } from "@/components/ui/BadgeCount";
 import type { AssignedTask } from "@/lib/api";
 
 interface TaskKanbanViewProps {
@@ -26,9 +27,7 @@ function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
                             <h3 className="text-body-s font-medium text-neutral-600">
                                 {col.label}
                             </h3>
-                            <span className="inline-flex items-center justify-center rounded-full bg-neutral-200 px-2 py-0.5 text-body-xs font-medium text-neutral-600">
-                                {columnTasks.length}
-                            </span>
+                            <BadgeCount count={columnTasks.length} />
                         </div>
                         <div className="space-y-3">
                             {columnTasks.length === 0 ? (

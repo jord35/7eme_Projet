@@ -28,7 +28,7 @@ function Avatar({
 }: AvatarProps) {
     const initials = name ? getInitials(name) : "?";
     const bgClass = isCurrentUser
-        ? "bg-[#FFE8D9] text-neutral-950"
+        ? "bg-brand-orange-light text-neutral-950"
         : "bg-neutral-200 text-neutral-600";
 
     const content = (

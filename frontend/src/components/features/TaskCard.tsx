@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
-import Image from "next/image";
-import { getStatusLabel, getStatusVariant, formatShortDate, getCommentCount } from "@/lib/mappers";
+import { getStatusLabel, getStatusVariant } from "@/lib/mappers";
+import { TaskMetadata } from "@/components/features/TaskMetadata";
 
 /**
  * Props de la carte tâche (utilisée dans le dashboard).
@@ -36,7 +36,6 @@ interface TaskCardProps {
  */
 function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps) {
     const projectId = task.project?.id;
-    const commentCount = getCommentCount(task);
 
     return (
         <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
@@ -56,27 +55,13 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
             )}
 
             {variant === "list" ? (
-                <div className="mt-3 flex items-center justify-between gap-3 text-body-xs text-neutral-600">
-                    <div className="flex items-center gap-3">
-                        {showProject && task.project && (
-                            <span className="flex items-center gap-1">
-                                <Image src="/icons/project-gray.svg" alt="" width={15} height={15} />
-                                {task.project.name}
-                            </span>
-                        )}
-                        {task.dueDate && (
-                            <span className="flex items-center gap-1">
-                                <Image src="/icons/calendar-gray.svg" alt="" width={15} height={15} />
-                                {formatShortDate(task.dueDate)}
-                            </span>
-                        )}
-                        {commentCount > 0 && (
-                            <span className="flex items-center gap-1">
-                                <Image src="/icons/comment.svg" alt="" width={15} height={15} />
-                                {commentCount}
-                            </span>
-                        )}
-                    </div>
+                <div className="mt-3 flex items-center justify-between gap-3">
+                    <TaskMetadata
+                        project={showProject ? task.project : null}
+                        dueDate={task.dueDate}
+                        comments={task.comments}
+                        _count={task._count}
+                    />
                     {projectId && (
                         <Link
                             href={`/projects/${projectId}`}
@@ -88,26 +73,12 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
                 </div>
             ) : (
                 <>
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-body-xs text-neutral-600">
-                        {showProject && task.project && (
-                            <span className="flex items-center gap-1">
-                                <Image src="/icons/project-gray.svg" alt="" width={15} height={15} />
-                                {task.project.name}
-                            </span>
-                        )}
-                        {task.dueDate && (
-                            <span className="flex items-center gap-1">
-                                <Image src="/icons/calendar-gray.svg" alt="" width={15} height={15} />
-                                {formatShortDate(task.dueDate)}
-                            </span>
-                        )}
-                        {commentCount > 0 && (
-                            <span className="flex items-center gap-1">
-                                <Image src="/icons/comment.svg" alt="" width={15} height={15} />
-                                {commentCount}
-                            </span>
-                        )}
-                    </div>
+                    <TaskMetadata
+                        project={showProject ? task.project : null}
+                        dueDate={task.dueDate}
+                        comments={task.comments}
+                        _count={task._count}
+                    />
                     {projectId && (
                         <div className="mt-3">
                             <Link
