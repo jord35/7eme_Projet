@@ -7,27 +7,19 @@ export const loginSchema = z.object({
     password: z.string().min(1, "Mot de passe requis"),
 });
 
-export const registerSchema = z
-    .object({
-        firstName: z.string().min(1, "Prénom requis"),
-        lastName: z.string().min(1, "Nom requis"),
-        email: z.string().email("Email invalide"),
-        password: z
-            .string()
-            .min(8, "Minimum 8 caractères")
-            .regex(/[A-Z]/, "Au moins une majuscule")
-            .regex(/[a-z]/, "Au moins une minuscule")
-            .regex(/[0-9]/, "Au moins un chiffre")
-            .regex(
-                /[@$!%*?&]/,
-                "Au moins un caractère spécial (@$!%*?&)",
-            ),
-        confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: "Les mots de passe ne correspondent pas",
-        path: ["confirmPassword"],
-    });
+export const registerSchema = z.object({
+    email: z.string().email("Email invalide"),
+    password: z
+        .string()
+        .min(8, "Minimum 8 caractères")
+        .regex(/[A-Z]/, "Au moins une majuscule")
+        .regex(/[a-z]/, "Au moins une minuscule")
+        .regex(/[0-9]/, "Au moins un chiffre")
+        .regex(
+            /[@$!%*?&]/,
+            "Au moins un caractère spécial (@$!%*?&)",
+        ),
+});
 
 // ─── Profil ─────────────────────────────────────────────
 

@@ -30,10 +30,13 @@ export function formatDate(
     return date.toLocaleDateString("fr-FR", localeOptions);
 }
 
-/** Formate une date ISO en date courte française (ex: "13/07/2026") */
+/** Formate une date ISO en jour + mois français (ex: "10 mars") */
 export function formatShortDate(dateStr: string | null | undefined): string {
     if (!dateStr) return "";
-    return new Date(dateStr).toLocaleDateString("fr-FR");
+    return new Date(dateStr).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+    });
 }
 
 // ─── Statuts ──────────────────────────────────────────────
@@ -50,7 +53,7 @@ const STATUS_LABELS: Record<TaskStatus, string> = {
 };
 
 const STATUS_VARIANTS: Record<TaskStatus, BadgeVariant> = {
-    TODO: "info",
+    TODO: "error",
     IN_PROGRESS: "warning",
     DONE: "success",
     CANCELLED: "error",

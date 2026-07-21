@@ -17,8 +17,8 @@ import type { Project } from "@/lib/api";
 type ViewMode = "list" | "kanban";
 
 const dashboardTabs = [
-    { key: "list", label: "Liste" },
-    { key: "kanban", label: "Kanban" },
+    { key: "list", label: "Liste", icon: "/icons/plus.svg" },
+    { key: "kanban", label: "Kanban", icon: "/icons/calendar.svg" },
 ];
 
 export default function DashboardPage() {
@@ -41,8 +41,8 @@ export default function DashboardPage() {
     return (
         <div>
             <PageHeader
-                title={`Bonjour, ${user?.name?.split(" ")[0] || ""} 👋`}
-                description="Voici un aperçu de votre activité."
+                title="Tableau de bord"
+                description={`Bonjour, ${user?.name || ""}, voici un aperçu de vos projets et tâches.`}
                 action={{
                     label: "Créer un projet",
                     onClick: () => setShowCreateProject(true),

@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -10,7 +11,8 @@ import { updateProfile, updatePassword } from "@/lib/api";
 import { profileSchema, type ProfileInput } from "@/lib/validators";
 
 function ProfileForm() {
-    const { user, loginSuccess } = useAuth();
+    const router = useRouter();
+    const { user, loginSuccess, refreshUser } = useAuth();
 
     const nameParts = (user?.name || "").split(" ");
     const defaultFirstName = nameParts[0] || "";
@@ -43,6 +45,7 @@ function ProfileForm() {
             }
 
             toast.success("Profil mis à jour !");
+            await refreshUser();
             form.reset({
                 firstName: data.firstName,
                 lastName: data.lastName,

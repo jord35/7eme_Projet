@@ -1,7 +1,8 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { getInitials, getRoleLabel, formatMemberLabel } from "@/lib/mappers";
+import { getRoleLabel, formatMemberLabel } from "@/lib/mappers";
+import { Avatar } from "@/components/ui/Avatar";
 
 interface ProjectMembersProps {
     owner: { id: string; name: string };
@@ -70,15 +71,10 @@ function ProjectMembers({
             <div className="mt-2 flex items-center justify-between">
                 {/* Propriétaire à gauche */}
                 <div className="flex items-center gap-2">
-                    <span
-                        className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${owner.id === currentUserId
-                            ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
-                            : "bg-neutral-200 text-neutral-600"
-                            }`}
-                        title={owner.name}
-                    >
-                        {getInitials(owner.name)}
-                    </span>
+                    <Avatar
+                        name={owner.name}
+                        isCurrentUser={owner.id === currentUserId}
+                    />
                     {showNames && (
                         <span className="text-body-xs text-neutral-600">
                             {owner.name}
@@ -96,16 +92,11 @@ function ProjectMembers({
                 {/* Membres à droite */}
                 <div className="flex items-center -space-x-2">
                     {visibleMembers.slice(1).map((member) => (
-                        <span
+                        <Avatar
                             key={member.id}
-                            className={`flex h-8 w-8 items-center justify-center rounded-full text-body-2xs font-medium ring-2 ring-neutral-white ${member.isCurrentUser
-                                ? "bg-[#FFE8D9] text-brand-orange-dark ring-brand-orange-main"
-                                : "bg-neutral-200 text-neutral-600"
-                                }`}
-                            title={member.name}
-                        >
-                            {getInitials(member.name)}
-                        </span>
+                            name={member.name}
+                            isCurrentUser={member.isCurrentUser}
+                        />
                     ))}
                     {hiddenCount > 0 && (
                         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-body-2xs font-medium text-neutral-400 ring-2 ring-neutral-white">

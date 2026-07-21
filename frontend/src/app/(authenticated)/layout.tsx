@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
 import { Spinner } from "@/components/ui/Spinner";
 
 export default function AuthenticatedLayout({
@@ -33,11 +34,12 @@ export default function AuthenticatedLayout({
     }
 
     return (
-        <>
+        <div className="flex min-h-screen flex-col">
             <Navigation />
-            <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
                 {children}
             </main>
-        </>
+            <Footer />
+        </div>
     );
 }

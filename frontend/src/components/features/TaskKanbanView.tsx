@@ -21,10 +21,15 @@ function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
                     (t) => t.status === col.key,
                 );
                 return (
-                    <div key={col.key}>
-                        <h3 className="mb-3 text-body-s font-medium text-neutral-600">
-                            {col.label} ({columnTasks.length})
-                        </h3>
+                    <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
+                        <div className="mb-4 flex items-center gap-2">
+                            <h3 className="text-body-s font-medium text-neutral-600">
+                                {col.label}
+                            </h3>
+                            <span className="inline-flex items-center justify-center rounded-full bg-neutral-200 px-2 py-0.5 text-body-xs font-medium text-neutral-600">
+                                {columnTasks.length}
+                            </span>
+                        </div>
                         <div className="space-y-3">
                             {columnTasks.length === 0 ? (
                                 <p className="text-body-xs text-neutral-400">
@@ -32,7 +37,7 @@ function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
                                 </p>
                             ) : (
                                 columnTasks.map((task) => (
-                                    <TaskCard key={task.id} task={task} showProject />
+                                    <TaskCard key={task.id} task={task} showProject variant="kanban" />
                                 ))
                             )}
                         </div>

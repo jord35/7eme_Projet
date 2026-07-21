@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 <input
                     ref={ref}
                     id={inputId}
-                    className={`mt-1 block w-full rounded-md border px-3 py-2 text-body-m text-neutral-950 shadow-sm transition-colors placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-offset-0 ${error
+                    className={`mt-1 block w-full rounded border px-3 py-2 text-body-m text-neutral-950 shadow-sm transition-colors placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-offset-0 ${error
                         ? "border-error-main focus:ring-error-main"
                         : "border-neutral-200 focus:border-brand-orange-main focus:ring-brand-orange-main"
                         } ${className}`}

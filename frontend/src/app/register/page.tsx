@@ -1,16 +1,14 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { RegisterForm } from "@/components/forms/RegisterForm";
+import { AuthForm } from "@/components/forms/AuthForm";
 
 export default function RegisterPage() {
     return (
         <div className="grid min-h-screen grid-cols-1 md:grid-cols-5">
             {/* Colonne gauche : logo + formulaire */}
-            <div className="flex flex-col bg-neutral-50 px-6 md:col-span-2">
-                {/* Logo centré avec padding top */}
-                <div className="flex justify-center pt-[93px]">
+            <div className="flex flex-col bg-neutral-50 md:col-span-2">
+                {/* Logo centré */}
+                <div className="flex justify-center pt-[93px] px-6">
                     <Image
                         src="/logos/logo-orange.svg"
                         alt="Abricot"
@@ -20,22 +18,25 @@ export default function RegisterPage() {
                     />
                 </div>
 
-                {/* Formulaire */}
-                <div className="mx-auto mt-12 w-full max-w-sm">
-                    <h1 className="text-h4 font-heading text-neutral-950">Inscription</h1>
-                    <p className="mt-2 text-body-s text-neutral-600">
-                        Créez un compte pour commencer à gérer vos projets.
-                    </p>
+                {/* Contenu principal avec padding 92 */}
+                <div className="flex flex-1 flex-col justify-between px-6 pb-[92px]">
+                    {/* Formulaire centré verticalement */}
+                    <div className="flex flex-1 flex-col justify-center">
+                        <div className="mx-auto w-full max-w-sm">
+                            <h1 className="text-center text-h1 font-heading text-brand-orange-dark">Inscription</h1>
 
-                    <div className="mt-6">
-                        <RegisterForm />
+                            <div className="mt-[30px]">
+                                <AuthForm mode="register" />
+                            </div>
+                        </div>
                     </div>
 
-                    <p className="mt-4 text-center text-body-s text-neutral-500">
+                    {/* Footer tout en bas */}
+                    <p className="text-center text-body-s text-neutral-500">
                         Déjà un compte ?{" "}
                         <Link
                             href="/login"
-                            className="font-medium text-brand-orange-main hover:text-brand-orange-dark"
+                            className="font-semibold text-brand-orange-main hover:text-brand-orange-dark"
                         >
                             Se connecter
                         </Link>

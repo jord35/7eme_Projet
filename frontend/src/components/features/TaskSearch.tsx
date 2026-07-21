@@ -69,7 +69,7 @@ function TaskSearch({
     }, []);
 
     return (
-        <div className="mb-4 flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3">
             {showStatusFilter && (
                 <select
                     value={status}
@@ -83,14 +83,22 @@ function TaskSearch({
                     ))}
                 </select>
             )}
-            <input
-                type="text"
-                value={query}
-                onChange={(e) => handleQueryChange(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={placeholder}
-                className="flex-1 rounded-md border border-neutral-200 px-3 py-1.5 text-body-s text-neutral-950 placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
-            />
+            <div className="relative" style={{ width: 357, height: 63 }}>
+                <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => handleQueryChange(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={placeholder}
+                    className="h-full w-full rounded-md border border-neutral-200 px-8 text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                />
+                <img
+                    src="/icons/search.svg"
+                    alt=""
+                    className="pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 text-neutral-600"
+                    style={{ width: 14, height: 14 }}
+                />
+            </div>
         </div>
     );
 }

@@ -54,7 +54,8 @@ function PageHeader({
             )}
 
             {/* Titre + actions */}
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center justify-between gap-4">
+                {/* Titre + description */}
                 <div>
                     <div className="flex items-center gap-2">
                         <h1 className="text-h3 font-heading text-neutral-950">{title}</h1>
@@ -73,6 +74,7 @@ function PageHeader({
                     )}
                 </div>
 
+                {/* Bouton d'action */}
                 <div className="flex items-center gap-2">
                     {showIAButton && (
                         <button
@@ -84,7 +86,7 @@ function PageHeader({
                         </button>
                     )}
                     {action && (
-                        <Button onClick={action.onClick}>{action.label}</Button>
+                        <Button onClick={action.onClick}>+ {action.label}</Button>
                     )}
                 </div>
             </div>

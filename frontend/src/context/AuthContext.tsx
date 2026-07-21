@@ -15,6 +15,7 @@ interface AuthContextType {
     isAuthenticated: boolean;
     loginSuccess: (token: string, user: User) => void;
     logout: () => void;
+    refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,6 +58,15 @@ function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
     }, []);
 
+    const refreshUser = useCallback(async () => {
+        try {
+            const profile = await getProfile();
+            setUser(profile);
+        } catch {
+            // Silently fail — le user reste inchangé
+        }
+    }, []);
+
     useEffect(() => {
         const token = getToken();
         if (!token) {
@@ -81,6 +91,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 isAuthenticated: !!user,
                 loginSuccess,
                 logout,
+                refreshUser,
             }}
         >
             {children}
