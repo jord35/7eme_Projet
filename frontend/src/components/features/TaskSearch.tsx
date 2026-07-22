@@ -69,19 +69,16 @@ function TaskSearch({
     }, []);
 
     return (
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap items-center gap-3">
             {showStatusFilter && (
-                <select
-                    value={status}
-                    onChange={(e) => handleStatusChange(e.target.value)}
-                    className="rounded-md border border-neutral-200 px-3 py-1.5 text-body-s text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                <button
+                    onClick={() => { }}
+                    className="flex items-center gap-2 rounded-md border border-neutral-200 px-8 text-body-s text-neutral-600 hover:bg-neutral-50 transition-colors"
+                    style={{ height: 63 }}
                 >
-                    {statusOptions.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </option>
-                    ))}
-                </select>
+                    Statut
+                    <img src="/icons/arrow-down.svg" alt="" width={12} height={8} />
+                </button>
             )}
             <div className="relative" style={{ width: 357, height: 63 }}>
                 <input

@@ -39,7 +39,7 @@ interface TabsProps {
  */
 function Tabs({ tabs, activeTab, onChange }: TabsProps) {
     return (
-        <div className="mb-6 flex gap-2">
+        <div className="flex gap-2">
             {tabs.map((tab) => {
                 const isActive = activeTab === tab.key;
                 return (

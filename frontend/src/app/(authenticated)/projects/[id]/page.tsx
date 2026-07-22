@@ -10,7 +10,7 @@ import { Tabs } from "@/components/ui/Tabs";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { TaskDetailCard } from "@/components/features/TaskDetailCard";
 import { TaskSearch } from "@/components/features/TaskSearch";
-import { ProjectMembers } from "@/components/features/ProjectMembers";
+import { ProjectTeam } from "@/components/features/ProjectTeam";
 import { ConfirmDeleteModal } from "@/components/features/ConfirmDeleteModal";
 import { Modal } from "@/components/ui/Modal";
 import { TaskForm } from "@/components/forms/TaskForm";
@@ -28,8 +28,8 @@ import type { Project, Task } from "@/lib/api";
 type ViewMode = "list" | "calendar";
 
 const projectTabs = [
-    { key: "list", label: "Liste" },
-    { key: "calendar", label: "Calendrier" },
+    { key: "list", label: "Liste", icon: "/icons/plus.svg" },
+    { key: "calendar", label: "Calendrier", icon: "/icons/calendar.svg" },
 ];
 
 export default function ProjectDetailPage() {
@@ -181,86 +181,90 @@ export default function ProjectDetailPage() {
                 onEditClick={() => setShowEditProject(true)}
             />
 
-            {/* Contributeurs (affichage lecture seule) */}
+            {/* Équipe du projet */}
             <div className="mb-6">
-                <ProjectMembers
+                <ProjectTeam
                     owner={project.owner}
                     members={project.members}
-                    label="Contributeurs"
-                    showNames
-                    showRoleBadge
                 />
             </div>
 
-            <Tabs
-                tabs={projectTabs}
-                activeTab={viewMode}
-                onChange={(key) => setViewMode(key as ViewMode)}
-            />
+            {/* Contenu principal (tâches) */}
+            <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
+                {/* En-tête : titre + recherche + tabs sur la même ligne */}
+                <div className="mb-4 flex items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-h5 font-heading text-neutral-950">Tâches</h2>
+                        <p className="mt-1 text-body-s text-neutral-400">Par ordre de priorité</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <Tabs
+                            tabs={projectTabs}
+                            activeTab={viewMode}
+                            onChange={(key) => setViewMode(key as ViewMode)}
+                        />
+                        <TaskSearch
+                            onSearch={(query, status) => {
+                                setSearchQuery(query);
+                                setStatusFilter(status);
+                            }}
+                            placeholder="Rechercher une tâche..."
+                            showStatusFilter
+                        />
+                    </div>
+                </div>
 
-            {/* Filtres + recherche */}
-            <TaskSearch
-                onSearch={(query, status) => {
-                    setSearchQuery(query);
-                    setStatusFilter(status);
-                }}
-                placeholder="Rechercher une tâche..."
-                showStatusFilter
-            />
+                {/* Vue Liste */}
+                {viewMode === "list" && (
+                    <div>
+                        {filteredTasks.length === 0 ? (
+                            <p className="text-body-s text-neutral-400">
+                                Aucune tâche trouvée.
+                            </p>
+                        ) : (
+                            <div className="space-y-3">
+                                {filteredTasks.map((task) => (
+                                    <TaskDetailCard
+                                        key={task.id}
+                                        task={task}
+                                        onEdit={(t) => setEditingTask(t)}
+                                        onDelete={(t) => setDeletingTask(t)}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
 
-            {/* Vue Liste */}
-            {viewMode === "list" && (
-                <div>
-                    <h2 className="text-body-s font-medium text-neutral-600">
-                        Tâches ({filteredTasks.length})
-                    </h2>
-                    {filteredTasks.length === 0 ? (
-                        <p className="mt-2 text-body-s text-neutral-400">
-                            Aucune tâche trouvée.
+                {/* Vue Calendrier */}
+                {viewMode === "calendar" && (
+                    <div>
+                        <Calendar
+                            tileClassName={({ date }) => {
+                                if (dueDates.includes(date.toDateString())) {
+                                    return "bg-brand-orange-light text-brand-orange-dark font-medium rounded-full";
+                                }
+                                return null;
+                            }}
+                            className="rounded-lg border border-neutral-200 bg-neutral-white p-4 shadow-sm"
+                        />
+                        <p className="mt-3 text-body-xs text-neutral-400">
+                            Les jours en orange ont une échéance de tâche.
                         </p>
-                    ) : (
-                        <div className="mt-3 space-y-3">
-                            {filteredTasks.map((task) => (
-                                <TaskDetailCard
-                                    key={task.id}
-                                    task={task}
-                                    onEdit={(t) => setEditingTask(t)}
-                                    onDelete={(t) => setDeletingTask(t)}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
+                    </div>
+                )}
 
-            {/* Vue Calendrier */}
-            {viewMode === "calendar" && (
-                <div>
-                    <Calendar
-                        tileClassName={({ date }) => {
-                            if (dueDates.includes(date.toDateString())) {
-                                return "bg-brand-orange-light text-brand-orange-dark font-medium rounded-full";
-                            }
-                            return null;
-                        }}
-                        className="rounded-lg border border-neutral-200 bg-neutral-white p-4 shadow-sm"
-                    />
-                    <p className="mt-3 text-body-xs text-neutral-400">
-                        Les jours en orange ont une échéance de tâche.
-                    </p>
-                </div>
-            )}
-
-            {isOwner && (
-                <div className="mt-8 border-t border-neutral-200 pt-6">
-                    <button
-                        onClick={() => setShowDeleteProject(true)}
-                        className="rounded-md bg-error-main px-4 py-2 text-body-s font-medium text-neutral-white shadow-sm hover:bg-error-main/80 transition-colors"
-                    >
-                        Supprimer le projet
-                    </button>
-                </div>
-            )}
+                {isOwner && (
+                    <div className="mt-8 border-t border-neutral-200 pt-6">
+                        <button
+                            onClick={() => setShowDeleteProject(true)}
+                            className="rounded-md bg-error-main px-4 py-2 text-body-s font-medium text-neutral-white shadow-sm hover:bg-error-main/80 transition-colors"
+                        >
+                            Supprimer le projet
+                        </button>
+                    </div>
+                )}
+            </div>
 
             <Modal
                 isOpen={showCreateTask}
