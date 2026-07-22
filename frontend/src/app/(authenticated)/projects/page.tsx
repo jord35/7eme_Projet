@@ -63,9 +63,9 @@ export default function ProjectsPage() {
         <div>
             <PageHeader
                 title="Mes projets"
-                description="Gérer vos projets"
+                description="Gérez vos projets"
                 action={{
-                    label: "+ Nouveau projet",
+                    label: "+ Créer un projet",
                     onClick: () => setShowCreateModal(true),
                 }}
             />

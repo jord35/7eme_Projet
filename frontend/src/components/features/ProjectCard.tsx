@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ProjectMembers } from "./ProjectMembers";
 
 interface ProjectCardProps {
@@ -29,36 +30,40 @@ function ProjectCard({ project, completedTasks = 0 }: ProjectCardProps) {
     return (
         <Link
             href={`/projects/${project.id}`}
-            className="block rounded-lg bg-neutral-white p-6 shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all"
+            className="block max-w-[380px] rounded-lg bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all"
+            style={{ padding: "30px 34px" }}
         >
-            <h2 className="text-h5 font-heading text-neutral-950">
-                {project.name}
-            </h2>
-            <p className="mt-2 line-clamp-2 text-body-s text-neutral-600">
-                {project.description}
-            </p>
+            {/* Div 1 : Titre + Description */}
+            <div>
+                <h2 className="text-h5 font-heading text-neutral-950">
+                    {project.name}
+                </h2>
+                <p className="mt-2 line-clamp-2 text-body-s text-neutral-600">
+                    {project.description}
+                </p>
+            </div>
 
-            {/* Barre de progression */}
-            <div className="mt-4">
+            {/* Div 2 : Progression */}
+            <div className="mt-[56px]">
                 <div className="flex items-center justify-between text-body-xs">
                     <span className="text-neutral-600">Progression</span>
                     <span className="font-medium text-neutral-950">
                         {progress}%
                     </span>
                 </div>
-                <div className="mt-1 h-2 w-full rounded-full bg-neutral-100">
+                <div className="mt-4 h-2 w-full rounded-full bg-neutral-100">
                     <div
                         className="h-2 rounded-full bg-brand-orange-main transition-all"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
-                <p className="mt-1 text-body-xs text-neutral-400">
-                    {completedTasks}/{totalTasks} tâches
+                <p className="mt-2 text-body-xs text-neutral-400">
+                    {completedTasks}/{totalTasks} tâches terminées
                 </p>
             </div>
 
-            {/* Équipe (composant réutilisable, sans les noms) */}
-            <div className="mt-4">
+            {/* Div 3 : Équipe */}
+            <div className="mt-[56px]">
                 <ProjectMembers
                     owner={project.owner}
                     members={project.members}

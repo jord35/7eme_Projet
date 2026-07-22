@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 import { getRoleLabel, formatMemberLabel } from "@/lib/mappers";
 import { Avatar } from "@/components/ui/Avatar";
 
@@ -63,43 +64,42 @@ function ProjectMembers({
     return (
         <div>
             {label && (
-                <span className="text-body-xs text-neutral-400">
-                    {formatMemberLabel(label, count)}
-                </span>
+                <div className="flex items-center gap-1 mb-2">
+                    <Image src="/icons/team.svg" alt="" width={12} height={12} />
+                    <span className="text-body-xs text-neutral-400">
+                        {formatMemberLabel(label, count)}
+                    </span>
+                </div>
             )}
 
-            <div className="mt-2 flex items-center justify-between">
-                {/* Propriétaire à gauche */}
-                <div className="flex items-center gap-2">
-                    <Avatar
-                        name={owner.name}
-                        isCurrentUser={owner.id === currentUserId}
-                    />
-                    {showNames && (
-                        <span className="text-body-xs text-neutral-600">
-                            {owner.name}
-                        </span>
-                    )}
-                </div>
+            <div className="flex items-center gap-[4px]">
+                {/* Propriétaire */}
+                <Avatar
+                    name={owner.name}
+                    isCurrentUser={owner.id === currentUserId}
+                    size={27}
+                />
 
                 {/* Badge du rôle de l'utilisateur connecté */}
                 {showRoleBadge && currentUserRole && (
-                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-body-2xs font-medium text-neutral-600">
+                    <span className="rounded-full bg-brand-orange-light px-4 py-1 text-body-s text-brand-orange-dark">
                         {currentUserRole}
                     </span>
                 )}
 
-                {/* Membres à droite */}
-                <div className="flex items-center -space-x-2">
+                {/* Contributeurs (chevauchés) */}
+                <div className="flex items-center">
                     {visibleMembers.slice(1).map((member) => (
-                        <Avatar
-                            key={member.id}
-                            name={member.name}
-                            isCurrentUser={member.isCurrentUser}
-                        />
+                        <div key={member.id} className="-ml-3 first:-ml-0">
+                            <Avatar
+                                name={member.name}
+                                isCurrentUser={member.isCurrentUser}
+                                size={27}
+                            />
+                        </div>
                     ))}
                     {hiddenCount > 0 && (
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-body-2xs font-medium text-neutral-400 ring-2 ring-neutral-white">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-body-2xs font-medium text-neutral-400 -ml-3">
                             +{hiddenCount}
                         </span>
                     )}

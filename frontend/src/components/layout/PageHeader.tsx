@@ -16,7 +16,7 @@ interface PageHeaderProps {
         label: string;
         onClick: () => void;
     };
-    /** Afficher le bouton d'édition (icône crayon) ? */
+    /** Afficher le bouton d'édition (lien "Modifier") ? */
     showEditButton?: boolean;
     /** Afficher le bouton IA (désactivé) ? */
     showIAButton?: boolean;
@@ -26,8 +26,8 @@ interface PageHeaderProps {
 
 /**
  * En-tête de page réutilisable.
- * Gère : titre, description, lien retour, bouton d'action,
- * bouton d'édition (admin), et bouton IA (placeholder).
+ * Gère : titre, description, bouton retour, bouton d'action,
+ * lien d'édition (admin), et bouton IA (placeholder).
  *
  * Utilisé dans : Dashboard, Projets, Détail projet.
  */
@@ -42,30 +42,28 @@ function PageHeader({
 }: PageHeaderProps) {
     return (
         <div className="mb-6">
-            {/* Lien retour */}
-            {backLink && (
-                <Link
-                    href={backLink}
-                    className="mb-2 inline-flex items-center gap-1 text-body-s text-neutral-600 hover:text-neutral-950 transition-colors"
-                >
-                    <Image src="/icons/chevron-down.svg" alt="" width={12} height={12} className="rotate-90" />
-                    Retour
-                </Link>
-            )}
+            <div className="flex items-start gap-4">
+                {/* Bouton retour (carré blanc avec flèche) */}
+                {backLink && (
+                    <Link
+                        href={backLink}
+                        className="flex items-center justify-center rounded-[10px] bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all"
+                        style={{ width: 57, height: 57, padding: 24 }}
+                    >
+                        <Image src="/icons/arrow-back.svg" alt="Retour" width={16} height={8} />
+                    </Link>
+                )}
 
-            {/* Titre + actions */}
-            <div className="flex items-center justify-between gap-4">
                 {/* Titre + description */}
-                <div>
+                <div className="flex-1">
                     <div className="flex items-center gap-2">
                         <h1 className="text-h3 font-heading text-neutral-950">{title}</h1>
                         {showEditButton && (
                             <button
                                 onClick={onEditClick}
-                                className="inline-flex items-center justify-center rounded-md p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
-                                aria-label="Modifier"
+                                className="text-body-s text-brand-orange-main underline hover:text-brand-orange-dark transition-colors"
                             >
-                                <Image src="/icons/edit.svg" alt="" width={16} height={16} />
+                                Modifier
                             </button>
                         )}
                     </div>
@@ -74,8 +72,11 @@ function PageHeader({
                     )}
                 </div>
 
-                {/* Bouton d'action */}
+                {/* Boutons d'action */}
                 <div className="flex items-center gap-2">
+                    {action && (
+                        <Button onClick={action.onClick}>{action.label}</Button>
+                    )}
                     {showIAButton && (
                         <button
                             disabled
@@ -84,9 +85,6 @@ function PageHeader({
                         >
                             <span>✨</span> IA
                         </button>
-                    )}
-                    {action && (
-                        <Button onClick={action.onClick}>+ {action.label}</Button>
                     )}
                 </div>
             </div>

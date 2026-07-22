@@ -44,7 +44,7 @@ export default function DashboardPage() {
                 title="Tableau de bord"
                 description={`Bonjour, ${user?.name || ""}, voici un aperçu de vos projets et tâches.`}
                 action={{
-                    label: "Créer un projet",
+                    label: "+ Créer un projet",
                     onClick: () => setShowCreateProject(true),
                 }}
             />
