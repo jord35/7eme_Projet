@@ -77,7 +77,7 @@ function TaskSearch({
                     style={{ height: 63 }}
                 >
                     Statut
-                    <img src="/icons/arrow-down.svg" alt="" width={12} height={8} />
+                    <img src="/icons/arrow.svg" alt="" width={12} height={8} />
                 </button>
             )}
             <div className="relative" style={{ width: 357, height: 63 }}>
