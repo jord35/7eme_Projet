@@ -65,22 +65,17 @@ function ProfileForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4"
         >
-            <h2 className="text-h5 font-heading text-neutral-950">
-                Modifier les informations
-            </h2>
+            <Input
+                label="Nom"
+                error={form.formState.errors.lastName?.message}
+                {...form.register("lastName")}
+            />
 
-            <div className="grid grid-cols-2 gap-4">
-                <Input
-                    label="Prénom"
-                    error={form.formState.errors.firstName?.message}
-                    {...form.register("firstName")}
-                />
-                <Input
-                    label="Nom"
-                    error={form.formState.errors.lastName?.message}
-                    {...form.register("lastName")}
-                />
-            </div>
+            <Input
+                label="Prénom"
+                error={form.formState.errors.firstName?.message}
+                {...form.register("firstName")}
+            />
 
             <Input
                 label="Email"
@@ -90,7 +85,7 @@ function ProfileForm() {
             />
 
             <Input
-                label="Mot de passe actuel"
+                label="Mot de passe"
                 type="password"
                 placeholder="Mot de passe actuel"
                 error={form.formState.errors.currentPassword?.message}
@@ -108,9 +103,8 @@ function ProfileForm() {
             <Button
                 type="submit"
                 isLoading={form.formState.isSubmitting}
-                className="w-full"
             >
-                Enregistrer
+                Modifier les informations
             </Button>
         </form>
     );
