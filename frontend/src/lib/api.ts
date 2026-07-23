@@ -172,6 +172,7 @@ export async function getProject(id: string): Promise<Project> {
 export async function createProject(data: {
     name: string;
     description: string;
+    contributors?: string[];
 }): Promise<Project> {
     const res = await fetch(`${API_URL}/projects`, {
         method: "POST",

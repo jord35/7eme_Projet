@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import Image from "next/image";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
@@ -55,7 +56,8 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
     });
 
     const form = isEdit ? editForm : createForm;
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = form;
+    const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = form;
+    const [nameValue, setNameValue] = useState(project?.name || "");
 
     // ─── Contributeurs ───
     const [showContributors, setShowContributors] = useState(false);
@@ -64,6 +66,8 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
         Array<{ id: string; email: string; name: string | null }>
     >([]);
     const [isSearching, setIsSearching] = useState(false);
+    // En mode création, stocke les emails des contributeurs en attente
+    const [pendingContributors, setPendingContributors] = useState<string[]>([]);
 
     // En mode edit, initialiser avec les membres existants
     const [currentMembers, setCurrentMembers] = useState<
@@ -80,6 +84,24 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
         }
     }, [project]);
 
+    // ─── Liste d'affichage combinée (vrais membres + emails en attente) ───
+    const displayMembers = useMemo(() => {
+        if (isEdit) {
+            return currentMembers.map((m) => ({
+                id: m.user.id,
+                email: m.user.email,
+                name: m.user.name,
+                isPending: false,
+            }));
+        }
+        return pendingContributors.map((email) => ({
+            id: email,
+            email,
+            name: email,
+            isPending: true,
+        }));
+    }, [currentMembers, pendingContributors, isEdit]);
+
     // ─── Recherche utilisateurs ───
     async function handleSearchUsers(query: string) {
         setContributorSearch(query);
@@ -92,7 +114,8 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
             const results = await searchUsers(query);
             const memberIds = new Set(currentMembers.map((m) => m.user.id));
             if (project?.owner?.id) memberIds.add(project.owner.id);
-            setSearchResults(results.filter((r) => !memberIds.has(r.id)));
+            pendingContributors.forEach((email) => memberIds.add(email));
+            setSearchResults(results.filter((r) => !memberIds.has(r.id) && !memberIds.has(r.email)));
         } catch {
             setSearchResults([]);
         } finally {
@@ -103,9 +126,11 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
     // ─── Ajouter un contributeur ───
     async function handleAddContributor(email: string, name: string | null) {
         if (!isEdit) {
-            // En mode création, on ne peut pas encore ajouter (le projet n'existe pas)
-            // On stocke juste l'info, l'ajout se fera après création
-            toast.info("Les contributeurs seront ajoutés après la création du projet.");
+            // En mode création, stocker l'email pour l'envoyer lors de la soumission
+            setPendingContributors((prev) => [...prev, email]);
+            setContributorSearch("");
+            setSearchResults([]);
+            toast.success(`${name || email} sera ajouté à la création du projet.`);
             return;
         }
 
@@ -155,6 +180,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                 result = await createProject({
                     name: createData.name,
                     description: createData.description || "",
+                    contributors: pendingContributors.length > 0 ? pendingContributors : undefined,
                 });
                 toast.success("Projet créé !");
             } else {
@@ -176,152 +202,132 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Nom */}
+            {/* Titre */}
             <Input
-                label="Nom du projet"
-                placeholder="Mon projet"
+                label="Titre *"
+                placeholder="Nom du projet"
                 error={errors.name?.message}
-                {...register("name")}
+                {...register("name", { onChange: (e) => setNameValue(e.target.value) })}
             />
 
             {/* Description */}
             <Textarea
-                label="Description"
+                label="Description *"
                 placeholder="Décrivez votre projet..."
                 rows={3}
                 error={errors.description?.message}
                 {...register("description")}
             />
 
-            {/* ─── Contributeurs (mode edit uniquement) ─── */}
-            {isEdit && project && (
-                <div>
-                    <button
-                        type="button"
-                        onClick={() => setShowContributors((prev) => !prev)}
-                        className="flex items-center gap-1 text-body-xs font-medium text-neutral-600 hover:text-neutral-800 transition-colors"
-                    >
-                        Contributeurs ({currentMembers.length + 1})
-                        <span className="text-neutral-400">
-                            {showContributors ? "▲" : "▼"}
-                        </span>
-                    </button>
+            {/* ─── Contributeurs ─── */}
+            <div>
+                <label className="mb-1 block text-body-s font-medium text-neutral-800">
+                    Contributeurs
+                </label>
+                <button
+                    type="button"
+                    onClick={() => setShowContributors((prev) => !prev)}
+                    className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-body-m text-neutral-400 hover:border-brand-orange-main transition-colors"
+                >
+                    <span>
+                        {displayMembers.length > 0
+                            ? `${displayMembers.length + 1} collaborateur${displayMembers.length + 1 > 1 ? "s" : ""}`
+                            : "Choisir un ou plusieurs collaborateurs"}
+                    </span>
+                    <Image
+                        src="/icons/arrow.svg"
+                        alt=""
+                        width={12}
+                        height={8}
+                        className={`transition-transform duration-200 ${showContributors ? "rotate-180" : ""}`}
+                    />
+                </button>
 
-                    {showContributors && (
-                        <div className="mt-2 space-y-2">
-                            {/* Recherche */}
-                            <input
-                                type="text"
-                                value={contributorSearch}
-                                onChange={(e) =>
-                                    handleSearchUsers(e.target.value)
-                                }
-                                placeholder="Rechercher par email ou nom..."
-                                className="block w-full rounded-md border border-neutral-200 px-3 py-1.5 text-body-xs shadow-sm placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
-                            />
+                {showContributors && (
+                    <div className="mt-2 space-y-2">
+                        {/* Recherche */}
+                        <input
+                            type="text"
+                            value={contributorSearch}
+                            onChange={(e) => handleSearchUsers(e.target.value)}
+                            placeholder="Rechercher par email ou nom..."
+                            className="block w-full rounded-md border border-neutral-200 px-3 py-1.5 text-body-xs shadow-sm placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                        />
 
-                            {/* Résultats de recherche */}
-                            {isSearching && (
-                                <p className="text-body-xs text-neutral-400">
-                                    Recherche...
-                                </p>
-                            )}
-                            {searchResults.length > 0 && (
-                                <div className="max-h-32 space-y-0.5 overflow-y-auto rounded-md border border-neutral-100">
-                                    {searchResults.map((u) => (
-                                        <button
-                                            key={u.id}
-                                            type="button"
-                                            onClick={() =>
-                                                handleAddContributor(
-                                                    u.email,
-                                                    u.name
-                                                )
-                                            }
-                                            className="flex w-full items-center justify-between px-3 py-1.5 text-left text-body-xs hover:bg-neutral-50 transition-colors"
-                                        >
-                                            <span>
-                                                {u.name || "Sans nom"}{" "}
-                                                <span className="text-neutral-400">
-                                                    ({u.email})
-                                                </span>
-                                            </span>
-                                            <span className="text-brand-orange-main font-medium">
-                                                + Ajouter
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                            {contributorSearch.length >= 2 &&
-                                !isSearching &&
-                                searchResults.length === 0 && (
-                                    <p className="text-body-xs text-neutral-400">
-                                        Aucun utilisateur trouvé.
-                                    </p>
-                                )}
-
-                            {/* Liste des membres actuels */}
-                            <div className="space-y-1">
-                                {/* Owner */}
-                                <div className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5">
-                                    <span className="text-body-xs text-neutral-700">
-                                        {project.owner.name}{" "}
-                                        <span className="text-neutral-400">
-                                            ({project.owner.email})
-                                        </span>
-                                        <Badge variant="info" className="ml-2">
-                                            Admin
-                                        </Badge>
-                                    </span>
-                                </div>
-
-                                {/* Membres */}
-                                {currentMembers.map((m) => (
-                                    <div
-                                        key={m.user.id}
-                                        className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5"
+                        {/* Résultats de recherche */}
+                        {isSearching && (
+                            <p className="text-body-xs text-neutral-400">Recherche...</p>
+                        )}
+                        {searchResults.length > 0 && (
+                            <div className="max-h-32 space-y-0.5 overflow-y-auto rounded-md border border-neutral-100">
+                                {searchResults.map((u) => (
+                                    <button
+                                        key={u.id}
+                                        type="button"
+                                        onClick={() => handleAddContributor(u.email, u.name)}
+                                        className="flex w-full items-center justify-between px-3 py-1.5 text-left text-body-xs hover:bg-neutral-50 transition-colors"
                                     >
-                                        <span className="text-body-xs text-neutral-700">
-                                            {m.user.name}{" "}
-                                            <span className="text-neutral-400">
-                                                ({m.user.email})
-                                            </span>
-                                            {m.role === "ADMIN" && (
-                                                <Badge
-                                                    variant="info"
-                                                    className="ml-2"
-                                                >
-                                                    Admin
-                                                </Badge>
-                                            )}
+                                        <span>
+                                            {u.name || "Sans nom"}{" "}
+                                            <span className="text-neutral-400">({u.email})</span>
                                         </span>
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                handleRemoveContributor(
-                                                    m.user.id
-                                                )
-                                            }
-                                            className="text-body-xs text-error-main hover:text-error-main/80 transition-colors"
-                                        >
-                                            Retirer
-                                        </button>
-                                    </div>
+                                        <span className="text-brand-orange-main font-medium">+ Ajouter</span>
+                                    </button>
                                 ))}
                             </div>
-                        </div>
-                    )}
-                </div>
-            )}
+                        )}
+                        {contributorSearch.length >= 2 && !isSearching && searchResults.length === 0 && (
+                            <p className="text-body-xs text-neutral-400">Aucun utilisateur trouvé.</p>
+                        )}
 
-            <Button
-                type="submit"
-                isLoading={isSubmitting}
-                className="w-full"
-            >
-                {mode === "create" ? "Créer le projet" : "Enregistrer"}
-            </Button>
+                        {/* Liste des membres actuels */}
+                        <div className="space-y-1">
+                            {/* Owner */}
+                            <div className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5">
+                                <span className="text-body-xs text-neutral-700">
+                                    {project?.owner?.name || "Vous"}
+                                    <Badge variant="info" className="ml-2">Admin</Badge>
+                                </span>
+                            </div>
+
+                            {/* Membres */}
+                            {displayMembers.map((m) => (
+                                <div key={m.id} className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5">
+                                    <span className="text-body-xs text-neutral-700">
+                                        {m.name}{" "}
+                                        <span className="text-neutral-400">({m.email})</span>
+                                        {m.isPending && <Badge variant="warning" className="ml-2">En attente</Badge>}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (m.isPending) {
+                                                setPendingContributors((prev) => prev.filter((e) => e !== m.email));
+                                            } else {
+                                                handleRemoveContributor(m.id);
+                                            }
+                                        }}
+                                        className="text-body-xs text-error-main hover:text-error-main/80 transition-colors"
+                                    >
+                                        Retirer
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className="flex">
+                <Button
+                    type="submit"
+                    isLoading={isSubmitting}
+                    disabled={!nameValue?.trim()}
+                    className={!nameValue?.trim() ? "bg-neutral-200 text-neutral-400" : ""}
+                >
+                    {mode === "create" ? "+ Créer le projet" : "Enregistrer"}
+                </Button>
+            </div>
         </form>
     );
 }
