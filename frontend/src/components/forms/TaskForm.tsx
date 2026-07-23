@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import Image from "next/image";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
@@ -13,17 +14,13 @@ import { getProjectMemberIds } from "@/lib/mappers";
 import type { Task } from "@/lib/api";
 
 interface TaskFormProps {
-    /** Mode création ou édition */
     mode: "create" | "edit";
     projectId: string;
-    /** Propriétaire du projet (inclus dans la liste des assignables) */
     owner: { id: string; name: string; email: string };
-    /** L'utilisateur connecté est-il propriétaire du projet ? */
     isOwner: boolean;
     members: Array<{
         user: { id: string; name: string; email: string };
     }>;
-    /** Données initiales (mode edit uniquement) */
     initialData?: {
         taskId: string;
         title: string;
@@ -33,7 +30,6 @@ interface TaskFormProps {
         priority?: string;
         assigneeIds: string[];
     };
-    /** Callback appelé après création ou modification réussie */
     onSuccess: (task: Task) => void;
 }
 
@@ -43,6 +39,12 @@ const statusOptions = [
     { value: "DONE", label: "Terminé" },
 ];
 
+const STATUS_COLORS: Record<string, string> = {
+    TODO: "bg-error-light text-error-main",
+    IN_PROGRESS: "bg-warning-light text-warning-main",
+    DONE: "bg-success-light text-success-main",
+};
+
 const priorityOptions = [
     { value: "LOW", label: "Basse" },
     { value: "MEDIUM", label: "Moyenne" },
@@ -50,22 +52,13 @@ const priorityOptions = [
     { value: "URGENT", label: "Urgente" },
 ];
 
-/**
- * Formulaire unifié de création / modification de tâche.
- * En mode "create" : appelle createTask().
- * En mode "edit" : pré-remplit les champs et appelle updateTask().
- */
 function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuccess }: TaskFormProps) {
-    // Filtre les assigneeIds pour ne garder que les membres encore dans le projet
-    // (évite les erreurs 400 INVALID_ASSIGNEES si un membre a été retiré entre-temps)
     const validMemberIds = getProjectMemberIds({ owner, members });
     const initialAssigneeIds = (initialData?.assigneeIds || []).filter((id) =>
         validMemberIds.has(id)
     );
 
-    const [selectedAssignees, setSelectedAssignees] = useState<string[]>(
-        initialAssigneeIds
-    );
+    const [selectedAssignees, setSelectedAssignees] = useState<string[]>(initialAssigneeIds);
     const [status, setStatus] = useState(initialData?.status || "TODO");
     const [priority, setPriority] = useState(initialData?.priority || "MEDIUM");
     const [showAssignees, setShowAssignees] = useState(false);
@@ -73,6 +66,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<CreateTaskInput>({
         resolver: zodResolver(createTaskSchema),
@@ -83,7 +77,14 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
         },
     });
 
-    /** Bascule la sélection d'un assigné dans le state local (pas d'appel API) */
+    const watchedTitle = watch("title");
+    const watchedDescription = watch("description");
+    const watchedDueDate = watch("dueDate");
+
+    const isFormValid = useMemo(() => {
+        return watchedTitle?.trim();
+    }, [watchedTitle]);
+
     function toggleAssigneeSelection(userId: string) {
         setSelectedAssignees((prev) =>
             prev.includes(userId)
@@ -92,11 +93,9 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
         );
     }
 
-    /** Soumission du formulaire */
     async function onSubmit(data: CreateTaskInput) {
         try {
             let task: Task;
-
             if (mode === "create") {
                 task = await createTask(projectId, {
                     title: data.title,
@@ -117,7 +116,6 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                 });
                 toast.success("Tâche modifiée !");
             }
-
             onSuccess(task);
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Erreur");
@@ -126,17 +124,14 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
 
     const memberList = [
         { id: owner.id, name: owner.name },
-        ...members.map((m) => ({
-            id: m.user.id,
-            name: m.user.name,
-        })),
+        ...members.map((m) => ({ id: m.user.id, name: m.user.name })),
     ];
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Titre */}
             <Input
-                label="Titre"
+                label="Titre *"
                 placeholder="Titre de la tâche"
                 error={errors.title?.message}
                 {...register("title")}
@@ -144,35 +139,44 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
 
             {/* Description */}
             <Textarea
-                label="Description"
+                label="Description *"
                 placeholder="Description..."
                 rows={3}
                 error={errors.description?.message}
                 {...register("description")}
             />
 
-            {/* Date d'échéance (propriétaire uniquement) */}
-            {isOwner && (
-                <Input
-                    label="Date d'échéance"
-                    type="date"
-                    error={errors.dueDate?.message}
-                    {...register("dueDate")}
-                />
-            )}
+            {/* Échéance */}
+            <Input
+                label="Échéance"
+                type="date"
+                error={errors.dueDate?.message}
+                {...register("dueDate")}
+            />
 
             {/* Assigné à — accordéon */}
             {memberList.length > 0 && (
                 <div>
+                    <label className="mb-1 block text-body-s font-medium text-neutral-800">
+                        Assigné à
+                    </label>
                     <button
                         type="button"
                         onClick={() => setShowAssignees((prev) => !prev)}
-                        className="flex items-center gap-1 text-body-xs font-medium text-neutral-600 hover:text-neutral-800 transition-colors"
+                        className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-body-m text-neutral-400 hover:border-brand-orange-main transition-colors"
                     >
-                        Assigné à ({selectedAssignees.length})
-                        <span className="text-neutral-400">
-                            {showAssignees ? "▲" : "▼"}
+                        <span>
+                            {selectedAssignees.length > 0
+                                ? `${selectedAssignees.length} collaborateur${selectedAssignees.length > 1 ? "s" : ""}`
+                                : "Choisir un ou plusieurs contributeurs"}
                         </span>
+                        <Image
+                            src="/icons/arrow.svg"
+                            alt=""
+                            width={12}
+                            height={8}
+                            className={`transition-transform duration-200 ${showAssignees ? "rotate-180" : ""}`}
+                        />
                     </button>
 
                     {showAssignees && (
@@ -198,55 +202,63 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                 </div>
             )}
 
-            {/* Priorité (propriétaire uniquement) */}
-            {isOwner && (
-                <div>
-                    <label className="block text-body-xs font-medium text-neutral-600 mb-1">
-                        Priorité
-                    </label>
-                    <div className="flex gap-2">
-                        {priorityOptions.map((opt) => (
+            {/* Statut */}
+            <div>
+                <label className="mb-2 block text-body-s text-neutral-950">Statut</label>
+                <div className="flex gap-2">
+                    {statusOptions.map((opt) => {
+                        const isActive = status === opt.value;
+                        return (
                             <button
                                 key={opt.value}
                                 type="button"
-                                onClick={() => setPriority(opt.value)}
-                                className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${priority === opt.value
-                                    ? "bg-brand-orange-main text-neutral-white"
-                                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                                onClick={() => setStatus(opt.value)}
+                                className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${STATUS_COLORS[opt.value]} ${isActive ? "ring-2 ring-neutral-950" : "ring-0"
                                     }`}
                             >
                                 {opt.label}
                             </button>
-                        ))}
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Priorité */}
+            {isOwner && (
+                <div>
+                    <label className="mb-2 block text-body-s text-neutral-950">Priorité</label>
+                    <div className="flex gap-2">
+                        {priorityOptions.map((opt) => {
+                            const isActive = priority === opt.value;
+                            return (
+                                <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => setPriority(opt.value)}
+                                    className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${isActive
+                                        ? "bg-brand-orange-main text-neutral-white ring-2 ring-neutral-950"
+                                        : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200 ring-0"
+                                        }`}
+                                >
+                                    {opt.label}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}
 
-            {/* Statut */}
-            <div>
-                <label className="block text-body-xs font-medium text-neutral-600 mb-1">
-                    Statut
-                </label>
-                <div className="flex gap-2">
-                    {statusOptions.map((opt) => (
-                        <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => setStatus(opt.value)}
-                            className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${status === opt.value
-                                ? "bg-brand-orange-main text-neutral-white"
-                                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
-                                }`}
-                        >
-                            {opt.label}
-                        </button>
-                    ))}
-                </div>
+            {/* Bouton submit */}
+            <div className="flex">
+                <Button
+                    type="submit"
+                    isLoading={isSubmitting}
+                    disabled={!isFormValid}
+                    className={!isFormValid ? "bg-neutral-200 text-neutral-400" : ""}
+                >
+                    + Ajouter une tâche
+                </Button>
             </div>
-
-            <Button type="submit" isLoading={isSubmitting} className="w-full">
-                {mode === "create" ? "Créer la tâche" : "Enregistrer"}
-            </Button>
         </form>
     );
 }

@@ -28,8 +28,25 @@ export default function DashboardPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showCreateProject, setShowCreateProject] = useState(false);
 
+    const PRIORITY_ORDER: Record<string, number> = {
+        URGENT: 0,
+        HIGH: 1,
+        MEDIUM: 2,
+        LOW: 3,
+    };
+
     const filteredTasks = useMemo(() => {
-        return filterBySearchQuery(tasks ?? [], searchQuery);
+        const filtered = filterBySearchQuery(tasks ?? [], searchQuery);
+        return [...filtered].sort((a, b) => {
+            const pa = PRIORITY_ORDER[a.priority] ?? 99;
+            const pb = PRIORITY_ORDER[b.priority] ?? 99;
+            if (pa !== pb) return pa - pb;
+            // À priorité égale, tri par date d'échéance
+            if (a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
+            if (a.dueDate) return -1;
+            if (b.dueDate) return 1;
+            return 0;
+        });
     }, [tasks, searchQuery]);
 
     function handleProjectCreated(_project: Project) {
