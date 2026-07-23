@@ -186,7 +186,7 @@ export async function createProject(data: {
 /** Modifier un projet : PUT /projects/:id */
 export async function updateProject(
     id: string,
-    data: { name?: string; description?: string },
+    data: { name?: string; description?: string; contributors?: string[] },
 ): Promise<Project> {
     const res = await fetch(`${API_URL}/projects/${id}`, {
         method: "PUT",

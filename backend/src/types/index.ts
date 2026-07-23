@@ -51,6 +51,7 @@ export interface CreateProjectRequest {
 export interface UpdateProjectRequest {
   name?: string;
   description?: string;
+  contributors?: string[]; // Array d'emails des contributeurs
 }
 
 export interface AddContributorRequest {

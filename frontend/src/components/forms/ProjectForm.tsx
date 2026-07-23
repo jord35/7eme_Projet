@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import Image from "next/image";
 import { Input } from "@/components/ui/Input";
@@ -13,15 +12,7 @@ import {
     createProject,
     updateProject,
     searchUsers,
-    addContributor,
-    removeContributor,
 } from "@/lib/api";
-import {
-    createProjectSchema,
-    updateProjectSchema,
-    type CreateProjectInput,
-    type UpdateProjectInput,
-} from "@/lib/validators";
 import type { Project } from "@/lib/api";
 
 interface ProjectFormProps {
@@ -39,68 +30,50 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
     const isEdit = mode === "edit";
 
     // ─── Formulaire nom/description ───
-    const createForm = useForm<CreateProjectInput>({
-        resolver: zodResolver(createProjectSchema),
+    // Type commun pour les deux modes (name requis en create, optionnel en edit)
+    type FormValues = {
+        name: string;
+        description?: string;
+    };
+
+    const form = useForm<FormValues>({
         defaultValues: {
             name: project?.name || "",
             description: project?.description || "",
         },
     });
-
-    const editForm = useForm<UpdateProjectInput>({
-        resolver: zodResolver(updateProjectSchema),
-        defaultValues: {
-            name: project?.name || "",
-            description: project?.description || "",
-        },
-    });
-
-    const form = isEdit ? editForm : createForm;
-    const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = form;
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = form;
     const [nameValue, setNameValue] = useState(project?.name || "");
 
-    // ─── Contributeurs ───
+    // ─── Contributeurs (stockés localement dans les deux modes) ───
     const [showContributors, setShowContributors] = useState(false);
     const [contributorSearch, setContributorSearch] = useState("");
     const [searchResults, setSearchResults] = useState<
         Array<{ id: string; email: string; name: string | null }>
     >([]);
     const [isSearching, setIsSearching] = useState(false);
-    // En mode création, stocke les emails des contributeurs en attente
-    const [pendingContributors, setPendingContributors] = useState<string[]>([]);
 
-    // En mode edit, initialiser avec les membres existants
-    const [currentMembers, setCurrentMembers] = useState<
-        Array<{
-            userId: string;
-            role: string;
-            user: { id: string; email: string; name: string };
-        }>
-    >(project?.members || []);
+    // Liste locale des emails des contributeurs (utilisée dans les deux modes)
+    const [pendingContributors, setPendingContributors] = useState<string[]>(
+        () => project?.members?.map((m) => m.user.email) || []
+    );
 
+    // Mettre à jour pendingContributors si le projet change (mode édition)
     useEffect(() => {
         if (project?.members) {
-            setCurrentMembers(project.members);
+            setPendingContributors(project.members.map((m) => m.user.email));
         }
     }, [project]);
 
-    // ─── Liste d'affichage combinée (vrais membres + emails en attente) ───
+    // ─── Liste d'affichage ───
     const displayMembers = useMemo(() => {
-        if (isEdit) {
-            return currentMembers.map((m) => ({
-                id: m.user.id,
-                email: m.user.email,
-                name: m.user.name,
-                isPending: false,
-            }));
-        }
         return pendingContributors.map((email) => ({
             id: email,
             email,
             name: email,
-            isPending: true,
+            isPending: !isEdit, // En mode création, tout est "en attente"
         }));
-    }, [currentMembers, pendingContributors, isEdit]);
+    }, [pendingContributors, isEdit]);
 
     // ─── Recherche utilisateurs ───
     async function handleSearchUsers(query: string) {
@@ -112,10 +85,9 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
         setIsSearching(true);
         try {
             const results = await searchUsers(query);
-            const memberIds = new Set(currentMembers.map((m) => m.user.id));
-            if (project?.owner?.id) memberIds.add(project.owner.id);
-            pendingContributors.forEach((email) => memberIds.add(email));
-            setSearchResults(results.filter((r) => !memberIds.has(r.id) && !memberIds.has(r.email)));
+            const memberEmails = new Set(pendingContributors);
+            if (project?.owner?.email) memberEmails.add(project.owner.email);
+            setSearchResults(results.filter((r) => !memberEmails.has(r.email)));
         } catch {
             setSearchResults([]);
         } finally {
@@ -123,76 +95,43 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
         }
     }
 
-    // ─── Ajouter un contributeur ───
-    async function handleAddContributor(email: string, name: string | null) {
-        if (!isEdit) {
-            // En mode création, stocker l'email pour l'envoyer lors de la soumission
-            setPendingContributors((prev) => [...prev, email]);
-            setContributorSearch("");
-            setSearchResults([]);
-            toast.success(`${name || email} sera ajouté à la création du projet.`);
-            return;
-        }
-
-        try {
-            await addContributor(project!.id, email);
-            toast.success(`${name || email} ajouté !`);
-            // Recharger les membres
-            const { getProject } = await import("@/lib/api");
-            const updated = await getProject(project!.id);
-            setCurrentMembers(updated.members);
-            setContributorSearch("");
-            setSearchResults([]);
-            onMembersChanged?.();
-        } catch (err) {
-            toast.error(
-                err instanceof Error ? err.message : "Erreur d'ajout"
-            );
-        }
+    // ─── Ajouter un contributeur (local, pas d'appel API) ───
+    function handleAddContributor(email: string, name: string | null) {
+        setPendingContributors((prev) => [...prev, email]);
+        setContributorSearch("");
+        setSearchResults([]);
+        toast.success(`${name || email} ajouté !`);
     }
 
-    // ─── Retirer un contributeur ───
-    async function handleRemoveContributor(userId: string) {
-        if (!isEdit || !project) return;
-        try {
-            // Le back-end nettoie automatiquement les assignations aux tâches
-            await removeContributor(project.id, userId);
-
-            toast.success("Contributeur retiré");
-            const { getProject } = await import("@/lib/api");
-            const updated = await getProject(project.id);
-            setCurrentMembers(updated.members);
-            onMembersChanged?.();
-        } catch (err) {
-            toast.error(
-                err instanceof Error ? err.message : "Erreur de retrait"
-            );
-        }
+    // ─── Retirer un contributeur (local, pas d'appel API) ───
+    function handleRemoveContributor(email: string) {
+        setPendingContributors((prev) => prev.filter((e) => e !== email));
+        toast.success("Contributeur retiré");
     }
 
     // ─── Soumission ───
-    async function onSubmit(data: CreateProjectInput | UpdateProjectInput) {
+    async function onSubmit(data: { name: string; description?: string }) {
         try {
             let result: Project;
 
             if (mode === "create") {
-                const createData = data as CreateProjectInput;
                 result = await createProject({
-                    name: createData.name,
-                    description: createData.description || "",
+                    name: data.name,
+                    description: data.description || "",
                     contributors: pendingContributors.length > 0 ? pendingContributors : undefined,
                 });
                 toast.success("Projet créé !");
             } else {
-                const updateData = data as UpdateProjectInput;
                 result = await updateProject(project!.id, {
-                    name: updateData.name,
-                    description: updateData.description || "",
+                    name: data.name,
+                    description: data.description || "",
+                    contributors: pendingContributors.length > 0 ? pendingContributors : undefined,
                 });
                 toast.success("Projet modifié !");
             }
 
             onSuccess(result);
+            onMembersChanged?.();
         } catch (err) {
             toast.error(
                 err instanceof Error ? err.message : "Erreur"

@@ -70,6 +70,7 @@ export const updateProjectSchema = z.object({
         .max(100, "Maximum 100 caractères")
         .optional(),
     description: z.string().max(500, "Maximum 500 caractères").optional(),
+    contributors: z.array(z.string().email("Email invalide")).optional(),
 });
 
 // ─── Tâche ──────────────────────────────────────────────
