@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
+import { Accordion } from "@/components/ui/Accordion";
 import { createTask, updateTask } from "@/lib/api";
 import { createTaskSchema, type CreateTaskInput } from "@/lib/validators";
 import { getProjectMemberIds } from "@/lib/mappers";
@@ -160,27 +161,16 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                     <label className="mb-1 block text-body-s font-medium text-neutral-800">
                         Assigné à
                     </label>
-                    <button
-                        type="button"
-                        onClick={() => setShowAssignees((prev) => !prev)}
-                        className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-body-m text-neutral-400 hover:border-brand-orange-main transition-colors"
-                    >
-                        <span>
-                            {selectedAssignees.length > 0
+                    <Accordion
+                        label={
+                            selectedAssignees.length > 0
                                 ? `${selectedAssignees.length} collaborateur${selectedAssignees.length > 1 ? "s" : ""}`
-                                : "Choisir un ou plusieurs contributeurs"}
-                        </span>
-                        <Image
-                            src="/icons/arrow.svg"
-                            alt=""
-                            width={12}
-                            height={8}
-                            className={`transition-transform duration-200 ${showAssignees ? "rotate-180" : ""}`}
-                        />
-                    </button>
-
-                    {showAssignees && (
-                        <div className="mt-2 flex flex-wrap gap-2">
+                                : "Choisir un ou plusieurs contributeurs"
+                        }
+                        open={showAssignees}
+                        onToggle={() => setShowAssignees((prev) => !prev)}
+                    >
+                        <div className="flex flex-wrap gap-2">
                             {memberList.map((member) => {
                                 const isSelected = selectedAssignees.includes(member.id);
                                 return (
@@ -198,7 +188,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                                 );
                             })}
                         </div>
-                    )}
+                    </Accordion>
                 </div>
             )}
 

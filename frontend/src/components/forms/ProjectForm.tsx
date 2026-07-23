@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Accordion } from "@/components/ui/Accordion";
 import {
     createProject,
     updateProject,
@@ -163,27 +164,16 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                 <label className="mb-1 block text-body-s font-medium text-neutral-800">
                     Contributeurs
                 </label>
-                <button
-                    type="button"
-                    onClick={() => setShowContributors((prev) => !prev)}
-                    className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-body-m text-neutral-400 hover:border-brand-orange-main transition-colors"
-                >
-                    <span>
-                        {displayMembers.length > 0
+                <Accordion
+                    label={
+                        displayMembers.length > 0
                             ? `${displayMembers.length + 1} collaborateur${displayMembers.length + 1 > 1 ? "s" : ""}`
-                            : "Choisir un ou plusieurs collaborateurs"}
-                    </span>
-                    <Image
-                        src="/icons/arrow.svg"
-                        alt=""
-                        width={12}
-                        height={8}
-                        className={`transition-transform duration-200 ${showContributors ? "rotate-180" : ""}`}
-                    />
-                </button>
-
-                {showContributors && (
-                    <div className="mt-2 space-y-2">
+                            : "Choisir un ou plusieurs collaborateurs"
+                    }
+                    open={showContributors}
+                    onToggle={() => setShowContributors((prev) => !prev)}
+                >
+                    <div className="space-y-2">
                         {/* Recherche */}
                         <input
                             type="text"
@@ -254,7 +244,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                             ))}
                         </div>
                     </div>
-                )}
+                </Accordion>
             </div>
 
             <div className="flex">
