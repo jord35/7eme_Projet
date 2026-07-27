@@ -289,6 +289,7 @@ export async function createTask(
     data: {
         title: string;
         description?: string;
+        status?: string;
         dueDate?: string;
         priority?: string;
         assigneeIds?: string[];

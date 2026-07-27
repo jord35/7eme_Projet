@@ -102,6 +102,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                     title: data.title,
                     description: data.description || "",
                     dueDate: data.dueDate,
+                    status,
                     priority,
                     assigneeIds: selectedAssignees.length > 0 ? selectedAssignees : undefined,
                 });
