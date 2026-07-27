@@ -47,8 +47,7 @@ function PageHeader({
                 {backLink && (
                     <Link
                         href={backLink}
-                        className="flex items-center justify-center rounded-[10px] bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all"
-                        style={{ width: 57, height: 57, padding: 24 }}
+                        className="flex items-center justify-center rounded-[10px] bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all size-14 p-6"
                     >
                         <Image src="/icons/arrow-back.svg" alt="Retour" width={16} height={8} />
                     </Link>
