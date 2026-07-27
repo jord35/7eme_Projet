@@ -16,7 +16,7 @@ const kanbanColumns = [
 
 function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
     return (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {kanbanColumns.map((col) => {
                 const columnTasks = tasks.filter(
                     (t) => t.status === col.key,

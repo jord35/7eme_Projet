@@ -35,13 +35,13 @@ function ProjectTeam({ owner, members }: ProjectTeamProps) {
     const userRole = isCurrentUserOwner ? "Propriétaire" : "Contributeur";
 
     return (
-        <div className="w-full rounded-lg bg-neutral-100 px-12 py-5">
-            <div className="flex items-center justify-between">
+        <div className="w-full rounded-lg bg-neutral-100 px-4 py-5 md:px-12">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="whitespace-nowrap">
                     <span className="text-h5 font-heading text-neutral-800">Contributeurs</span>
                     <span className="text-body-m text-neutral-600"> {members.length} personnes</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     {/* Avatar propriétaire + tag */}
                     <div className="flex items-center gap-1">
                         <Avatar

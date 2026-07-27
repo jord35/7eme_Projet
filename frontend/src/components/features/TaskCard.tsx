@@ -39,20 +39,22 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
 
     return (
         <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
-            <div className="flex items-start justify-between gap-2">
-                <h3 className="text-h3 font-heading text-neutral-950 truncate min-w-0 flex-1">
-                    {task.title}
-                </h3>
-                <Badge variant={getStatusVariant(task.status)}>
-                    {getStatusLabel(task.status)}
-                </Badge>
+            {/* Sur mobile : badge centré, titre centré, description centrée */}
+            <div className="flex flex-col items-center gap-1 md:items-stretch">
+                <div className="flex flex-col items-center md:flex-row md:items-start md:justify-between">
+                    <Badge variant={getStatusVariant(task.status)} className="self-center">
+                        {getStatusLabel(task.status)}
+                    </Badge>
+                    <h3 className="text-center text-h3 font-heading text-neutral-950 min-w-0 break-words md:mt-0 md:flex-1 md:text-left">
+                        {task.title}
+                    </h3>
+                </div>
+                {task.description && (
+                    <p className="text-center text-body-s text-neutral-600 line-clamp-2 md:mt-2 md:text-left">
+                        {task.description}
+                    </p>
+                )}
             </div>
-
-            {task.description && (
-                <p className="mt-2 text-body-s text-neutral-600 line-clamp-2">
-                    {task.description}
-                </p>
-            )}
 
             {variant === "list" ? (
                 <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -65,7 +67,7 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
                     {projectId && (
                         <Link
                             href={`/projects/${projectId}`}
-                            className="inline-flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors md:w-auto"
+                            className="flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors md:w-auto md:inline-flex"
                         >
                             Voir
                         </Link>
@@ -80,10 +82,10 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
                         _count={task._count}
                     />
                     {projectId && (
-                        <div className="mt-3">
+                        <div className="mt-3 flex w-full md:block md:w-auto">
                             <Link
                                 href={`/projects/${projectId}`}
-                                className="inline-flex items-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors"
+                                className="flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors md:inline-flex md:w-auto"
                             >
                                 Voir
                             </Link>

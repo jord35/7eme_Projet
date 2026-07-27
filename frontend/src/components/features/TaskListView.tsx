@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { TaskCard } from "@/components/features/TaskCard";
-import { TaskSearch } from "@/components/features/TaskSearch";
+import { SearchInput } from "@/components/ui/SearchInput";
 import type { AssignedTask } from "@/lib/api";
 
 interface TaskListViewProps {
@@ -11,6 +12,21 @@ interface TaskListViewProps {
 }
 
 function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
+    const [localQuery, setLocalQuery] = useState(searchQuery);
+
+    function handleSearch(value: string) {
+        setLocalQuery(value);
+        if (value.length >= 3 || value.length === 0) {
+            onSearch(value);
+        }
+    }
+
+    function handleKeyDown(e: React.KeyboardEvent) {
+        if (e.key === "Enter") {
+            onSearch(localQuery);
+        }
+    }
+
     return (
         <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
             {/* En-tête : titre + recherche */}
@@ -20,10 +36,11 @@ function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
                     <p className="mt-1 text-body-s text-neutral-400">Par ordre de priorité</p>
                 </div>
                 <div className="flex w-full justify-center md:w-auto">
-                    <TaskSearch
-                        onSearch={(query) => onSearch(query)}
+                    <SearchInput
+                        value={localQuery}
+                        onChange={handleSearch}
+                        onKeyDown={handleKeyDown}
                         placeholder="Rechercher une tâche"
-                        showStatusFilter={false}
                     />
                 </div>
             </div>

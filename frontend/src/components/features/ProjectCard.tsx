@@ -30,8 +30,7 @@ function ProjectCard({ project, completedTasks = 0 }: ProjectCardProps) {
     return (
         <Link
             href={`/projects/${project.id}`}
-            className="block max-w-[380px] rounded-lg bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all"
-            style={{ padding: "30px 34px" }}
+            className="block rounded-lg bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all md:max-w-[380px] p-8"
         >
             {/* Div 1 : Titre + Description */}
             <div>
