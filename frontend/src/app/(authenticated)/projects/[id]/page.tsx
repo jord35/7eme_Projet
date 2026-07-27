@@ -191,13 +191,15 @@ export default function ProjectDetailPage() {
 
             {/* Contenu principal (tâches) */}
             <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
-                {/* En-tête : titre + recherche + tabs sur la même ligne */}
-                <div className="mb-4 flex items-center justify-between gap-4">
-                    <div>
+                {/* En-tête : titre + recherche + tabs */}
+                <div className="mb-4">
+                    {/* Titre + sous-titre — caché en mobile */}
+                    <div className="hidden md:block">
                         <h2 className="text-h5 font-heading text-neutral-950">Tâches</h2>
                         <p className="mt-1 text-body-s text-neutral-400">Par ordre de priorité</p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    {/* Onglets + recherche */}
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <Tabs
                             tabs={projectTabs}
                             activeTab={viewMode}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { SearchInput } from "@/components/ui/SearchInput";
 
 interface TaskSearchProps {
     /** Appelé quand la recherche ou le filtre change */
@@ -12,7 +13,7 @@ interface TaskSearchProps {
 }
 
 const statusOptions = [
-    { value: "", label: "Tous les statuts" },
+    { value: "", label: "Statut" },
     { value: "TODO", label: "À faire" },
     { value: "IN_PROGRESS", label: "En cours" },
     { value: "DONE", label: "Terminé" },
@@ -71,31 +72,33 @@ function TaskSearch({
     return (
         <div className="flex flex-wrap items-center gap-3">
             {showStatusFilter && (
-                <button
-                    onClick={() => { }}
-                    className="flex items-center gap-2 rounded-md border border-neutral-200 px-8 text-body-s text-neutral-600 hover:bg-neutral-50 transition-colors"
-                    style={{ height: 63 }}
-                >
-                    Statut
-                    <img src="/icons/arrow.svg" alt="" width={12} height={8} />
-                </button>
+                <div className="relative">
+                    <select
+                        value={status}
+                        onChange={(e) => handleStatusChange(e.target.value)}
+                        className="appearance-none rounded-md border border-neutral-200 bg-neutral-white text-body-s text-neutral-600 hover:bg-neutral-50 transition-colors cursor-pointer h-16 min-w-[140px] pr-10 pl-8"
+                    >
+                        {statusOptions.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                                {opt.label}
+                            </option>
+                        ))}
+                    </select>
+                    <img
+                        src="/icons/arrow.svg"
+                        alt=""
+                        width={12}
+                        height={8}
+                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
+                    />
+                </div>
             )}
-            <div className="relative" style={{ width: 357, height: 63 }}>
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => handleQueryChange(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder={placeholder}
-                    className="h-full w-full rounded-md border border-neutral-200 px-8 text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
-                />
-                <img
-                    src="/icons/search.svg"
-                    alt=""
-                    className="pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 text-neutral-600"
-                    style={{ width: 14, height: 14 }}
-                />
-            </div>
+            <SearchInput
+                value={query}
+                onChange={handleQueryChange}
+                onKeyDown={handleKeyDown}
+                placeholder={placeholder}
+            />
         </div>
     );
 }
