@@ -55,7 +55,7 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
             )}
 
             {variant === "list" ? (
-                <div className="mt-3 flex items-center justify-between gap-3">
+                <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <TaskMetadata
                         project={showProject ? task.project : null}
                         dueDate={task.dueDate}
@@ -65,7 +65,7 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
                     {projectId && (
                         <Link
                             href={`/projects/${projectId}`}
-                            className="inline-flex items-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors"
+                            className="inline-flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors md:w-auto"
                         >
                             Voir
                         </Link>

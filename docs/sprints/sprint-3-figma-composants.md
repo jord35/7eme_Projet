@@ -56,8 +56,8 @@
 - [x] Surbrillance de l'utilisateur connecté
 
 ### 3.5 Profil — Simplification
-- [ ] Fusionner les deux formulaires en un seul (nom, prénom, email, mot de passe actuel, nouveau mot de passe)
-- [ ] Un seul bouton "Enregistrer"
+- [x] Fusionner les deux formulaires en un seul (nom, prénom, email, mot de passe , nouveau mot de passe)
+- [x] Un seul bouton "Enregistrer"
 
 ---
 

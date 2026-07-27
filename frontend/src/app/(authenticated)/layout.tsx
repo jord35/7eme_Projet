@@ -36,7 +36,7 @@ export default function AuthenticatedLayout({
     return (
         <div className="flex min-h-screen flex-col">
             <Navigation />
-            <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
+            <main className="mx-auto w-full max-w-7xl flex-1 px-0 py-6 sm:px-0 md:px-6 lg:px-8">
                 {children}
             </main>
             <Footer />

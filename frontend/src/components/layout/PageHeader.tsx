@@ -54,8 +54,8 @@ function PageHeader({
                     </Link>
                 )}
 
-                {/* Titre + description */}
-                <div className="flex-1">
+                {/* Titre + description — caché en mobile */}
+                <div className="hidden md:block flex-1">
                     <div className="flex items-center gap-2">
                         <h1 className="text-h3 font-heading text-neutral-950">{title}</h1>
                         {showEditButton && (
@@ -72,8 +72,8 @@ function PageHeader({
                     )}
                 </div>
 
-                {/* Boutons d'action */}
-                <div className="flex items-center gap-2">
+                {/* Boutons d'action — centré en mobile */}
+                <div className="flex flex-1 items-center justify-center gap-2 md:flex-none">
                     {action && (
                         <Button onClick={action.onClick}>{action.label}</Button>
                     )}

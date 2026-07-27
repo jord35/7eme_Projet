@@ -14,10 +14,10 @@ function Navigation() {
 
     return (
         <nav className="border-b border-neutral-200 bg-neutral-white">
-            <div className="mx-auto flex items-center justify-between px-[100px] py-3">
+            <div className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-[100px] py-3">
                 {/* Logo */}
                 <Link href="/dashboard">
-                    <Image src="/logos/logo-orange.svg" alt="Abricot" width={147} height={19} />
+                    <Image src="/logos/logo-orange.svg" alt="Abricot" width={147} height={19} className="shrink-0" />
                 </Link>
 
                 {/* Liens centrés */}
@@ -32,11 +32,12 @@ function Navigation() {
                         >
                             <img
                                 src={isActive("/dashboard") ? "/icons/dashboard-white.svg" : "/icons/dashboard.svg"}
-                                alt=""
+                                alt="Tableau de bord"
                                 width={16}
                                 height={16}
+                                className="shrink-0"
                             />
-                            Tableau de bord
+                            <span className="hidden md:inline">Tableau de bord</span>
                         </Link>
                         <Link
                             href="/projects"
@@ -47,11 +48,12 @@ function Navigation() {
                         >
                             <img
                                 src={isActive("/projects") ? "/icons/project-white.svg" : "/icons/project.svg"}
-                                alt=""
+                                alt="Projets"
                                 width={16}
                                 height={16}
+                                className="shrink-0"
                             />
-                            Projets
+                            <span className="hidden md:inline">Projets</span>
                         </Link>
                     </div>
                 )}
