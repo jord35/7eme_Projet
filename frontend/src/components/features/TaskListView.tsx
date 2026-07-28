@@ -28,12 +28,12 @@ function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
     }
 
     return (
-        <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
+        <div className="rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200">
             {/* En-tête : titre + recherche */}
-            <div className="mb-4 flex items-center justify-between gap-4">
+            <div className="mb-[52px] flex items-center justify-between gap-4">
                 <div className="hidden md:block">
                     <h2 className="text-h5 font-heading text-neutral-950">Mes tâches assignées</h2>
-                    <p className="mt-1 text-body-s text-neutral-400">Par ordre de priorité</p>
+                    <p className="mt-1 text-body-m text-neutral-400">Par ordre de priorité</p>
                 </div>
                 <div className="flex w-full justify-center md:w-auto">
                     <SearchInput
@@ -51,7 +51,7 @@ function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
                     Aucune tâche assignée pour le moment.
                 </p>
             ) : (
-                <div className="space-y-4 md:space-y-3">
+                <div className="space-y-[17px]">
                     {tasks.map((task) => (
                         <TaskCard key={task.id} task={task} showProject />
                     ))}

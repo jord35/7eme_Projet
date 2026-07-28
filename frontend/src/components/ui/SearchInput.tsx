@@ -25,14 +25,14 @@ function SearchInput({
     onKeyDown,
 }: SearchInputProps) {
     return (
-        <div className="relative w-full md:w-[357px] h-16">
+        <div className="relative w-full md:w-[357px]">
             <input
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={onKeyDown}
                 placeholder={placeholder}
-                className="h-full w-full rounded-md border border-neutral-200 px-8 text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                className="w-full rounded-md border border-neutral-200 px-8 py-[21px] text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
             />
             <img
                 src="/icons/search.svg"

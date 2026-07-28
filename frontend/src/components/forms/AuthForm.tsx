@@ -33,7 +33,7 @@ const CONFIG = {
     register: {
         title: "Inscription",
         description: "Créez un compte pour commencer à gérer vos projets.",
-        buttonLabel: "Créer un compte",
+        buttonLabel: "S'inscrire",
         schema: registerSchema,
         apiCall: (data: RegisterInput) => registerUser(data.email, data.password),
         successMessage: "Compte créé avec succès !",
@@ -75,7 +75,7 @@ function AuthForm({ mode }: AuthFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-[30px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-[29px]">
             <Input
                 label="Email"
                 type="email"
@@ -90,9 +90,11 @@ function AuthForm({ mode }: AuthFormProps) {
                 error={errors.password?.message}
                 {...register("password")}
             />
-            <Button type="submit" isLoading={isSubmitting} className="w-full">
-                {config.buttonLabel}
-            </Button>
+            <div className="flex justify-center">
+                <Button type="submit" isLoading={isSubmitting} className="w-[249px] py-[14px] text-body-m font-normal">
+                    {config.buttonLabel}
+                </Button>
+            </div>
         </form>
     );
 }

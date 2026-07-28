@@ -41,8 +41,8 @@ function PageHeader({
     onEditClick,
 }: PageHeaderProps) {
     return (
-        <div className="mb-6">
-            <div className="flex items-start gap-4">
+        <div className="mb-[60px] mt-[32px]">
+            <div className="flex items-center gap-4">
                 {/* Bouton retour (carré blanc avec flèche) */}
                 {backLink && (
                     <Link
@@ -56,7 +56,7 @@ function PageHeader({
                 {/* Titre + description — caché en mobile */}
                 <div className="hidden md:block flex-1">
                     <div className="flex items-center gap-2">
-                        <h1 className="text-h3 font-heading text-neutral-950">{title}</h1>
+                        <h1 className="text-h4 font-heading text-neutral-800">{title}</h1>
                         {showEditButton && (
                             <button
                                 onClick={onEditClick}
@@ -67,14 +67,16 @@ function PageHeader({
                         )}
                     </div>
                     {description && (
-                        <p className="mt-1 text-body-s text-neutral-600">{description}</p>
+                        <p className="mt-1 text-body-l text-neutral-800">{description}</p>
                     )}
                 </div>
 
                 {/* Boutons d'action — centré en mobile */}
                 <div className="flex flex-1 items-center justify-center gap-2 md:flex-none">
                     {action && (
-                        <Button onClick={action.onClick}>{action.label}</Button>
+                        <Button onClick={action.onClick} className="px-[27px] h-[50px] text-body-m font-normal">
+                            {action.label}
+                        </Button>
                     )}
                     {showIAButton && (
                         <button

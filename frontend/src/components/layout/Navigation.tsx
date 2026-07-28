@@ -14,10 +14,10 @@ function Navigation() {
 
     return (
         <nav className="border-b border-neutral-200 bg-neutral-white">
-            <div className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-[100px] py-3">
+            <div className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-[100px] py-2">
                 {/* Logo */}
                 <Link href="/dashboard">
-                    <Image src="/logos/logo-orange.svg" alt="Abricot" width={147} height={19} className="shrink-0" />
+                    <Image src="/logos/logo-orange.svg" alt="Abricot" width={147} height={18.72} className="shrink-0" />
                 </Link>
 
                 {/* Liens centrés */}
@@ -25,7 +25,7 @@ function Navigation() {
                     <div className="flex items-center gap-4">
                         <Link
                             href="/dashboard"
-                            className={`flex items-center gap-2 rounded-md px-4 py-2 text-body-s font-medium tracking-wide transition-colors ${isActive("/dashboard")
+                            className={`flex items-center gap-2 rounded-md px-4 h-[78px] text-body-s font-medium tracking-wide transition-colors ${isActive("/dashboard")
                                 ? "bg-neutral-800 text-neutral-white"
                                 : "text-brand-orange-main hover:bg-neutral-100"
                                 }`}
@@ -41,7 +41,7 @@ function Navigation() {
                         </Link>
                         <Link
                             href="/projects"
-                            className={`flex items-center gap-2 rounded-md px-4 py-2 text-body-s font-medium tracking-wide transition-colors ${isActive("/projects")
+                            className={`flex items-center gap-2 rounded-md px-4 h-[78px] text-body-s font-medium tracking-wide transition-colors ${isActive("/projects")
                                 ? "bg-neutral-800 text-neutral-white"
                                 : "text-brand-orange-main hover:bg-neutral-100"
                                 }`}
@@ -66,7 +66,7 @@ function Navigation() {
                             isCurrentUser={true}
                             linkToProfile={true}
                             size={65}
-                            className="text-body-s"
+                            className="text-body-s tracking-wide"
                         />
                     ) : (
                         <div className="flex gap-4">

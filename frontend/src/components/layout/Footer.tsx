@@ -7,7 +7,7 @@ import Image from "next/image";
 function Footer() {
     return (
         <footer
-            className="flex items-center justify-between bg-neutral-white"
+            className="mt-[48px] flex items-center justify-between bg-neutral-white"
             style={{ height: 68, paddingLeft: 30, paddingRight: 50 }}
         >
             <Image src="/logos/logo-black.svg" alt="Abricot" width={101} height={13} />

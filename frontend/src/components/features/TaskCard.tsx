@@ -38,16 +38,16 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
     const projectId = task.project?.id;
 
     return (
-        <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
+        <div className="rounded-lg bg-neutral-white px-[40px] py-[32.23px] shadow-sm ring-1 ring-neutral-200">
             {/* Sur mobile : badge centré, titre centré, description centrée */}
             <div className="flex flex-col items-center gap-1 md:items-stretch">
                 <div className="flex flex-col items-center md:flex-row md:items-start md:justify-between">
+                    <h3 className="text-center text-h5 font-heading text-neutral-950 min-w-0 break-words md:mt-0 md:flex-1 md:text-left">
+                        {task.title}
+                    </h3>
                     <Badge variant={getStatusVariant(task.status)} className="self-center">
                         {getStatusLabel(task.status)}
                     </Badge>
-                    <h3 className="text-center text-h3 font-heading text-neutral-950 min-w-0 break-words md:mt-0 md:flex-1 md:text-left">
-                        {task.title}
-                    </h3>
                 </div>
                 {task.description && (
                     <p className="text-center text-body-s text-neutral-600 line-clamp-2 md:mt-2 md:text-left">
@@ -67,7 +67,7 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
                     {projectId && (
                         <Link
                             href={`/projects/${projectId}`}
-                            className="flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors md:w-auto md:inline-flex"
+                            className="flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 h-[52px] min-w-[121px] px-[42px] text-body-m font-normal text-neutral-white hover:bg-neutral-950 transition-colors md:w-auto md:inline-flex"
                         >
                             Voir
                         </Link>
