@@ -41,7 +41,7 @@ function PageHeader({
     onEditClick,
 }: PageHeaderProps) {
     return (
-        <div className="mb-[60px] mt-[32px]">
+        <div className="mb-[60px] mt-[32px] mx-4 sm:mx-6 lg:mx-[125px]">
             <div className="flex items-center gap-4">
                 {/* Bouton retour (carré blanc avec flèche) */}
                 {backLink && (

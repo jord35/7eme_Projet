@@ -7,7 +7,7 @@ interface BadgeCountProps {
 
 function BadgeCount({ count }: BadgeCountProps) {
     return (
-        <span className="inline-flex items-center justify-center rounded-full bg-neutral-200 px-2 py-0.5 text-body-xs font-medium text-neutral-600">
+        <span className="inline-flex items-center justify-center rounded-full bg-neutral-200 px-[15px] py-0.5 text-body-xs font-medium text-neutral-600">
             {count}
         </span>
     );

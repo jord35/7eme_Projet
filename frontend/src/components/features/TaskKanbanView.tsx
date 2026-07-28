@@ -16,20 +16,20 @@ const kanbanColumns = [
 
 function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
     return (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="mx-4 mb-[107.85px] grid grid-cols-1 gap-6 sm:mx-6 lg:mx-[69px] lg:grid-cols-3">
             {kanbanColumns.map((col) => {
                 const columnTasks = tasks.filter(
                     (t) => t.status === col.key,
                 );
                 return (
-                    <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
-                        <div className="mb-4 flex items-center gap-2">
-                            <h3 className="text-body-s font-medium text-neutral-600">
+                    <div className="rounded-lg bg-neutral-white px-[24px] py-[40px] shadow-sm ring-1 ring-neutral-200">
+                        <div className="mb-[22px] flex items-center gap-2">
+                            <h3 className="text-h5 font-heading text-neutral-800">
                                 {col.label}
                             </h3>
                             <BadgeCount count={columnTasks.length} />
                         </div>
-                        <div className="space-y-3">
+                        <div className="space-y-[16px]">
                             {columnTasks.length === 0 ? (
                                 <p className="text-body-xs text-neutral-400">
                                     Aucune tâche

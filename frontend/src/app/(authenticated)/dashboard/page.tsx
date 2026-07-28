@@ -56,7 +56,7 @@ export default function DashboardPage() {
     if (isLoading) return <PageLoader />;
 
     return (
-        <div>
+        <div className="mx-auto w-full max-w-[1440px]">
             <PageHeader
                 title="Tableau de bord"
                 description={`Bonjour, ${user?.name || ""}, voici un aperçu de vos projets et tâches.`}

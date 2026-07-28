@@ -36,9 +36,10 @@ interface TaskCardProps {
  */
 function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps) {
     const projectId = task.project?.id;
+    const cardPadding = variant === "kanban" ? "px-[40px] py-[25px]" : "px-[40px] py-[32.23px]";
 
     return (
-        <div className="rounded-lg bg-neutral-white px-[40px] py-[32.23px] shadow-sm ring-1 ring-neutral-200">
+        <div className={`rounded-lg bg-neutral-white ${cardPadding} shadow-sm ring-1 ring-neutral-200`}>
             {/* Sur mobile : badge centré, titre centré, description centrée */}
             <div className="flex flex-col items-center gap-1 md:items-stretch">
                 <div className="flex flex-col items-center md:flex-row md:items-start md:justify-between">
@@ -75,17 +76,19 @@ function TaskCard({ task, showProject = false, variant = "list" }: TaskCardProps
                 </div>
             ) : (
                 <>
-                    <TaskMetadata
-                        project={showProject ? task.project : null}
-                        dueDate={task.dueDate}
-                        comments={task.comments}
-                        _count={task._count}
-                    />
+                    <div className="mt-[32px]">
+                        <TaskMetadata
+                            project={showProject ? task.project : null}
+                            dueDate={task.dueDate}
+                            comments={task.comments}
+                            _count={task._count}
+                        />
+                    </div>
                     {projectId && (
-                        <div className="mt-3 flex w-full md:block md:w-auto">
+                        <div className="mt-[32px] flex w-full md:block md:w-auto">
                             <Link
                                 href={`/projects/${projectId}`}
-                                className="flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 px-4 py-2 text-body-s font-medium text-neutral-white hover:bg-neutral-950 transition-colors md:inline-flex md:w-auto"
+                                className="flex w-full items-center justify-center gap-1 rounded-md bg-neutral-800 h-[52px] min-w-[121px] px-[42px] text-body-m font-normal text-neutral-white hover:bg-neutral-950 transition-colors md:inline-flex md:w-auto"
                             >
                                 Voir
                             </Link>
