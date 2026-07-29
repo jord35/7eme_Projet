@@ -179,10 +179,11 @@ export default function ProjectDetailPage() {
                 showEditButton={isAdmin}
                 showIAButton
                 onEditClick={() => setShowEditProject(true)}
+                className="ml-[44px] mr-[113px] mt-[21px] mb-[49px]"
             />
 
             {/* Équipe du projet */}
-            <div className="mb-6">
+            <div className="ml-[112px] mr-[113px] mb-[48px]">
                 <ProjectTeam
                     owner={project.owner}
                     members={project.members}
@@ -190,20 +191,19 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Contenu principal (tâches) */}
-            <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
-                {/* En-tête : titre + recherche + tabs */}
-                <div className="mb-4">
-                    {/* Titre + sous-titre — caché en mobile */}
-                    <div className="hidden md:block">
+            <div className="ml-[117px] mr-[108px] mb-[41.85px] rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200">
+                {/* En-tête : titre + description | tabs + statut + recherche */}
+                <div className="mb-[41px] flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="whitespace-nowrap">
                         <h2 className="text-h5 font-heading text-neutral-950">Tâches</h2>
-                        <p className="mt-1 text-body-s text-neutral-400">Par ordre de priorité</p>
+                        <p className="text-body-s text-neutral-400">Par ordre de priorité</p>
                     </div>
-                    {/* Onglets + recherche */}
-                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-3">
                         <Tabs
                             tabs={projectTabs}
                             activeTab={viewMode}
                             onChange={(key) => setViewMode(key as ViewMode)}
+                            className="flex gap-2"
                         />
                         <TaskSearch
                             onSearch={(query, status) => {
@@ -224,14 +224,15 @@ export default function ProjectDetailPage() {
                                 Aucune tâche trouvée.
                             </p>
                         ) : (
-                            <div className="space-y-3">
+                            <div className="space-y-[17px]">
                                 {filteredTasks.map((task) => (
-                                    <TaskDetailCard
-                                        key={task.id}
-                                        task={task}
-                                        onEdit={(t) => setEditingTask(t)}
-                                        onDelete={(t) => setDeletingTask(t)}
-                                    />
+                                    <div key={task.id} className="mx-[40px]">
+                                        <TaskDetailCard
+                                            task={task}
+                                            onEdit={(t) => setEditingTask(t)}
+                                            onDelete={(t) => setDeletingTask(t)}
+                                        />
+                                    </div>
                                 ))}
                             </div>
                         )}

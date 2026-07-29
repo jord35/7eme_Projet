@@ -46,11 +46,11 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
     const commentCount = getCommentCount(task);
 
     return (
-        <div className="rounded-lg bg-neutral-white p-4 shadow-sm ring-1 ring-neutral-200">
+        <div className="rounded-lg bg-neutral-white pt-[25px] pb-[25px] pl-[40px] pr-[35px] shadow-sm ring-1 ring-neutral-200">
             <div className="flex items-start justify-between gap-4">
-                {/* Titre + Badge + Description */}
                 <div className="flex-1">
-                    <div className="flex items-center gap-2">
+                    {/* Titre + Badge */}
+                    <div className="mb-[7px] flex items-center gap-2">
                         <h3 className="text-body-m font-medium text-neutral-950">
                             {task.title}
                         </h3>
@@ -61,7 +61,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
                     {/* Description */}
                     {task.description && (
-                        <p className="mt-2 text-body-s text-neutral-600">
+                        <p className="mb-[32px] text-body-s text-neutral-600">
                             {task.description}
                         </p>
                     )}
@@ -72,7 +72,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
                     <div className="relative shrink-0">
                         <button
                             onClick={() => setShowMenu((prev) => !prev)}
-                            className="flex items-center justify-center rounded-md bg-neutral-white px-3 py-1.5 text-neutral-600 ring-1 ring-neutral-200 hover:bg-neutral-50 transition-colors"
+                            className="flex items-center justify-center rounded-md bg-neutral-white px-[24.5px] py-[20.5px] text-neutral-600 ring-1 ring-neutral-200 hover:bg-neutral-50 transition-colors"
                             title="Actions"
                         >
                             <span className="text-body-s leading-none">⋯</span>
@@ -111,7 +111,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
             {/* Date d'échéance */}
             {task.dueDate && (
-                <div className="mt-3 flex items-center gap-1 text-body-xs">
+                <div className="mb-[24px] flex items-center gap-1 text-body-xs">
                     <span className="text-neutral-600">Échéance :</span>
                     <Image src="/icons/calendar-black.svg" alt="" width={12} height={12} />
                     <span className="text-neutral-800">{formatShortDate(task.dueDate)}</span>
@@ -120,7 +120,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
             {/* Assignés */}
             {task.assignees && task.assignees.length > 0 && (
-                <div className="mt-3 flex items-center gap-2">
+                <div className="mb-[24px] flex items-center gap-2">
                     <span className="text-body-xs text-neutral-600 whitespace-nowrap">Assigné à :</span>
                     <div className="flex flex-wrap items-center gap-2">
                         {task.assignees.map((a) => (
@@ -142,7 +142,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
             )}
 
             {/* Accordéon commentaires */}
-            <div className="mt-3 border-t border-neutral-100 pt-2">
+            <div className="border-t border-neutral-100 pt-[24px]">
                 <button
                     onClick={() => setExpandedComments((prev) => !prev)}
                     className="flex w-full items-center justify-between text-body-s text-neutral-800 hover:text-neutral-950 transition-colors"
@@ -153,7 +153,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
                         alt=""
                         width={12}
                         height={8}
-                        className={`transition-transform duration-200 ${expandedComments ? "rotate-180" : ""}`}
+                        className={`transition-transform duration-200 ${expandedComments ? "" : "rotate-180"}`}
                     />
                 </button>
                 {expandedComments && (

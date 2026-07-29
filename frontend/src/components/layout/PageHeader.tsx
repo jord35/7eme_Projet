@@ -22,6 +22,8 @@ interface PageHeaderProps {
     showIAButton?: boolean;
     /** Callback du clic sur le bouton d'édition */
     onEditClick?: () => void;
+    /** Classes CSS supplémentaires pour surcharger les marges */
+    className?: string;
 }
 
 /**
@@ -39,9 +41,10 @@ function PageHeader({
     showEditButton,
     showIAButton,
     onEditClick,
+    className,
 }: PageHeaderProps) {
     return (
-        <div className="mb-[60px] mt-[32px] mx-4 sm:mx-6 lg:mx-[125px]">
+        <div className={className ?? "mb-[60px] mt-[32px] mx-4 sm:mx-6 lg:mx-[125px]"}>
             <div className="flex items-center gap-4">
                 {/* Bouton retour (carré blanc avec flèche) */}
                 {backLink && (
@@ -72,7 +75,7 @@ function PageHeader({
                 </div>
 
                 {/* Boutons d'action — centré en mobile */}
-                <div className="flex flex-1 items-center justify-center gap-2 md:flex-none">
+                <div className="flex flex-1 items-center justify-center gap-3 md:flex-none">
                     {action && (
                         <Button onClick={action.onClick} className="px-[27px] h-[50px] text-body-m font-normal">
                             {action.label}
@@ -81,10 +84,11 @@ function PageHeader({
                     {showIAButton && (
                         <button
                             disabled
-                            className="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-3 py-2 text-body-s font-medium text-neutral-400 cursor-not-allowed"
+                            className="inline-flex items-center gap-1 rounded-md bg-brand-orange-dark px-[32px] py-[15px] text-body-s font-medium text-neutral-white cursor-not-allowed"
                             title="Fonctionnalité à venir"
                         >
-                            <span>✨</span> IA
+                            <Image src="/icons/star-white.svg" alt="" width={13} height={13} className="text-neutral-white" />
+                            IA
                         </button>
                     )}
                 </div>

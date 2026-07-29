@@ -70,13 +70,13 @@ function TaskSearch({
     }, []);
 
     return (
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-3">
             {showStatusFilter && (
                 <div className="relative">
                     <select
                         value={status}
                         onChange={(e) => handleStatusChange(e.target.value)}
-                        className="appearance-none rounded-md border border-neutral-200 bg-neutral-white text-body-s text-neutral-600 hover:bg-neutral-50 transition-colors cursor-pointer h-16 min-w-[140px] pr-10 pl-8"
+                        className="appearance-none rounded-md border border-neutral-200 bg-neutral-white text-body-s text-neutral-600 hover:bg-neutral-50 transition-colors cursor-pointer h-[63px] w-[152px] pr-10 pl-8"
                     >
                         {statusOptions.map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -98,6 +98,7 @@ function TaskSearch({
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
+                className="relative w-[283px]"
             />
         </div>
     );

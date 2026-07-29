@@ -21,6 +21,8 @@ interface TabsProps {
     activeTab: string;
     /** Callback appelé quand l'utilisateur clique sur un onglet */
     onChange: (key: string) => void;
+    /** Classes CSS supplémentaires */
+    className?: string;
 }
 
 /**
@@ -37,9 +39,9 @@ interface TabsProps {
  *   onChange={setViewMode}
  * />
  */
-function Tabs({ tabs, activeTab, onChange }: TabsProps) {
+function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
     return (
-        <div className="mb-[30px] flex gap-2 mx-4 sm:mx-6 lg:mx-[125px]">
+        <div className={className ?? "mb-[30px] flex gap-2 mx-4 sm:mx-6 lg:mx-[125px]"}>
             {tabs.map((tab) => {
                 const isActive = activeTab === tab.key;
                 return (

@@ -9,6 +9,8 @@ interface SearchInputProps {
     placeholder?: string;
     /** Appelée sur appui touche (Entrée, etc.) */
     onKeyDown?: (e: React.KeyboardEvent) => void;
+    /** Classes CSS supplémentaires pour surcharger la largeur */
+    className?: string;
 }
 
 /**
@@ -23,16 +25,17 @@ function SearchInput({
     onChange,
     placeholder = "Rechercher...",
     onKeyDown,
+    className,
 }: SearchInputProps) {
     return (
-        <div className="relative w-full md:w-[357px]">
+        <div className={className ?? "relative w-full md:w-[357px]"}>
             <input
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={onKeyDown}
                 placeholder={placeholder}
-                className="w-full rounded-md border border-neutral-200 px-8 py-[21px] text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                className="w-full rounded-md border border-neutral-200 px-8 py-[21.5px] text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
             />
             <img
                 src="/icons/search.svg"
