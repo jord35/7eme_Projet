@@ -26,23 +26,26 @@ function Navigation() {
                     <div className="flex items-center gap-4">
                         <Link
                             href="/dashboard"
-                            className={`flex items-center gap-2 rounded-md px-4 h-[78px] text-body-s font-medium tracking-wide transition-colors ${isActive("/dashboard")
+                            className={`flex items-center justify-center gap-2 rounded-md px-4 h-[78px] text-body-s font-medium tracking-wide transition-colors ${isActive("/dashboard")
                                 ? "bg-neutral-800 text-neutral-white"
                                 : "text-brand-orange-main hover:bg-neutral-100"
                                 }`}
                         >
-                            <img
-                                src={isActive("/dashboard") ? "/icons/dashboard-white.svg" : "/icons/dashboard.svg"}
-                                alt="Tableau de bord"
-                                width={16}
-                                height={16}
-                                className="shrink-0"
-                            />
-                            <span className="hidden md:inline">Tableau de bord</span>
+                            {isActive("/dashboard") ? (
+                                <>
+                                    <img src="/icons/dashboard-white.svg" alt="Tableau de bord" width={16} height={16} className="shrink-0" />
+                                    <span className="hidden md:inline">Tableau de bord</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="hidden md:inline">Tableau de bord</span>
+                                    <img src="/icons/dashboard.svg" alt="Tableau de bord" width={16} height={16} className="shrink-0" />
+                                </>
+                            )}
                         </Link>
                         <Link
                             href="/projects"
-                            className={`flex items-center gap-2 rounded-md px-4 h-[78px] text-body-s font-medium tracking-wide transition-colors ${isActive("/projects")
+                            className={`flex items-center justify-center gap-2 rounded-md px-4 h-[78px] w-[140px] text-body-s font-medium tracking-wide transition-colors ${isActive("/projects")
                                 ? "bg-neutral-800 text-neutral-white"
                                 : "text-brand-orange-main hover:bg-neutral-100"
                                 }`}
