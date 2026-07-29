@@ -111,7 +111,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
             {/* Date d'échéance */}
             {task.dueDate && (
-                <div className="mb-[24px] flex items-center justify-center gap-1 text-body-xs max-md:justify-center">
+                <div className="mb-[24px] flex items-center gap-1 text-body-xs max-md:justify-center">
                     <span className="text-neutral-600">Échéance :</span>
                     <Image src="/icons/calendar-black.svg" alt="" width={12} height={12} />
                     <span className="text-neutral-800">{formatShortDate(task.dueDate)}</span>
@@ -120,9 +120,9 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
             {/* Assignés */}
             {task.assignees && task.assignees.length > 0 && (
-                <div className="mb-[24px] flex flex-col items-center gap-1">
+                <div className="mb-[24px] flex flex-col gap-1 max-md:items-center min-[1440px]:flex-row min-[1440px]:items-center">
                     <span className="text-body-xs text-neutral-600">Assigné à</span>
-                    <div className="flex flex-wrap items-center justify-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2 max-md:justify-center">
                         {task.assignees.map((a) => (
                             <div key={a.userId} className="flex items-center gap-1">
                                 <Avatar
