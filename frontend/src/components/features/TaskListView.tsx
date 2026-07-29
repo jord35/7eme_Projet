@@ -33,7 +33,7 @@ function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
             <div className="mb-[52px] flex items-center justify-between gap-4">
                 <div className="hidden md:block">
                     <h2 className="text-h5 font-heading text-neutral-950">Mes tâches assignées</h2>
-                    <p className="mt-1 text-body-m text-neutral-400">Par ordre de priorité</p>
+                    <p className="mt-1 text-body-m text-neutral-600">Par ordre de priorité</p>
                 </div>
                 <div className="flex w-full justify-center md:w-auto">
                     <SearchInput
@@ -47,7 +47,7 @@ function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
 
             {/* Liste des tâches */}
             {tasks.length === 0 ? (
-                <p className="mt-4 text-body-s text-neutral-400">
+                <p className="mt-4 text-body-s text-neutral-600">
                     Aucune tâche assignée pour le moment.
                 </p>
             ) : (

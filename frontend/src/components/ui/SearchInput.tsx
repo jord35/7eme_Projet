@@ -38,7 +38,8 @@ function SearchInput({
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={onKeyDown}
                 placeholder={placeholder}
-                className={`w-full rounded-md border border-neutral-200 px-8 py-[21.5px] text-body-s text-neutral-950 placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main ${inputClassName ?? ""}`}
+                aria-label={placeholder}
+                className={`w-full rounded-md border border-neutral-200 px-8 py-[21.5px] text-body-s text-neutral-950 placeholder:text-neutral-800 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main ${inputClassName ?? ""}`}
             />
             <img
                 src="/icons/search.svg"

@@ -2,27 +2,32 @@
 
 @theme {
     /* ─── Couleurs ─────────────────────────── */
-    --color-brand-orange-main: #FF8B42;
+    --color-brand-orange-main: #C74C00;
     --color-brand-orange-light: #FFE8D9;
-    --color-brand-orange-dark: #D3590B;
+    --color-brand-orange-dark: #C2510A;
+    --color-brand-orange-vibrant: #FF8B42;
+    --color-brand-orange-badge: #B34B09;
 
     --color-neutral-50: #F9FAFB;
     --color-neutral-100: #F3F4F6;
     --color-neutral-200: #E5E7EB;
     --color-neutral-400: #9CA3AF;
-    --color-neutral-600: #6B7280;
+    --color-neutral-600: #616775;
     --color-neutral-800: #1F1F1F;
     --color-neutral-950: #0F0F0F;
     --color-neutral-white: #FFFFFF;
 
     --color-success-main: #27AE60;
     --color-success-light: #F1FFF7;
-    --color-error-main: #EF4444;
+    --color-success-badge: #1D8148;
+    --color-error-main: #E71313;
     --color-error-light: #FFE0E0;
+    --color-error-badge: #C03030;
     --color-info-main: #3B82F6;
     --color-info-light: #E0ECFF;
     --color-warning-main: #E08D00;
     --color-warning-light: #FFF0D7;
+    --color-warning-badge: #996300;
 
     /* ─── Polices ──────────────────────────── */
     --font-family-heading: "Manrope", sans-serif;

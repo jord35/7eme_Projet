@@ -41,9 +41,9 @@ const statusOptions = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-    TODO: "bg-error-light text-error-main",
-    IN_PROGRESS: "bg-warning-light text-warning-main",
-    DONE: "bg-success-light text-success-main",
+    TODO: "bg-error-light text-error-badge",
+    IN_PROGRESS: "bg-warning-light text-warning-badge",
+    DONE: "bg-success-light text-success-badge",
 };
 
 const priorityOptions = [
@@ -189,7 +189,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                                         type="button"
                                         onClick={() => toggleAssigneeSelection(member.id)}
                                         className={`rounded-full px-3 py-1 text-body-xs font-medium transition ${isSelected
-                                            ? "bg-brand-orange-main text-neutral-white"
+                                            ? "bg-[#CC4E00] text-neutral-white"
                                             : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                                             }`}
                                     >
@@ -236,7 +236,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                                     type="button"
                                     onClick={() => setPriority(opt.value)}
                                     className={`rounded-full px-4 py-1.5 text-body-xs font-medium transition ${isActive
-                                        ? "bg-brand-orange-main text-neutral-white ring-2 ring-neutral-950"
+                                        ? "bg-[#CC4E00] text-neutral-white ring-2 ring-neutral-950"
                                         : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200 ring-0"
                                         }`}
                                 >
@@ -254,7 +254,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                     type="submit"
                     isLoading={isSubmitting}
                     disabled={!isFormValid}
-                    className={!isFormValid ? "bg-neutral-200 text-neutral-400" : ""}
+                    className={!isFormValid ? "bg-neutral-200 text-neutral-600" : ""}
                 >
                     {mode === "create" ? "+ Ajouter une tâche" : "Enregistrer"}
                 </Button>

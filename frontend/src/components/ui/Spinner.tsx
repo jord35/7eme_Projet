@@ -13,7 +13,7 @@ function Spinner({ size = "md", className = "" }: SpinnerProps) {
     return (
         <div className={`flex items-center justify-center ${className}`} role="status">
             <svg
-                className={`animate-spin text-brand-orange-main ${sizeClasses[size]}`}
+                className={`animate-spin text-brand-orange-vibrant ${sizeClasses[size]}`}
                 fill="none"
                 viewBox="0 0 24 24"
             >

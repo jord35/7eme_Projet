@@ -23,7 +23,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                     ref={ref}
                     id={inputId}
                     rows={rows}
-                    className={`mt-1 block w-full rounded border px-3 py-[14px] text-body-m text-neutral-950 transition-colors placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-offset-0 ${error
+                    className={`mt-1 block w-full rounded border px-3 py-[14px] text-body-m text-neutral-950 transition-colors placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-offset-0 ${error
                         ? "border-error-main focus:ring-error-main"
                         : "border-neutral-200 focus:border-brand-orange-main focus:ring-brand-orange-main"
                         } ${className}`}

@@ -183,12 +183,12 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                             value={contributorSearch}
                             onChange={(e) => handleSearchUsers(e.target.value)}
                             placeholder="Rechercher par email ou nom..."
-                            className="block w-full rounded-md border border-neutral-200 px-3 py-1.5 text-body-xs shadow-sm placeholder:text-neutral-400 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
+                            className="block w-full rounded-md border border-neutral-200 px-3 py-1.5 text-body-xs shadow-sm placeholder:text-neutral-600 focus:border-brand-orange-main focus:outline-none focus:ring-1 focus:ring-brand-orange-main"
                         />
 
                         {/* Résultats de recherche */}
                         {isSearching && (
-                            <p className="text-body-xs text-neutral-400">Recherche...</p>
+                            <p className="text-body-xs text-neutral-600">Recherche...</p>
                         )}
                         {searchResults.length > 0 && (
                             <div className="max-h-32 space-y-0.5 overflow-y-auto rounded-md border border-neutral-100">
@@ -201,7 +201,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                                     >
                                         <span>
                                             {u.name || "Sans nom"}{" "}
-                                            <span className="text-neutral-400">({u.email})</span>
+                                            <span className="text-neutral-600">({u.email})</span>
                                         </span>
                                         <span className="text-brand-orange-main font-medium">+ Ajouter</span>
                                     </button>
@@ -209,7 +209,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                             </div>
                         )}
                         {contributorSearch.length >= 2 && !isSearching && searchResults.length === 0 && (
-                            <p className="text-body-xs text-neutral-400">Aucun utilisateur trouvé.</p>
+                            <p className="text-body-xs text-neutral-600">Aucun utilisateur trouvé.</p>
                         )}
 
                         {/* Liste des membres actuels */}
@@ -227,7 +227,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                                 <div key={m.id} className="flex items-center justify-between rounded-md bg-neutral-50 px-3 py-1.5">
                                     <span className="text-body-xs text-neutral-700">
                                         {m.name}{" "}
-                                        <span className="text-neutral-400">({m.email})</span>
+                                        <span className="text-neutral-600">({m.email})</span>
                                         {m.isPending && <Badge variant="warning" className="ml-2">En attente</Badge>}
                                     </span>
                                     <button
@@ -255,7 +255,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                     type="submit"
                     isLoading={isSubmitting}
                     disabled={!nameValue?.trim() || nameValue.trim().length < 2}
-                    className={!nameValue?.trim() || nameValue.trim().length < 2 ? "bg-neutral-200 text-neutral-400" : ""}
+                    className={!nameValue?.trim() || nameValue.trim().length < 2 ? "bg-neutral-200 text-neutral-600" : ""}
                 >
                     {mode === "create" ? "Ajouter un projet" : "Enregistrer"}
                 </Button>

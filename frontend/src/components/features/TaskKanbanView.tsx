@@ -31,7 +31,7 @@ function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
                         </div>
                         <div className="space-y-[16px]">
                             {columnTasks.length === 0 ? (
-                                <p className="text-body-xs text-neutral-400">
+                                <p className="text-body-xs text-neutral-600">
                                     Aucune tâche
                                 </p>
                             ) : (

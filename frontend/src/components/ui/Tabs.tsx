@@ -53,8 +53,8 @@ function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
                             : "bg-neutral-white"
                             }`}
                     >
-                        <Image src={tab.icon} alt="" width={16} height={16} className="text-brand-orange-dark" />
-                        <span className="text-brand-orange-dark">{tab.label}</span>
+                        <Image src={tab.icon} alt="" width={16} height={16} className="text-brand-orange-badge" />
+                        <span className="text-brand-orange-badge">{tab.label}</span>
                     </button>
                 );
             })}

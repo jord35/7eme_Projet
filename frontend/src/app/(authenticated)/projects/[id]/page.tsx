@@ -158,7 +158,7 @@ export default function ProjectDetailPage() {
     if (!project) {
         return (
             <div className="flex min-h-[50vh] items-center justify-center">
-                <p className="text-body-s text-neutral-400">Projet introuvable.</p>
+                <p className="text-body-s text-neutral-600">Projet introuvable.</p>
             </div>
         );
     }
@@ -196,7 +196,7 @@ export default function ProjectDetailPage() {
                 <div className="mb-[41px] flex flex-col items-center gap-4 min-[1440px]:flex-row min-[1440px]:items-center min-[1440px]:justify-between">
                     <div className="whitespace-nowrap text-center min-[1440px]:text-left">
                         <h2 className="text-h5 font-heading text-neutral-950">Tâches</h2>
-                        <p className="text-body-s text-neutral-400">Par ordre de priorité</p>
+                        <p className="text-body-s text-neutral-600">Par ordre de priorité</p>
                     </div>
                     <div className="flex flex-col items-center gap-3 min-[1440px]:flex-row">
                         <Tabs
@@ -220,7 +220,7 @@ export default function ProjectDetailPage() {
                 {viewMode === "list" && (
                     <div>
                         {filteredTasks.length === 0 ? (
-                            <p className="text-body-s text-neutral-400">
+                            <p className="text-body-s text-neutral-600">
                                 Aucune tâche trouvée.
                             </p>
                         ) : (
@@ -245,13 +245,13 @@ export default function ProjectDetailPage() {
                         <Calendar
                             tileClassName={({ date }) => {
                                 if (dueDates.includes(date.toDateString())) {
-                                    return "bg-brand-orange-light text-brand-orange-dark font-medium rounded-full";
+                                    return "bg-brand-orange-light text-brand-orange-badge font-medium rounded-full";
                                 }
                                 return null;
                             }}
                             className="rounded-lg border border-neutral-200 bg-neutral-white p-4 shadow-sm"
                         />
-                        <p className="mt-3 text-body-xs text-neutral-400">
+                        <p className="mt-3 text-body-xs text-neutral-600">
                             Les jours en orange ont une échéance de tâche.
                         </p>
                     </div>

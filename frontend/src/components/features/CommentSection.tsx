@@ -54,9 +54,9 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
     return (
         <div>
             {isLoading ? (
-                <p className="text-body-xs text-neutral-400">Chargement...</p>
+                <p className="text-body-xs text-neutral-600">Chargement...</p>
             ) : comments.length === 0 ? (
-                <p className="text-body-xs text-neutral-400">
+                <p className="text-body-xs text-neutral-600">
                     Aucun commentaire. Soyez le premier à commenter !
                 </p>
             ) : (
@@ -73,7 +73,7 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
                                     <span className="text-body-xs font-medium text-neutral-950">
                                         {comment.author.name}
                                     </span>
-                                    <span className="text-body-xs text-neutral-400">
+                                    <span className="text-body-xs text-neutral-600">
                                         {formatDate(comment.createdAt, { withTime: true })}
                                     </span>
                                 </div>
@@ -106,7 +106,7 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
                                 }
                             }}
                             placeholder="Ajouter un commentaire"
-                            className="w-full bg-transparent text-body-xs text-neutral-950 placeholder:text-neutral-400 focus:outline-none"
+                            className="w-full bg-transparent text-body-xs text-neutral-950 placeholder:text-neutral-600 focus:outline-none"
                         />
                     </div>
                     <div className="mt-2 flex justify-end max-md:justify-center">

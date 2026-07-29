@@ -52,11 +52,11 @@ function ProjectCard({ project, completedTasks = 0 }: ProjectCardProps) {
                 </div>
                 <div className="mt-4 h-2 w-full rounded-full bg-neutral-100">
                     <div
-                        className="h-2 rounded-full bg-brand-orange-main transition-all"
+                        className="h-2 rounded-full bg-brand-orange-vibrant transition-all"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
-                <p className="mt-2 text-body-xs text-neutral-400">
+                <p className="mt-2 text-body-xs text-neutral-600">
                     {completedTasks}/{totalTasks} tâches terminées
                 </p>
             </div>

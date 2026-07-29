@@ -11,9 +11,11 @@ const config: Config = {
             colors: {
                 brand: {
                     orange: {
-                        main: "#FF8B42",
+                        main: "#C74C00",
                         light: "#FFE8D9",
-                        dark: "#D3590B",
+                        dark: "#C2510A",
+                        vibrant: "#FF8B42",
+                        badge: "#B34B09",
                     },
                 },
                 neutral: {
@@ -21,7 +23,7 @@ const config: Config = {
                     100: "#F3F4F6",
                     200: "#E5E7EB",
                     400: "#9CA3AF",
-                    600: "#6B7280",
+                    600: "#616775",
                     800: "#1F1F1F",
                     950: "#0F0F0F",
                     white: "#FFFFFF",
@@ -29,10 +31,12 @@ const config: Config = {
                 success: {
                     main: "#27AE60",
                     light: "#F1FFF7",
+                    badge: "#1D8148",
                 },
                 error: {
-                    main: "#EF4444",
+                    main: "#E71313",
                     light: "#FFE0E0",
+                    badge: "#C03030",
                 },
                 info: {
                     main: "#3B82F6",
@@ -41,6 +45,7 @@ const config: Config = {
                 warning: {
                     main: "#E08D00",
                     light: "#FFF0D7",
+                    badge: "#996300",
                 },
             },
             fontFamily: {

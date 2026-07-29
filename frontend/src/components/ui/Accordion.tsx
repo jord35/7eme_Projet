@@ -18,7 +18,7 @@ function Accordion({ label, open, onToggle, children }: AccordionProps) {
             <button
                 type="button"
                 onClick={onToggle}
-                className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-body-m text-neutral-400 hover:border-brand-orange-main transition-colors"
+                className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-body-m text-neutral-600 hover:border-brand-orange-main transition-colors"
             >
                 <span>{label}</span>
                 <Image

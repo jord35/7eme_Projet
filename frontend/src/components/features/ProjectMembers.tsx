@@ -66,7 +66,7 @@ function ProjectMembers({
             {label && (
                 <div className="flex items-center gap-1 mb-2">
                     <Image src="/icons/team.svg" alt="" width={12} height={12} />
-                    <span className="text-body-xs text-neutral-400">
+                    <span className="text-body-xs text-neutral-600">
                         {formatMemberLabel(label, count)}
                     </span>
                 </div>
@@ -82,7 +82,7 @@ function ProjectMembers({
 
                 {/* Badge du rôle de l'utilisateur connecté */}
                 {showRoleBadge && currentUserRole && (
-                    <span className="rounded-full bg-brand-orange-light px-4 py-1 text-body-s text-brand-orange-dark">
+                    <span className="rounded-full bg-brand-orange-light px-4 py-1 text-body-s text-brand-orange-badge">
                         {currentUserRole}
                     </span>
                 )}
@@ -99,7 +99,7 @@ function ProjectMembers({
                         </div>
                     ))}
                     {hiddenCount > 0 && (
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-body-2xs font-medium text-neutral-400 -ml-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-body-2xs font-medium text-neutral-600 -ml-3">
                             +{hiddenCount}
                         </span>
                     )}

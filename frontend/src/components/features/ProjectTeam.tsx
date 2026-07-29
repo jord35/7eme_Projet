@@ -55,7 +55,7 @@ function ProjectTeam({ owner, members }: ProjectTeamProps) {
                             </span>
                         )}
                     </div>
-                    <span className="rounded-full bg-brand-orange-light px-4 py-1 text-body-s text-brand-orange-dark">
+                    <span className="rounded-full bg-brand-orange-light px-4 py-1 text-body-s text-brand-orange-badge">
                         {userRole}
                     </span>
 
