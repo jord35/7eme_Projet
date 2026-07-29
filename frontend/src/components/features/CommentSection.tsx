@@ -109,12 +109,12 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
                             className="w-full bg-transparent text-body-xs text-neutral-950 placeholder:text-neutral-400 focus:outline-none"
                         />
                     </div>
-                    <div className="mt-2 flex justify-end">
+                    <div className="mt-2 flex justify-end max-md:justify-center">
                         <Button
                             onClick={handleAdd}
                             disabled={isAdding || !newContent.trim()}
                             isLoading={isAdding}
-                            className="px-[79.5px] py-[15px]"
+                            className="px-[79.5px] py-[15px] max-md:px-[40px] max-md:py-[8px]"
                         >
                             Envoyer
                         </Button>

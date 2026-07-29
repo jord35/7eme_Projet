@@ -47,10 +47,10 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
     return (
         <div className="rounded-lg bg-neutral-white pt-[25px] pb-[25px] pl-[40px] pr-[35px] shadow-sm ring-1 ring-neutral-200">
-            <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
+            <div className="flex items-start justify-between gap-4 max-md:flex-col max-md:items-center max-md:gap-0">
+                <div className="flex-1 max-md:text-center">
                     {/* Titre + Badge */}
-                    <div className="mb-[7px] flex items-center gap-2">
+                    <div className="mb-[7px] flex items-center gap-2 max-md:flex-col max-md:items-center">
                         <h3 className="text-body-m font-medium text-neutral-950">
                             {task.title}
                         </h3>
@@ -69,7 +69,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
                 {/* Menu "..." horizontal */}
                 {(onEdit || onDelete) && (
-                    <div className="relative shrink-0">
+                    <div className="relative shrink-0 max-md:mb-[24px]">
                         <button
                             onClick={() => setShowMenu((prev) => !prev)}
                             className="flex items-center justify-center rounded-md bg-neutral-white px-[24.5px] py-[20.5px] text-neutral-600 ring-1 ring-neutral-200 hover:bg-neutral-50 transition-colors"
@@ -111,7 +111,7 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
             {/* Date d'échéance */}
             {task.dueDate && (
-                <div className="mb-[24px] flex items-center gap-1 text-body-xs">
+                <div className="mb-[24px] flex items-center justify-center gap-1 text-body-xs max-md:justify-center">
                     <span className="text-neutral-600">Échéance :</span>
                     <Image src="/icons/calendar-black.svg" alt="" width={12} height={12} />
                     <span className="text-neutral-800">{formatShortDate(task.dueDate)}</span>
@@ -120,9 +120,9 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
 
             {/* Assignés */}
             {task.assignees && task.assignees.length > 0 && (
-                <div className="mb-[24px] flex items-center gap-2">
-                    <span className="text-body-xs text-neutral-600 whitespace-nowrap">Assigné à :</span>
-                    <div className="flex flex-wrap items-center gap-2">
+                <div className="mb-[24px] flex flex-col items-center gap-1">
+                    <span className="text-body-xs text-neutral-600">Assigné à</span>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
                         {task.assignees.map((a) => (
                             <div key={a.userId} className="flex items-center gap-1">
                                 <Avatar

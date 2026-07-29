@@ -98,7 +98,8 @@ function TaskSearch({
                 onChange={handleQueryChange}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                className="relative w-[283px]"
+                className="relative w-[283px] max-md:!w-[142px]"
+                inputClassName="max-md:placeholder:text-transparent"
             />
         </div>
     );

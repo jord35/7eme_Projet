@@ -183,7 +183,7 @@ export default function ProjectDetailPage() {
             />
 
             {/* Équipe du projet */}
-            <div className="ml-[112px] mr-[113px] mb-[48px]">
+            <div className="ml-[112px] mr-[113px] mb-[48px] max-md:ml-0 max-md:mr-0">
                 <ProjectTeam
                     owner={project.owner}
                     members={project.members}
@@ -191,14 +191,14 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Contenu principal (tâches) */}
-            <div className="ml-[117px] mr-[108px] mb-[41.85px] rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200">
+            <div className="ml-[117px] mr-[108px] mb-[41.85px] rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200 max-lg:ml-0 max-lg:mr-0 max-md:px-0">
                 {/* En-tête : titre + description | tabs + statut + recherche */}
-                <div className="mb-[41px] flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div className="whitespace-nowrap">
+                <div className="mb-[41px] flex flex-col items-center gap-4 min-[1440px]:flex-row min-[1440px]:items-center min-[1440px]:justify-between">
+                    <div className="whitespace-nowrap text-center min-[1440px]:text-left">
                         <h2 className="text-h5 font-heading text-neutral-950">Tâches</h2>
                         <p className="text-body-s text-neutral-400">Par ordre de priorité</p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-center gap-3 min-[1440px]:flex-row">
                         <Tabs
                             tabs={projectTabs}
                             activeTab={viewMode}
