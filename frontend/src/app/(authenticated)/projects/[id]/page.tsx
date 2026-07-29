@@ -167,7 +167,7 @@ export default function ProjectDetailPage() {
     const isOwner = user?.id === project.owner.id;
 
     return (
-        <div>
+        <div className="mx-auto w-full max-w-[1440px]">
             <PageHeader
                 title={project.name}
                 description={project.description || "Aucune description"}
