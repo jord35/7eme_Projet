@@ -83,7 +83,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
     const watchedDueDate = watch("dueDate");
 
     const isFormValid = useMemo(() => {
-        return watchedTitle?.trim();
+        return watchedTitle?.trim().length >= 2;
     }, [watchedTitle]);
 
     function toggleAssigneeSelection(userId: string) {
@@ -128,37 +128,46 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
         { id: owner.id, name: owner.name },
         ...members.map((m) => ({ id: m.user.id, name: m.user.name })),
     ];
-
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Titre */}
-            <Input
-                label="Titre *"
-                placeholder="Titre de la tâche"
-                error={errors.title?.message}
-                {...register("title")}
-            />
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-[27.67px] ml-[34.33px] mr-[34.33px] mb-[42px]">
+            <h2 className="text-h5 font-heading text-neutral-950">
+                {mode === "create" ? "Créer une tâche" : "Modifier"}
+            </h2>
 
-            {/* Description */}
-            <Textarea
-                label="Description *"
-                placeholder="Description..."
-                rows={3}
-                error={errors.description?.message}
-                {...register("description")}
-            />
+            {/* Titre — 40px après le titre */}
+            <div className="mt-[40px]">
+                <Input
+                    label="Titre*"
+                    placeholder="Titre de la tâche"
+                    error={errors.title?.message}
+                    {...register("title")}
+                />
+            </div>
 
-            {/* Échéance */}
-            <Input
-                label="Échéance"
-                type="date"
-                error={errors.dueDate?.message}
-                {...register("dueDate")}
-            />
+            {/* Description — 24px après le titre */}
+            <div className="mt-[24px]">
+                <Textarea
+                    label="Description"
+                    placeholder="Description..."
+                    rows={1}
+                    error={errors.description?.message}
+                    {...register("description")}
+                />
+            </div>
 
-            {/* Assigné à — accordéon */}
+            {/* Échéance — 24px */}
+            <div className="mt-[24px]">
+                <Input
+                    label="Échéance"
+                    type="date"
+                    error={errors.dueDate?.message}
+                    {...register("dueDate")}
+                />
+            </div>
+
+            {/* Assigné à — accordéon — 24px */}
             {memberList.length > 0 && (
-                <div>
+                <div className="mt-[24px]">
                     <label className="mb-1 block text-body-s font-medium text-neutral-800">
                         Assigné à
                     </label>
@@ -193,8 +202,8 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                 </div>
             )}
 
-            {/* Statut */}
-            <div>
+            {/* Statut — 24px */}
+            <div className="mt-[24px]">
                 <label className="mb-2 block text-body-s text-neutral-950">Statut</label>
                 <div className="flex gap-2">
                     {statusOptions.map((opt) => {
@@ -214,9 +223,9 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                 </div>
             </div>
 
-            {/* Priorité */}
+            {/* Priorité — seulement pour le propriétaire — 24px */}
             {isOwner && (
-                <div>
+                <div className="mt-[24px]">
                     <label className="mb-2 block text-body-s text-neutral-950">Priorité</label>
                     <div className="flex gap-2">
                         {priorityOptions.map((opt) => {
@@ -239,15 +248,15 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
                 </div>
             )}
 
-            {/* Bouton submit */}
-            <div className="flex">
+            {/* Bouton submit — 56px après le dernier élément */}
+            <div className="mt-[56px] flex">
                 <Button
                     type="submit"
                     isLoading={isSubmitting}
                     disabled={!isFormValid}
                     className={!isFormValid ? "bg-neutral-200 text-neutral-400" : ""}
                 >
-                    + Ajouter une tâche
+                    {mode === "create" ? "+ Ajouter une tâche" : "Enregistrer"}
                 </Button>
             </div>
         </form>

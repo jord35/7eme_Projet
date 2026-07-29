@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useCallback, type ReactNode } from "react";
+import Image from "next/image";
 
 interface ModalProps {
     /** Contrôle l'ouverture de la modale */
     isOpen: boolean;
     /** Callback appelé quand l'utilisateur ferme (Escape ou clic overlay) */
     onClose: () => void;
-    /** Titre optionnel de la modale */
-    title?: string;
     /** Contenu de la modale */
     children: ReactNode;
 }
@@ -23,7 +22,7 @@ interface ModalProps {
  *   <CreateProjectForm onSuccess={handleSuccess} />
  * </Modal>
  */
-function Modal({ isOpen, onClose, title, children }: ModalProps) {
+function Modal({ isOpen, onClose, children }: ModalProps) {
     const handleKeyDown = useCallback(
         (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
@@ -55,17 +54,23 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
 
             {/* Contenu */}
             <div
-                className="relative z-10 mx-4 w-full max-w-lg rounded-lg bg-neutral-white p-6 shadow-xl ring-1 ring-neutral-200"
+                className="relative z-10 mx-4 w-full max-w-[598px] rounded-lg bg-neutral-white shadow-xl ring-1 ring-neutral-200"
                 role="dialog"
                 aria-modal="true"
-                aria-labelledby={title ? "modal-title" : undefined}
             >
-                {title && (
-                    <h2 id="modal-title" className="text-h5 font-heading text-neutral-950">
-                        {title}
-                    </h2>
-                )}
-                <div className={title ? "mt-4" : ""}>{children}</div>
+                {/* Croix de fermeture — propre à la modale */}
+                <div className="flex justify-end pt-[37px] pr-[38.67px]">
+                    <button
+                        onClick={onClose}
+                        className="flex items-center justify-center rounded-md p-1 text-neutral-600 hover:bg-neutral-100 transition-colors"
+                        aria-label="Fermer"
+                    >
+                        <Image src="/icons/croix.svg" alt="" width={15} height={15} />
+                    </button>
+                </div>
+
+                {/* Contenu (formulaire avec son propre titre) */}
+                <div className="px-[38.67px] pb-[37px]">{children}</div>
             </div>
         </div>
     );

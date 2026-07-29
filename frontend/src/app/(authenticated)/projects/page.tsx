@@ -87,7 +87,6 @@ export default function ProjectsPage() {
             <Modal
                 isOpen={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                title="Créer un projet"
             >
                 <ProjectForm mode="create" onSuccess={handleProjectCreated} />
             </Modal>

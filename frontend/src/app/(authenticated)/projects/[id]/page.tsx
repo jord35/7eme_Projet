@@ -272,7 +272,6 @@ export default function ProjectDetailPage() {
             <Modal
                 isOpen={showCreateTask}
                 onClose={() => setShowCreateTask(false)}
-                title="Créer une tâche"
             >
                 <TaskForm
                     mode="create"
@@ -287,7 +286,6 @@ export default function ProjectDetailPage() {
             <Modal
                 isOpen={showEditProject}
                 onClose={() => setShowEditProject(false)}
-                title="Modifier le projet"
             >
                 <ProjectForm
                     mode="edit"
@@ -311,7 +309,6 @@ export default function ProjectDetailPage() {
                 <Modal
                     isOpen={!!editingTask}
                     onClose={() => setEditingTask(null)}
-                    title="Modifier la tâche"
                 >
                     <TaskForm
                         mode="edit"

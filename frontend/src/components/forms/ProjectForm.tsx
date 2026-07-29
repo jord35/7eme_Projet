@@ -142,9 +142,12 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <h2 className="text-h5 font-heading text-neutral-950">
+                {mode === "create" ? "Créer un projet" : "Modifier le projet"}
+            </h2>
             {/* Titre */}
             <Input
-                label="Titre *"
+                label="Titre*"
                 placeholder="Nom du projet"
                 error={errors.name?.message}
                 {...register("name", { onChange: (e) => setNameValue(e.target.value) })}
@@ -152,7 +155,7 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
 
             {/* Description */}
             <Textarea
-                label="Description *"
+                label="Description"
                 placeholder="Décrivez votre projet..."
                 rows={3}
                 error={errors.description?.message}
@@ -251,10 +254,10 @@ function ProjectForm({ mode, project, onSuccess, onMembersChanged }: ProjectForm
                 <Button
                     type="submit"
                     isLoading={isSubmitting}
-                    disabled={!nameValue?.trim()}
-                    className={!nameValue?.trim() ? "bg-neutral-200 text-neutral-400" : ""}
+                    disabled={!nameValue?.trim() || nameValue.trim().length < 2}
+                    className={!nameValue?.trim() || nameValue.trim().length < 2 ? "bg-neutral-200 text-neutral-400" : ""}
                 >
-                    {mode === "create" ? "+ Créer le projet" : "Enregistrer"}
+                    {mode === "create" ? "Ajouter un projet" : "Enregistrer"}
                 </Button>
             </div>
         </form>

@@ -30,8 +30,9 @@ function ConfirmDeleteModal({
     message = "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.",
 }: ConfirmDeleteModalProps) {
     return (
-        <Modal isOpen={isOpen} onClose={onCancel} title={title}>
-            <p className="text-body-s text-neutral-600">{message}</p>
+        <Modal isOpen={isOpen} onClose={onCancel}>
+            <h2 className="text-h5 font-heading text-neutral-950">{title}</h2>
+            <p className="mt-4 text-body-s text-neutral-600">{message}</p>
             <div className="mt-6 flex justify-end gap-3">
                 <button
                     onClick={onCancel}
