@@ -30,7 +30,7 @@ function ProjectCard({ project, completedTasks = 0 }: ProjectCardProps) {
     return (
         <Link
             href={`/projects/${project.id}`}
-            className="block rounded-lg bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all md:max-w-[380px] p-8"
+            className="block rounded-lg bg-neutral-white shadow-sm ring-1 ring-neutral-200 hover:ring-brand-orange-main transition-all md:max-w-[380px] px-[34px] py-[30px]"
         >
             {/* Div 1 : Titre + Description */}
             <div>
