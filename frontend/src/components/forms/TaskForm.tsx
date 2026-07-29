@@ -129,7 +129,7 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
         ...members.map((m) => ({ id: m.user.id, name: m.user.name })),
     ];
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-[27.67px] ml-[34.33px] mr-[34.33px] mb-[42px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-[27.67px] ml-[34.33px] mr-[34.33px] mb-[42px] max-[425px]:ml-0 max-[425px]:mr-0">
             <h2 className="text-h5 font-heading text-neutral-950">
                 {mode === "create" ? "Créer une tâche" : "Modifier"}
             </h2>
@@ -204,8 +204,8 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
 
             {/* Statut — 24px */}
             <div className="mt-[24px]">
-                <label className="mb-2 block text-body-s text-neutral-950">Statut</label>
-                <div className="flex gap-2">
+                <label className="mb-2 block text-center text-body-s text-neutral-950">Statut</label>
+                <div className="flex flex-wrap justify-center gap-2 max-[375px]:flex-col max-[375px]:items-center">
                     {statusOptions.map((opt) => {
                         const isActive = status === opt.value;
                         return (
@@ -226,8 +226,8 @@ function TaskForm({ mode, projectId, owner, isOwner, members, initialData, onSuc
             {/* Priorité — seulement pour le propriétaire — 24px */}
             {isOwner && (
                 <div className="mt-[24px]">
-                    <label className="mb-2 block text-body-s text-neutral-950">Priorité</label>
-                    <div className="flex gap-2">
+                    <label className="mb-2 block text-center text-body-s text-neutral-950">Priorité</label>
+                    <div className="flex flex-wrap justify-center gap-2 max-[375px]:flex-col max-[375px]:items-center">
                         {priorityOptions.map((opt) => {
                             const isActive = priority === opt.value;
                             return (
