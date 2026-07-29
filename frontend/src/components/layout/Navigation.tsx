@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Navigation principale de l'application.
+ *
+ * Affiche le logo, les liens vers le dashboard et les projets,
+ * ainsi que l'avatar de l'utilisateur connecté ou les liens
+ * de connexion/inscription selon l'état d'authentification.
+ * Le lien "Projets" est actif pour /projects et /projects/[id].
+ */
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";

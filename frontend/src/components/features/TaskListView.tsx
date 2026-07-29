@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Vue liste des tâches assignées.
+ *
+ * Affiche les tâches sous forme de liste verticale avec un champ
+ * de recherche pour filtrer. Chaque tâche est une TaskCard.
+ * Utilisée dans le Dashboard en mode "liste".
+ */
+
 import { useState } from "react";
 import { TaskCard } from "@/components/features/TaskCard";
 import { SearchInput } from "@/components/ui/SearchInput";

@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * Carte de projet pour la liste des projets.
+ *
+ * Affiche le nom, la description tronquée, la progression
+ * et le nombre de tâches terminées. Le clic redirige vers
+ * la page de détail du projet.
+ */
 import Link from "next/link";
 import Image from "next/image";
 import { ProjectMembers } from "./ProjectMembers";

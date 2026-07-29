@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * Formulaire de création et d'édition d'une tâche.
+ *
+ * Gère les champs : titre, description, assignés, statut, priorité, échéance.
+ * Utilise react-hook-form avec validation Zod côté client.
+ * Les assignés et le statut/priorité sont affichés sous forme de badges cliquables.
+ * Mode "create" : permet de choisir les assignés parmi les membres du projet.
+ * Mode "edit" : pré-remplit les champs avec les données existantes.
+ */
+
 import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

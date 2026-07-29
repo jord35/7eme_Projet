@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Vue Kanban des tâches assignées.
+ *
+ * Affiche les tâches dans 3 colonnes (À faire, En cours, Terminé).
+ * Chaque colonne contient une carte TaskCard avec le projet associé.
+ * Utilisée dans le Dashboard en mode "kanban".
+ */
+
 import { TaskCard } from "@/components/features/TaskCard";
 import { BadgeCount } from "@/components/ui/BadgeCount";
 import type { AssignedTask } from "@/lib/api";
