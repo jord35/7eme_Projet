@@ -67,7 +67,7 @@ function Navigation() {
                             isCurrentUser={true}
                             linkToProfile={true}
                             size={65}
-                            className="text-body-s tracking-wide"
+                            className={`text-body-s tracking-wide ${pathname === "/profile" ? "!bg-brand-orange-dark !text-neutral-white" : ""}`}
                         />
                     ) : (
                         <div className="flex gap-4">

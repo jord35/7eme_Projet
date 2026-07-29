@@ -63,22 +63,25 @@ function ProfileForm() {
     return (
         <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
+            className="w-full space-y-4"
         >
             <Input
                 label="Nom"
+                labelClassName="mb-1 block text-body-s text-neutral-800"
                 error={form.formState.errors.lastName?.message}
                 {...form.register("lastName")}
             />
 
             <Input
                 label="Prénom"
+                labelClassName="mb-1 block text-body-s text-neutral-800"
                 error={form.formState.errors.firstName?.message}
                 {...form.register("firstName")}
             />
 
             <Input
                 label="Email"
+                labelClassName="mb-1 block text-body-s text-neutral-800"
                 type="email"
                 error={form.formState.errors.email?.message}
                 {...form.register("email")}
@@ -86,6 +89,7 @@ function ProfileForm() {
 
             <Input
                 label="Mot de passe"
+                labelClassName="mb-1 block text-body-s text-neutral-800"
                 type="password"
                 placeholder="Mot de passe actuel"
                 error={form.formState.errors.currentPassword?.message}
@@ -94,6 +98,7 @@ function ProfileForm() {
 
             <Input
                 label="Nouveau mot de passe"
+                labelClassName="mb-1 block text-body-s text-neutral-800"
                 type="password"
                 placeholder="Nouveau mot de passe (optionnel)"
                 error={form.formState.errors.newPassword?.message}

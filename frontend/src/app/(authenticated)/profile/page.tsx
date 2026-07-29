@@ -7,9 +7,9 @@ export default function ProfilePage() {
     const { user } = useAuth();
 
     return (
-        <div className="mx-auto max-w-2xl">
-            <h1 className="text-h3 font-heading text-neutral-950">Mon compte</h1>
-            <p className="mt-1 text-body-s text-neutral-600">
+        <div className="ml-[100px] mr-[125px] mb-[133px] w-[calc(100%-225px)] rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200">
+            <h1 className="text-h4 font-heading text-neutral-800">Mon compte</h1>
+            <p className="mt-1 text-body-m text-neutral-600">
                 {user?.name || "Prénom, nom"}
             </p>
             <div className="mt-6">
