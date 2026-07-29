@@ -16,14 +16,14 @@ const kanbanColumns = [
 
 function TaskKanbanView({ tasks }: TaskKanbanViewProps) {
     return (
-        <div className="mx-4 mb-[107.85px] grid grid-cols-1 gap-6 sm:mx-6 lg:mx-[69px] lg:grid-cols-3">
+        <div className="mx-4 mb-[107.85px] grid grid-cols-1 gap-6 sm:mx-6 lg:mx-[69px] lg:grid-cols-3 max-md:mx-0">
             {kanbanColumns.map((col) => {
                 const columnTasks = tasks.filter(
                     (t) => t.status === col.key,
                 );
                 return (
-                    <div className="rounded-lg bg-neutral-white px-[24px] py-[40px] shadow-sm ring-1 ring-neutral-200">
-                        <div className="mb-[22px] flex items-center gap-2">
+                    <div className="rounded-lg bg-neutral-white px-[24px] py-[40px] shadow-sm ring-1 ring-neutral-200 max-[425px]:px-0">
+                        <div className="mb-[22px] flex items-center justify-center gap-2 max-[425px]:justify-center md:justify-start">
                             <h3 className="text-h5 font-heading text-neutral-800">
                                 {col.label}
                             </h3>

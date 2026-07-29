@@ -226,7 +226,7 @@ export default function ProjectDetailPage() {
                         ) : (
                             <div className="space-y-[17px]">
                                 {filteredTasks.map((task) => (
-                                    <div key={task.id} className="mx-[40px]">
+                                    <div key={task.id} className="mx-[40px] max-[425px]:mx-0">
                                         <TaskDetailCard
                                             task={task}
                                             onEdit={(t) => setEditingTask(t)}

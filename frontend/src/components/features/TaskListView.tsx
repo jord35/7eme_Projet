@@ -28,7 +28,7 @@ function TaskListView({ tasks, searchQuery, onSearch }: TaskListViewProps) {
     }
 
     return (
-        <div className="mx-4 rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200 sm:mx-6 lg:mx-[125px]">
+        <div className="mx-4 rounded-lg bg-neutral-white px-[59px] py-[40px] shadow-sm ring-1 ring-neutral-200 sm:mx-6 lg:mx-[125px] max-md:mx-0 max-md:px-0">
             {/* En-tête : titre + recherche */}
             <div className="mb-[52px] flex items-center justify-between gap-4">
                 <div className="hidden md:block">

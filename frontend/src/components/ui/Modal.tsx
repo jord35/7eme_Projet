@@ -54,7 +54,7 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
 
             {/* Contenu */}
             <div
-                className="relative z-10 mx-4 w-full max-w-[598px] rounded-lg bg-neutral-white shadow-xl ring-1 ring-neutral-200"
+                className="relative z-10 mx-4 w-full max-w-[598px] rounded-lg bg-neutral-white shadow-xl ring-1 ring-neutral-200 max-[425px]:mx-0"
                 role="dialog"
                 aria-modal="true"
             >

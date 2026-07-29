@@ -73,7 +73,7 @@ export default function ProjectsPage() {
             {projects.length === 0 ? (
                 <p className="text-body-s text-neutral-400">Aucun projet trouvé.</p>
             ) : (
-                <div className="mx-4 mb-[30px] grid gap-4 grid-cols-1 sm:mx-6 lg:mx-[136px] md:grid-cols-2 lg:grid-cols-3">
+                <div className="mx-4 mb-[30px] grid gap-4 grid-cols-1 sm:mx-6 lg:mx-[136px] md:grid-cols-2 lg:grid-cols-3 max-[425px]:mx-0">
                     {projects.map((project) => (
                         <ProjectCard
                             key={project.id}
