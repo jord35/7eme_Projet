@@ -10,7 +10,8 @@ function Navigation() {
     const pathname = usePathname();
     const { user, isAuthenticated } = useAuth();
 
-    const isActive = (path: string) => pathname === path;
+    const isActive = (path: string) =>
+        pathname === path || (path === "/projects" && pathname.startsWith("/projects/"));
 
     return (
         <nav className="border-b border-neutral-200 bg-neutral-white">

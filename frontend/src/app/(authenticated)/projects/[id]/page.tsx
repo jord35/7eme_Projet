@@ -258,7 +258,7 @@ export default function ProjectDetailPage() {
                 )}
 
                 {isOwner && (
-                    <div className="mt-8 border-t border-neutral-200 pt-6">
+                    <div className="mt-8 flex justify-center border-t border-neutral-200 pt-6">
                         <button
                             onClick={() => setShowDeleteProject(true)}
                             className="rounded-md bg-error-main px-4 py-2 text-body-s font-medium text-neutral-white shadow-sm hover:bg-error-main/80 transition-colors"

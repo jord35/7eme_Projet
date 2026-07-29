@@ -11,23 +11,29 @@ import type { Task, AssignedTask, Comment } from "./api";
 
 // ─── Dates ────────────────────────────────────────────────
 
-/** Formate une date ISO en français (ex: "13 juil. 2026, 14:30") */
+/** Formate une date ISO en français.
+ *  Sans time : "13 juillet 2026"
+ *  Avec time : "13 juillet 14:30" */
 export function formatDate(
     dateStr: string | null | undefined,
     options?: { withTime?: boolean },
 ): string {
     if (!dateStr) return "";
     const date = new Date(dateStr);
-    const localeOptions: Intl.DateTimeFormatOptions = {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-    };
     if (options?.withTime) {
-        localeOptions.hour = "2-digit";
-        localeOptions.minute = "2-digit";
+        return date.toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+        }) + " " + date.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
     }
-    return date.toLocaleDateString("fr-FR", localeOptions);
+    return date.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
 }
 
 /** Formate une date ISO en jour + mois français (ex: "10 mars") */
