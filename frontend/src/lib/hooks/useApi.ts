@@ -17,7 +17,6 @@ interface UseApiResult<T> {
  */
 export function useApi<T>(
     fetcher: () => Promise<T>,
-    deps: React.DependencyList = [],
 ): UseApiResult<T> {
     const [data, setData] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +36,7 @@ export function useApi<T>(
                 setError(err);
                 setIsLoading(false);
             });
-    }, deps);
+    }, []);
 
     useEffect(() => {
         fetchData();

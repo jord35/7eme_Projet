@@ -23,7 +23,6 @@ function CommentSection({ projectId, taskId }: CommentSectionProps) {
     const { user } = useAuth();
     const { data: apiComments, isLoading } = useApi(
         () => getComments(projectId, taskId),
-        [projectId, taskId],
     );
     const [localComments, setLocalComments] = useState<Comment[]>([]);
     const [newContent, setNewContent] = useState("");
