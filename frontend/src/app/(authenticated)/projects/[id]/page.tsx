@@ -179,7 +179,7 @@ export default function ProjectDetailPage() {
                 showEditButton={isAdmin}
                 showIAButton
                 onEditClick={() => setShowEditProject(true)}
-                className="ml-[44px] mr-[113px] mt-[21px] mb-[49px]"
+                className="ml-[44px] mr-[113px] mt-[21px] mb-[49px] max-md:ml-0 max-md:mr-0 max-md:items-center"
             />
 
             {/* Équipe du projet */}
