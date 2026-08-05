@@ -123,8 +123,8 @@ function TaskDetailCard({ task, onEdit, onDelete }: TaskDetailCardProps) {
                 <div className="mb-[24px] flex flex-col gap-1 max-md:items-center min-[1440px]:flex-row min-[1440px]:items-center">
                     <span className="text-body-xs text-neutral-600">Assigné à</span>
                     <div className="flex flex-wrap items-center gap-2 max-md:justify-center">
-                        {task.assignees.map((a) => (
-                            <div key={a.userId} className="flex items-center gap-1">
+                        {task.assignees.map((a, index) => (
+                            <div key={index} className="flex items-center gap-1">
                                 <Avatar
                                     name={a.user.name}
                                     isCurrentUser={a.user.id === currentUserId}
